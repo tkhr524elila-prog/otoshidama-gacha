@@ -3,151 +3,181 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <meta name="theme-color" content="#ff7a00">
-  <title>お年玉ガチャ（1連/10連）</title>
+  <meta name="theme-color" content="#ff7a00" />
+  <title>お年玉ガチャ</title>
+
   <style>
     :root{
       --bg1:#070b18; --bg2:#140a2b;
       --text:#eef3ff; --muted:#a9b4da;
       --accent:#ff7a00; --gold:#ffd54a;
       --cyan:#00e5ff; --vio:#7c4dff;
+      --line: rgba(255,255,255,.12);
       --shadow: 0 18px 60px rgba(0,0,0,.55);
-      --radius: 18px;
+      --radius: 20px;
+
+      --n:#a8b3d6; --r:#00e5ff; --sr:#ff7a00; --ssr:#ffd54a;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
-      margin:0;color:var(--text);
+      margin:0; color:var(--text);
       font-family: system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans JP",sans-serif;
       background:
         radial-gradient(1200px 700px at 18% 10%, rgba(124,77,255,.30), transparent 60%),
         radial-gradient(900px 600px at 90% 30%, rgba(0,229,255,.22), transparent 55%),
         radial-gradient(900px 600px at 60% 110%, rgba(255,122,0,.22), transparent 55%),
         linear-gradient(180deg, var(--bg1), var(--bg2));
-      padding: clamp(12px, 3.5vw, 22px);
-      padding-bottom: calc(clamp(12px, 3.5vw, 22px) + env(safe-area-inset-bottom));
-      min-height:100%;
+      padding: 14px;
+      padding-bottom: calc(14px + env(safe-area-inset-bottom));
+      overflow-x:hidden;
     }
-    .wrap{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
 
-    .topbar{
-      display:flex;align-items:center;justify-content:space-between;gap:12px;
-      padding:12px 14px;border:1px solid rgba(255,255,255,.10);
-      background:linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.02));
-      border-radius: var(--radius);
+    .app{
+      max-width: 760px;
+      margin: 0 auto;
+      min-height: calc(100dvh - 14px - env(safe-area-inset-bottom));
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      position:relative;
+    }
+
+    /* HUD */
+    .hud{
+      display:flex; align-items:center; gap:10px;
+      padding:10px 12px;
+      border-radius: 18px;
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(0,0,0,.16));
       box-shadow: var(--shadow);
       backdrop-filter: blur(10px);
+      width: fit-content;
     }
-    .title{font-weight:1100;letter-spacing:.03em}
-    .sub{font-size:12px;color:var(--muted);line-height:1.25}
-    .badge{
-      display:inline-flex;align-items:center;gap:8px;
-      padding:6px 10px;border-radius:999px;
-      background:rgba(0,0,0,.20);
-      border:1px solid rgba(255,255,255,.10);
-      font-size:12px;color:var(--text);font-weight:1000;
-    }
-
-    .gem{
-      display:flex;align-items:center;gap:10px;
-      padding:10px 12px;border-radius:14px;
-      border:1px solid rgba(255,255,255,.12);
-      background:rgba(0,0,0,.16);
-      min-width:210px;justify-content:space-between;
-    }
-    .gemL{display:flex;align-items:center;gap:10px}
     .gemIcon{
       width:18px;height:18px;border-radius:6px;
       background: conic-gradient(from 160deg, var(--cyan), var(--vio), var(--accent), var(--cyan));
-      box-shadow: 0 0 18px rgba(0,229,255,.34);
-      transform: rotate(12deg);
+      box-shadow: 0 0 18px rgba(0,229,255,.28);
+      transform: rotate(10deg);
     }
-    .gemCount{font-weight:1100}
-    .gemSmall{font-size:11px;color:var(--muted)}
+    .gemText{line-height:1.1}
+    .gemCount{font-weight:1100; letter-spacing:.02em}
+    .gemSub{font-size:11px;color:var(--muted);margin-top:2px}
 
-    .card{
+    /* Info card */
+    .infoCard{
+      flex: 1 1 auto;
       border-radius: var(--radius);
-      border: 1px solid rgba(255,255,255,.10);
-      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(0,0,0,.16));
+      border:1px solid rgba(255,255,255,.12);
+      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(0,0,0,.18));
       box-shadow: var(--shadow);
       backdrop-filter: blur(10px);
       overflow:hidden;
+      position:relative;
+      padding: 14px;
     }
-    .cardIn{padding:16px}
-    label{display:block;font-size:12px;color:var(--muted);margin:6px 0}
+    .title{font-weight:1200; letter-spacing:.03em; font-size:16px}
+    .badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+    .badge{
+      display:inline-flex;align-items:center;gap:6px;
+      padding:6px 10px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.18);
+      font-size:12px;font-weight:1100;
+    }
+    .badge.ssr{
+      border-color: rgba(255,213,74,.45);
+      box-shadow: 0 0 24px rgba(255,213,74,.14);
+    }
+    .infoBody{
+      margin-top:12px;
+      border-radius: 18px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.14);
+      padding:12px;
+    }
+    label{display:block;font-size:12px;color:var(--muted);margin:8px 0 6px}
     input, textarea{
       width:100%;
       color:var(--text);
-      background:rgba(0,0,0,.22);
+      background: rgba(0,0,0,.22);
       border:1px solid rgba(255,255,255,.12);
-      border-radius:14px;
-      padding:12px 12px;
-      font-size:14px;
-      outline:none;
+      border-radius: 14px;
+      padding: 12px;
+      font-size: 14px;
+      outline: none;
     }
     textarea{min-height:84px;resize:vertical}
-    .hint{font-size:12px;color:var(--muted);line-height:1.45;margin-top:6px}
-
-    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
-    .btn{
-      border:0;cursor:pointer;
-      border-radius:16px;
-      padding:14px 16px;
-      font-weight:1100;
-      letter-spacing:.02em;
-      color:#091021;
-      background: linear-gradient(180deg, #ffd54a, #ff7a00);
-      box-shadow: 0 16px 32px rgba(255,122,0,.30);
-      display:flex;align-items:center;gap:10px;
-      transition: transform .08s ease, filter .12s ease, opacity .12s ease;
-      user-select:none;-webkit-tap-highlight-color: transparent;
-    }
-    .btn:active{transform: scale(.985)}
-    .btn[disabled]{opacity:.45;cursor:not-allowed;filter:saturate(.75)}
-    .btn2{
+    .hint{font-size:12px;color:var(--muted);line-height:1.45;margin-top:8px}
+    .ghostBtn{
       border:1px solid rgba(255,255,255,.14);
-      color:var(--text);
       background: rgba(0,0,0,.16);
-      box-shadow:none;
+      color: var(--text);
+      border-radius: 999px;
+      padding:10px 12px;
+      font-weight:1100;
+      cursor:pointer;
+      margin-top:10px;
     }
-    .costBadge{
-      margin-left:auto;
-      display:flex;align-items:center;gap:6px;
-      padding:6px 10px;border-radius:999px;
+
+    /* Bottom buttons */
+    .bottomBar{
+      position:sticky;
+      bottom: calc(10px + env(safe-area-inset-bottom));
+      display:flex;
+      gap:12px;
+      align-items:stretch;
+    }
+    .gachaBtn{
+      flex: 1 1 0;
+      border:0;
+      border-radius: 20px;
+      padding:14px 14px;
+      cursor:pointer;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      box-shadow: 0 18px 40px rgba(0,0,0,.35);
+      transition: transform .08s ease, opacity .12s ease;
+    }
+    .gachaBtn:active{transform: scale(.99)}
+    .gachaBtn[disabled]{opacity:.45; cursor:not-allowed}
+    .gachaL{
+      background: linear-gradient(180deg, rgba(255,255,255,.16), rgba(0,0,0,.18));
+      border: 1px solid rgba(255,255,255,.12);
+      color: var(--text);
+    }
+    .gachaR{
+      background: linear-gradient(180deg, #ffd54a, #ff7a00);
+      color: #08101f;
+      font-weight:1200;
+    }
+    .btnTitle{font-weight:1200}
+    .btnSub{font-size:11px; opacity:.9; margin-top:2px}
+    .costPill{
+      display:flex; align-items:center; gap:6px;
+      padding:8px 10px;border-radius:999px;
       background: rgba(0,0,0,.22);
-      border:1px solid rgba(255,255,255,.10);
-      font-size:12px;color:var(--text);
+      border:1px solid rgba(255,255,255,.12);
+      font-size:12px;
+      color: var(--text);
+      font-weight:1100;
+    }
+    .gachaR .costPill{
+      background: rgba(255,255,255,.25);
+      border-color: rgba(0,0,0,.10);
+      color:#08101f;
     }
     .miniGem{width:12px;height:12px;border-radius:4px;background:linear-gradient(135deg,var(--cyan),var(--vio));}
 
-    .resultPanel{
-      margin-top:12px;
-      border-radius:16px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.16);
-      padding:14px;
-      position:relative;
-      overflow:hidden;
-    }
-    .money{font-size:44px;font-weight:1200;letter-spacing:.02em;line-height:1.05}
-    .rarity{
-      display:inline-flex;align-items:center;gap:8px;
-      margin-top:8px;
-      padding:6px 10px;border-radius:999px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.05);
-      color:var(--muted);
-      font-size:12px;font-weight:1100;
-      text-transform:uppercase;
-    }
-    .rarDot{width:8px;height:8px;border-radius:999px;background:rgba(255,255,255,.25)}
-    .smallnote{font-size:11px;color:var(--muted);margin-top:10px}
-
     /* Toast */
     .toastWrap{
-      position:fixed;left:0;right:0;top:10px;
-      display:flex;justify-content:center;
-      pointer-events:none;z-index:80;
+      position:fixed; left:0; right:0; top:10px;
+      display:flex; justify-content:center;
+      pointer-events:none; z-index:90;
     }
     .toast{
       pointer-events:auto;
@@ -157,8 +187,8 @@
       background: rgba(0,0,0,.35);
       backdrop-filter: blur(10px);
       box-shadow: 0 22px 90px rgba(0,0,0,.55);
-      padding:12px 12px;
-      display:flex;align-items:center;gap:10px;
+      padding:12px;
+      display:flex; align-items:center; gap:10px;
       transform: translateY(-16px);
       opacity:0;
       transition: transform .22s ease, opacity .22s ease;
@@ -184,71 +214,32 @@
       cursor:pointer;
     }
 
-    /* Overlay / Modal (スマホ最適化：高さ制限＋スクロール) */
+    /* Overlay */
     .overlay{
-      position:fixed;inset:0;
-      background:rgba(0,0,0,.78);
-      display:none;align-items:center;justify-content:center;
-      padding:14px;z-index:60;
+      position:fixed; inset:0;
+      background: rgba(0,0,0,.78);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 12px;
+      z-index:80;
     }
     .overlay.show{display:flex}
     .modal{
-      width:min(760px, 100%);
+      width:min(760px,100%);
       max-height: calc(100dvh - 24px);
-      overflow:hidden;
-      border-radius:24px;
+      border-radius: 24px;
       border:1px solid rgba(255,255,255,.12);
       background:
         radial-gradient(700px 400px at 30% 10%, rgba(124,77,255,.38), transparent 60%),
         radial-gradient(700px 400px at 70% 90%, rgba(0,229,255,.28), transparent 60%),
         linear-gradient(180deg, rgba(255,255,255,.10), rgba(0,0,0,.18));
       box-shadow: 0 30px 110px rgba(0,0,0,.70);
-      position:relative;
+      overflow:hidden;
       display:flex;
       flex-direction:column;
+      position:relative;
     }
-    .modalIn{
-      padding:16px;
-      overflow:auto;
-      -webkit-overflow-scrolling: touch;
-    }
-    .modalTitle{font-weight:1200;font-size:16px}
-    .modalSub{font-size:12px;color:var(--muted);margin-top:6px}
-
-    /* Gacha stage */
-    .stage{
-      margin-top:12px;
-      height: min(360px, 52dvh);
-      border-radius:20px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.20);
-      position:relative;overflow:hidden;
-      display:flex;align-items:center;justify-content:center;
-      user-select:none;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .beam{
-      position:absolute;inset:-40%;
-      background: conic-gradient(from 180deg, rgba(255,213,74,.0), rgba(255,213,74,.45), rgba(255,122,0,.0));
-      animation: beam 1.05s linear infinite;
-      mix-blend-mode: screen;
-      opacity:0;
-    }
-    @keyframes beam{to{transform: rotate(360deg)}}
-    .orb{
-      width:128px;height:128px;border-radius:999px;
-      background:
-        radial-gradient(circle at 30% 30%, rgba(255,255,255,.95), rgba(255,255,255,.16) 30%, rgba(0,0,0,.0) 60%),
-        conic-gradient(from 140deg, var(--cyan), var(--vio), var(--accent), var(--cyan));
-      filter:saturate(1.25);
-      box-shadow: 0 0 50px rgba(124,77,255,.30), 0 0 90px rgba(0,229,255,.18);
-      animation: float 1.7s ease-in-out infinite;
-    }
-    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-11px)}}
-    .spinny .orb{animation: spin 0.95s linear infinite}
-    .spinny .beam{opacity:.9}
-    @keyframes spin{to{transform: rotate(360deg)}}
-
     .rainbow{
       position:absolute;inset:-60%;
       background: conic-gradient(from 180deg,
@@ -268,50 +259,60 @@
       transition: opacity .18s ease;
     }
     .rainbow.show{opacity:.95}
+    @keyframes spin{to{transform: rotate(360deg)}}
     .flash{
-      position:absolute;inset:0;background: rgba(255,255,255,1);
-      opacity:0;pointer-events:none;
+      position:absolute; inset:0;
+      background: rgba(255,255,255,1);
+      opacity:0; pointer-events:none;
     }
-    .flash.on{animation: flash 0.55s ease}
+    .flash.on{animation: flash .55s ease}
     @keyframes flash{0%{opacity:0}12%{opacity:.95}100%{opacity:0}}
 
-    .chars{position:absolute;inset:0;pointer-events:none}
-    .char{
-      position:absolute;bottom:12px;
-      width:164px;height:192px;border-radius:22px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.14);
-      backdrop-filter: blur(6px);
-      box-shadow: 0 18px 60px rgba(0,0,0,.35);
+    .modalIn{
+      padding: 14px;
+      overflow:auto;
+      -webkit-overflow-scrolling: touch;
+      position:relative;
+      z-index:2;
+    }
+    .mTitle{font-weight:1200;font-size:15px}
+    .mSub{font-size:12px;color:var(--muted);margin-top:4px}
+
+    .stage{
+      margin-top:12px;
+      height: min(420px, 58dvh);
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.20);
+      position:relative;
       overflow:hidden;
-      opacity:0; transform: translateY(10px);
-      transition: opacity .22s ease, transform .22s ease;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
     }
-    .char.show{opacity:1;transform: translateY(0)}
-    .char.left{left:12px}
-    .char.right{right:12px}
-    .charFace{
-      position:absolute;left:14px;top:14px;
-      width:54px;height:54px;border-radius:16px;
-      background: linear-gradient(135deg, rgba(255,255,255,.20), rgba(255,255,255,.06));
-      border:1px solid rgba(255,255,255,.10);
+    .beam{
+      position:absolute;inset:-40%;
+      background: conic-gradient(from 180deg, rgba(255,213,74,.0), rgba(255,213,74,.45), rgba(255,122,0,.0));
+      animation: beam 1.05s linear infinite;
+      mix-blend-mode: screen;
+      opacity:0;
     }
-    .charFace::before,.charFace::after{
-      content:"";position:absolute;top:20px;width:8px;height:10px;border-radius:6px;background:rgba(255,255,255,.75);
+    @keyframes beam{to{transform: rotate(360deg)}}
+    .orb{
+      width:128px;height:128px;border-radius:999px;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(255,255,255,.95), rgba(255,255,255,.16) 30%, rgba(0,0,0,.0) 60%),
+        conic-gradient(from 140deg, var(--cyan), var(--vio), var(--accent), var(--cyan));
+      filter:saturate(1.25);
+      box-shadow: 0 0 50px rgba(124,77,255,.30), 0 0 90px rgba(0,229,255,.18);
+      animation: float 1.7s ease-in-out infinite;
+      pointer-events:none;
     }
-    .charFace::before{left:15px}
-    .charFace::after{right:15px}
-    .charName{position:absolute;left:78px;top:16px;font-weight:1200;font-size:12px}
-    .charRole{position:absolute;left:78px;top:36px;font-weight:1000;font-size:11px;color:var(--muted)}
-    .bubble{
-      position:absolute;left:12px;right:12px;top:78px;
-      padding:10px 10px;border-radius:16px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.18);
-      color: var(--text);
-      font-size:12px;line-height:1.35;
-    }
-    .bubble small{color:var(--muted)}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-11px)}}
+    .spinny .orb{animation: spin 0.95s linear infinite}
+    .spinny .beam{opacity:.9}
 
     .tapHint{
       position:absolute;left:50%;top:12px;transform:translateX(-50%);
@@ -319,7 +320,6 @@
       border:1px solid rgba(255,255,255,.12);
       background: rgba(0,0,0,.22);
       font-size:12px;font-weight:1100;
-      color: var(--text);
       opacity:0;
       transition: opacity .18s ease;
       pointer-events:none;
@@ -327,22 +327,103 @@
     }
     .tapHint.show{opacity:1}
 
-    .reveal{
-      position:absolute;inset:0;
-      display:flex;flex-direction:column;align-items:center;justify-content:center;
-      gap:6px;text-align:center;padding:16px;
-      opacity:0;transform: scale(.98);
-      transition: opacity .22s ease, transform .22s ease;
+    /* SSR確定スタンプ */
+    .stamp{
+      position:absolute;
+      left:50%; top:50%;
+      transform: translate(-50%,-50%) rotate(-10deg) scale(.9);
+      padding:14px 16px;
+      border-radius: 18px;
+      background: rgba(0,0,0,.22);
+      border: 2px solid rgba(255,213,74,.75);
+      box-shadow: 0 0 35px rgba(255,213,74,.22);
+      font-weight:1300;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      opacity:0;
+      pointer-events:none;
     }
-    .reveal.show{opacity:1;transform:scale(1)}
-    .revealMoney{font-size:54px;font-weight:1300}
-    .revealRarity{font-size:14px;font-weight:1200;letter-spacing:.08em}
-    .rollSummary{margin-top:8px;font-size:12px;color:var(--muted);max-width:620px}
+    .stamp.show{animation: stamp .85s ease forwards}
+    @keyframes stamp{
+      0%{opacity:0; transform: translate(-50%,-50%) rotate(-12deg) scale(.6)}
+      22%{opacity:1; transform: translate(-50%,-50%) rotate(-12deg) scale(1.06)}
+      55%{opacity:1; transform: translate(-50%,-50%) rotate(-12deg) scale(1.0)}
+      100%{opacity:0; transform: translate(-50%,-60%) rotate(-12deg) scale(.96)}
+    }
+
+    /* Card reveal */
+    .cardWrap{
+      position:absolute; inset:0;
+      display:flex; flex-direction:column;
+      align-items:center; justify-content:center;
+      gap:10px;
+      padding:16px;
+      opacity:0;
+      transform: scale(.98);
+      transition: opacity .18s ease, transform .18s ease;
+    }
+    .cardWrap.show{opacity:1; transform: scale(1)}
+    .card{
+      width: min(320px, 86%);
+      aspect-ratio: 3 / 4;
+      border-radius: 22px;
+      background: rgba(0,0,0,.18);
+      border: 2px solid rgba(255,255,255,.14);
+      box-shadow: 0 24px 80px rgba(0,0,0,.45);
+      position:relative;
+      overflow:hidden;
+    }
+    .card::before{
+      content:"";
+      position:absolute; inset:-30%;
+      background: radial-gradient(circle at 30% 25%, rgba(255,255,255,.18), transparent 50%);
+      transform: rotate(10deg);
+      opacity:.8;
+    }
+    .cardGlow{
+      position:absolute; inset:-60%;
+      opacity:0;
+      filter: blur(10px) saturate(1.2);
+      mix-blend-mode: screen;
+      animation: spin 1.2s linear infinite;
+    }
+    .cardFrame{
+      position:absolute; inset:10px;
+      border-radius: 18px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.16);
+    }
+    .rarText{
+      position:absolute; top:14px; left:14px;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.18);
+      font-weight:1300;
+      letter-spacing:.12em;
+      font-size:12px;
+    }
+    .money{
+      position:absolute; left:0; right:0;
+      top:50%; transform: translateY(-50%);
+      text-align:center;
+      font-weight:1400;
+      font-size: 46px;
+      text-shadow: 0 10px 30px rgba(0,0,0,.55);
+      padding: 0 12px;
+    }
+    .tapNext{
+      font-size:12px; color: var(--muted);
+      text-align:center;
+      margin-top:2px;
+    }
     .pills{
-      display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:10px;
-      max-height: 92px;
+      display:flex; flex-wrap:wrap;
+      gap:6px; justify-content:center;
+      max-height: 88px;
       overflow:auto;
-      padding:2px 4px;
+      padding: 2px 4px;
+      width: 100%;
     }
     .pill{
       font-size:11px;font-weight:1100;
@@ -351,10 +432,57 @@
       background: rgba(0,0,0,.16);
       color: var(--text);
     }
-    .pill.ssr{border-color: rgba(255,213,74,.45);box-shadow: 0 0 24px rgba(255,213,74,.18)}
-    .confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+    .pill.ssr{border-color: rgba(255,213,74,.55); box-shadow: 0 0 20px rgba(255,213,74,.14)}
 
-    .footerRow{display:flex;gap:10px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+    /* rarity color states for card */
+    .card.n{border-color: rgba(168,179,214,.35)}
+    .card.r{border-color: rgba(0,229,255,.55); box-shadow: 0 0 40px rgba(0,229,255,.10), 0 24px 80px rgba(0,0,0,.45)}
+    .card.sr{border-color: rgba(255,122,0,.65); box-shadow: 0 0 45px rgba(255,122,0,.12), 0 24px 80px rgba(0,0,0,.45)}
+    .card.ssr{border-color: rgba(255,213,74,.80); box-shadow: 0 0 55px rgba(255,213,74,.18), 0 24px 80px rgba(0,0,0,.45)}
+    .card.ssr .cardGlow{opacity:.85; background: conic-gradient(from 180deg,
+      rgba(255,0,92,.0), rgba(255,0,92,.55),
+      rgba(255,214,0,.55),
+      rgba(0,229,255,.55),
+      rgba(124,77,255,.55),
+      rgba(255,122,0,.55),
+      rgba(255,0,92,.55),
+      rgba(255,0,92,.0)
+    );}
+    .card.sr .cardGlow{opacity:.65; background: conic-gradient(from 180deg, rgba(255,213,74,.0), rgba(255,213,74,.5), rgba(255,122,0,.0));}
+    .card.r .cardGlow{opacity:.55; background: conic-gradient(from 180deg, rgba(0,229,255,.0), rgba(0,229,255,.55), rgba(124,77,255,.0));}
+    .card.n .cardGlow{opacity:.22; background: conic-gradient(from 180deg, rgba(168,179,214,.0), rgba(168,179,214,.35), rgba(168,179,214,.0));}
+
+    /* Total badge */
+    .totalBadge{
+      position:absolute;
+      right:12px; top:12px;
+      padding:8px 10px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.22);
+      font-size:12px;
+      font-weight:1200;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      opacity:0;
+      transform: translateY(-4px);
+      transition: opacity .18s ease, transform .18s ease;
+      pointer-events:none;
+    }
+    .totalBadge.show{opacity:1; transform: translateY(0)}
+    .dot{width:8px;height:8px;border-radius:999px;background: rgba(255,255,255,.3)}
+    .dot.ssr{background: rgba(255,213,74,.95)}
+    .dot.sr{background: rgba(255,122,0,.95)}
+    .dot.r{background: rgba(0,229,255,.95)}
+    .dot.n{background: rgba(168,179,214,.65)}
+
+    .footerRow{
+      display:flex; gap:10px;
+      justify-content:flex-end;
+      margin-top: 12px;
+      flex-wrap:wrap;
+    }
     .okbtn{
       border:1px solid rgba(255,255,255,.14);
       background: rgba(0,0,0,.16);
@@ -365,22 +493,14 @@
       cursor:pointer;
     }
 
-    /* Mobile tweaks */
     @media (max-width: 520px){
-      .wrap{gap:12px}
-      .topbar{flex-direction:column;align-items:flex-start}
-      .gem{min-width:unset;width:100%;justify-content:flex-start}
-      .money{font-size:40px}
-      .char{width:132px;height:156px}
-      .bubble{top:64px;font-size:11px}
-      .charName{left:70px;font-size:11px}
-      .charRole{left:70px;top:33px;font-size:10px}
-      .revealMoney{font-size:48px}
+      .money{font-size:42px}
     }
   </style>
 </head>
 
 <body>
+  <!-- Login bonus toast -->
   <div class="toastWrap">
     <div class="toast" id="toast">
       <div class="toastIcon"></div>
@@ -392,58 +512,56 @@
     </div>
   </div>
 
-  <div class="wrap">
-    <div class="topbar">
-      <div>
-        <div class="title">お年玉ガチャ（1連 / 10連）</div>
-        <div class="sub">
-          <span class="badge">1連：300ジェム</span>
-          <span class="badge">10連：3000ジェム</span>
-          <span class="badge">SSRで最大30,000円</span>
-        </div>
-      </div>
-      <div class="gem">
-        <div class="gemL">
-          <div class="gemIcon"></div>
-          <div>
-            <div class="gemCount"><span id="gems">--</span> <span class="gemSmall">GEMS</span></div>
-            <div class="gemSmall">所持ジェム</div>
-          </div>
-        </div>
+  <div class="app">
+    <div class="hud">
+      <div class="gemIcon"></div>
+      <div class="gemText">
+        <div class="gemCount"><span id="gems">--</span> GEMS</div>
+        <div class="gemSub">所持ジェム</div>
       </div>
     </div>
 
-    <div class="card">
-      <div class="cardIn">
-        <div class="actions" style="margin-top:0">
-          <button class="btn btn2" id="resetBtn">初期化（親PIN）</button>
-        </div>
-
-        <label style="margin-top:10px;">候補金額（カンマ区切り）</label>
-        <input id="candidates" />
-        <div class="hint">SSRは 3,000円（虹演出）。SSRが含まれる10連は途中で“虹予兆”が出ます。</div>
-
-        <label style="margin-top:10px;">確率（任意：金額:重み）</label>
-        <textarea id="weights"></textarea>
-        <div class="hint">重みが大きいほど出やすい。空なら均等。</div>
-
-        <div class="actions">
-          <button class="btn" id="oneBtn">
-            1連を回す
-            <span class="costBadge"><span class="miniGem"></span>-300</span>
-          </button>
-          <button class="btn" id="tenBtn">
-            10連を回す
-            <span class="costBadge"><span class="miniGem"></span>-3000</span>
-          </button>
-        </div>
-
-        <div class="resultPanel">
-          <div class="money" id="money">¥---</div>
-          <div class="rarity" id="rarity"><span class="rarDot"></span><span id="rarText">READY</span></div>
-          <div class="smallnote">※ ジェムが足りないと回せません</div>
-        </div>
+    <div class="infoCard">
+      <div class="title">お年玉ガチャ</div>
+      <div class="badges">
+        <div class="badge">1回：300ジェム</div>
+        <div class="badge ssr">SSR確定！10連：3000ジェム</div>
+        <div class="badge">SSR=3,000円</div>
+        <div class="badge">最大30,000円（10連合計）</div>
       </div>
+
+      <div class="infoBody">
+        <div class="hint">
+          ・10連は <b>SSR(3,000円)が必ず1回</b> 入ります<br/>
+          ・開封は <b>タップで1個ずつ</b> → 最後に「合計は……」の溜め
+        </div>
+
+        <label>候補金額（カンマ区切り）</label>
+        <input id="candidates" />
+
+        <label>確率（任意：金額:重み）</label>
+        <textarea id="weights"></textarea>
+
+        <button class="ghostBtn" id="resetBtn">初期化（親PIN）</button>
+      </div>
+    </div>
+
+    <div class="bottomBar">
+      <button class="gachaBtn gachaL" id="oneBtn">
+        <div>
+          <div class="btnTitle">1回ガチャ</div>
+          <div class="btnSub">タップで開封</div>
+        </div>
+        <div class="costPill"><span class="miniGem"></span>-300</div>
+      </button>
+
+      <button class="gachaBtn gachaR" id="tenBtn">
+        <div>
+          <div class="btnTitle">SSR確定！10連</div>
+          <div class="btnSub">カード演出</div>
+        </div>
+        <div class="costPill"><span class="miniGem"></span>-3000</div>
+      </button>
     </div>
   </div>
 
@@ -452,38 +570,35 @@
     <div class="modal">
       <div class="rainbow" id="rainbow"></div>
       <div class="flash" id="flash"></div>
-      <div class="confetti" id="confetti"></div>
+
       <div class="modalIn">
-        <div class="modalTitle" id="modalTitle">召喚中…</div>
-        <div class="modalSub" id="modalSub">演出中</div>
+        <div class="mTitle" id="mTitle">召喚中…</div>
+        <div class="mSub" id="mSub">ステージをタップして進める</div>
 
         <div class="stage spinny" id="stage">
-          <div class="beam" aria-hidden="true"></div>
-          <div class="orb" aria-hidden="true"></div>
+          <div class="beam"></div>
+          <div class="orb"></div>
 
-          <div class="tapHint" id="tapHint">タップで開封（1/10）</div>
+          <div class="tapHint" id="tapHint">タップで開封</div>
+          <div class="stamp" id="stamp">SSR確定！</div>
 
-          <div class="chars">
-            <div class="char left" id="charL">
-              <div class="charFace"></div>
-              <div class="charName">召喚士 ハヤブサ</div>
-              <div class="charRole">煽り担当</div>
-              <div class="bubble" id="lineL">いくぞ…</div>
-            </div>
-            <div class="char right" id="charR">
-              <div class="charFace"></div>
-              <div class="charName">精霊 ミオ</div>
-              <div class="charRole">運命担当</div>
-              <div class="bubble" id="lineR">虹、見たい？</div>
-            </div>
+          <div class="totalBadge" id="totalBadge">
+            <span class="dot" id="totalDot"></span>
+            <span id="totalText">TOTAL</span>
           </div>
 
-          <div class="reveal" id="reveal">
-            <div class="revealRarity" id="revealRarity">R</div>
-            <div class="revealMoney" id="revealMoney">¥---</div>
-            <div class="rollSummary" id="rollSummary">—</div>
+          <!-- Card UI -->
+          <div class="cardWrap" id="cardWrap">
+            <div class="card n" id="card">
+              <div class="cardGlow" id="cardGlow"></div>
+              <div class="cardFrame"></div>
+              <div class="rarText" id="rarText">N</div>
+              <div class="money" id="money">¥---</div>
+            </div>
+
+            <div class="tapNext" id="tapNext">タップで次へ</div>
+
             <div class="pills" id="pills"></div>
-            <div class="modalSub">スクショ推奨</div>
           </div>
         </div>
 
@@ -499,19 +614,20 @@
       BONUS_GEMS: 3000,
       COST_1: 300,
       COST_10: 3000,
-      MAX_TENROLL_PAYOUT: 30000,
       SSR_AMOUNT: 3000,
+      MAX_TOTAL: 30000,
       PARENT_PIN: "2525",
       CANDIDATES: "500,1000,2000,3000",
       WEIGHTS: `500:55
 1000:30
 2000:12
-3000:3`
+3000:3`,
+      TAP_COOLDOWN_MS: 300
     };
 
     const LS = {
-      gems: "otg5_gems_v1",
-      bonusTaken: "otg5_bonus_taken_v1"
+      gems: "otg7_gems_v1",
+      bonusTaken: "otg7_bonus_taken_v1"
     };
 
     const $ = (id) => document.getElementById(id);
@@ -558,23 +674,23 @@
       return items[items.length - 1].a;
     }
 
-    function setDot(r){
-      const dot = $("rarity").querySelector(".rarDot");
-      dot.style.background =
-        r==="SSR" ? "rgba(255,213,74,.95)" :
-        r==="SR" ? "rgba(255,122,0,.95)" :
-        r==="R" ? "rgba(0,229,255,.95)" :
-        r==="N" ? "rgba(168,179,214,.65)" :
-        "rgba(255,255,255,.25)";
-    }
-    function rarityFromPayout(p){
-      if (p >= 30000) return "SSR";
-      if (p >= 20000) return "SR";
-      if (p >= 10000) return "R";
+    // rarity for each pull (card frame)
+    function rarityOfValue(v){
+      // このアプリ仕様では最大が3000なので、3000=SSR。それ以外は段階分け。
+      if (v >= 3000) return "SSR";
+      if (v >= 2000) return "SR";
+      if (v >= 1000) return "R";
       return "N";
     }
 
-    // WebAudio
+    function totalRarity(total){
+      if (total >= 30000) return "ssr";
+      if (total >= 20000) return "sr";
+      if (total >= 10000) return "r";
+      return "n";
+    }
+
+    // WebAudio (simple)
     let audioCtx;
     function beep(seq){
       try{
@@ -596,83 +712,32 @@
       }catch(e){}
     }
     function vibe(ms){ if (navigator.vibrate) navigator.vibrate(ms); }
-    function sfxBonus(){ beep([{at:0,f:523.25,d:0.12,v:0.10,type:"square"},{at:0.12,f:659.25,d:0.12,v:0.11,type:"square"}]); }
-    function sfxStart(){ beep([{at:0,f:196,d:0.10,v:0.10,type:"square"},{at:0.10,f:247,d:0.10,v:0.10,type:"square"}]); }
-    function sfxTap(){ beep([{at:0,f:220,d:0.06,v:0.07,type:"sine"}]); }
-    function sfxDrum(){ beep([{at:0,f:110,d:0.07,v:0.08,type:"sine"},{at:0.08,f:98,d:0.08,v:0.08,type:"sine"}]); }
-    function sfxSSR(){
-      beep([
-        {at:0.00,f:523.25,d:0.14,v:0.14,type:"sawtooth"},
-        {at:0.14,f:659.25,d:0.14,v:0.14,type:"sawtooth"},
-        {at:0.28,f:783.99,d:0.22,v:0.16,type:"sawtooth"},
-        {at:0.52,f:1046.5,d:0.25,v:0.18,type:"sine"}
-      ]);
-    }
-    function sfxNormal(r){
-      if (r==="SR") beep([{at:0,f:392,d:0.14,v:0.12},{at:0.14,f:523.25,d:0.20,v:0.13}]);
-      else if (r==="R") beep([{at:0,f:330,d:0.14,v:0.10},{at:0.14,f:440,d:0.18,v:0.11}]);
-      else beep([{at:0,f:262,d:0.12,v:0.08}]);
-    }
+
+    const sfx = {
+      start(){ beep([{at:0,f:196,d:0.10,v:0.10,type:"square"},{at:0.10,f:247,d:0.10,v:0.10,type:"square"}]); },
+      tap(){ beep([{at:0,f:220,d:0.06,v:0.07,type:"sine"}]); },
+      drum(){ beep([{at:0,f:110,d:0.07,v:0.08,type:"sine"},{at:0.08,f:98,d:0.08,v:0.08,type:"sine"}]); },
+      ssr(){
+        beep([
+          {at:0.00,f:523.25,d:0.14,v:0.14,type:"sawtooth"},
+          {at:0.14,f:659.25,d:0.14,v:0.14,type:"sawtooth"},
+          {at:0.28,f:783.99,d:0.22,v:0.16,type:"sawtooth"},
+          {at:0.52,f:1046.5,d:0.25,v:0.18,type:"sine"}
+        ]);
+      },
+      reveal(){ beep([{at:0,f:392,d:0.14,v:0.12},{at:0.14,f:523.25,d:0.18,v:0.13}]); },
+      bonus(){ beep([{at:0,f:523.25,d:0.12,v:0.10,type:"square"},{at:0.12,f:659.25,d:0.12,v:0.11,type:"square"}]); }
+    };
+
     function flash(){
       const f = $("flash");
       f.classList.remove("on"); void f.offsetWidth; f.classList.add("on");
     }
-    function confettiBurst(kind){
-      const wrap = $("confetti");
-      wrap.innerHTML = "";
-      const count = kind==="SSR" ? 70 : (kind==="SR" ? 36 : (kind==="R" ? 22 : 12));
-      for(let i=0;i<count;i++){
-        const el = document.createElement("div");
-        el.style.position="absolute";
-        el.style.top="-24px";
-        el.style.left = (Math.random()*100) + "%";
-        const w = 6 + Math.random()*10;
-        const h = 10 + Math.random()*18;
-        el.style.width = w+"px";
-        el.style.height = h+"px";
-        el.style.borderRadius = "4px";
-        const col =
-          kind==="SSR" ? ["rgba(255,0,92,.95)","rgba(255,214,0,.95)","rgba(0,229,255,.95)","rgba(124,77,255,.95)","rgba(255,122,0,.95)"][Math.floor(Math.random()*5)]
-          : kind==="SR" ? (Math.random()<.5 ? "rgba(255,213,74,.95)" : "rgba(255,122,0,.95)")
-          : kind==="R" ? (Math.random()<.5 ? "rgba(0,229,255,.95)" : "rgba(255,255,255,.85)")
-          : (Math.random()<.5 ? "rgba(255,255,255,.75)" : "rgba(168,179,214,.75)");
-        el.style.background = col;
-
-        const dur = 800 + Math.random()*900;
-        const rot = Math.random()*360;
-        const drift = (Math.random()*140 - 70);
-        el.animate(
-          [
-            { transform:`translate(0px,-10px) rotate(${rot}deg)`, opacity:1 },
-            { transform:`translate(${drift}px,360px) rotate(${rot+700}deg)`, opacity:0.95 }
-          ],
-          { duration: dur, delay: Math.random()*180, easing: "linear", fill:"forwards" }
-        );
-        wrap.appendChild(el);
-      }
-    }
-
-    const LINES_L = {
-      start: ["いくぞ…", "覚悟はいいか？", "最大値を掴め。"],
-      mid: ["…来い、SSR（3,000円）", "1つずつ開けるぞ。", "運命を見せてみろ。"],
-      hint: ["……気配が違う。", "虹の匂いがする。", "今のは…前兆だ。"],
-      end: ["よし、受け取れ。", "スクショしろ。", "次はジェムがある時だけだ。"]
-    };
-    const LINES_R = {
-      start: ["順番にいくよ。", "ドキドキするね。", "虹、見たい？"],
-      mid: ["まだまだ、いける。", "次、開けるよ。", "集中して。"],
-      hint: ["見えた？…虹の予兆。", "SSRが近いかも。", "運命、動いた。"],
-      end: ["おめでとう。", "これが今回の結果。", "保存してね。"]
-    };
-    function randPick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 
     function showToastIfNeeded(){
       const taken = localStorage.getItem(LS.bonusTaken) === "1";
-      if (!taken){
-        setTimeout(()=>$("toast").classList.add("show"), 350);
-      }else{
-        $("toast").classList.remove("show");
-      }
+      if (!taken) setTimeout(()=>$("toast").classList.add("show"), 350);
+      else $("toast").classList.remove("show");
     }
     function hideToast(){ $("toast").classList.remove("show"); }
     function applyBonus(){
@@ -680,19 +745,10 @@
       if (taken) return;
       localStorage.setItem(LS.bonusTaken, "1");
       setGems(getGems() + CFG.BONUS_GEMS);
-      sfxBonus(); vibe(40);
-      confettiBurst("SSR");
+      sfx.bonus(); vibe(40);
       hideToast();
     }
 
-    function showOverlay(){ $("overlay").classList.add("show"); }
-    function hideOverlay(){ $("overlay").classList.remove("show"); }
-
-    function renderResult(amount, rar){
-      $("money").textContent = yen(amount);
-      $("rarText").textContent = rar;
-      setDot(rar);
-    }
     function render(){
       const g = getGems();
       $("gems").textContent = g;
@@ -700,167 +756,201 @@
       $("tenBtn").disabled = g < CFG.COST_10;
     }
 
-    // ====== Tap-to-open state ======
-    let openState = null;
+    function showOverlay(){
+      $("overlay").classList.add("show");
+    }
+    function hideOverlay(){
+      $("overlay").classList.remove("show");
+    }
 
     function setTapHint(text, show){
       $("tapHint").textContent = text;
       $("tapHint").classList.toggle("show", !!show);
     }
+    function showStamp(){
+      const st = $("stamp");
+      st.classList.remove("show");
+      void st.offsetWidth;
+      st.classList.add("show");
+    }
+
+    function setTotalBadge(text, rar){
+      $("totalText").textContent = text;
+      const dot = $("totalDot");
+      dot.className = "dot " + rar;
+      $("totalBadge").classList.add("show");
+    }
+    function hideTotalBadge(){ $("totalBadge").classList.remove("show"); }
+
+    function setCard(value){
+      const rar = rarityOfValue(value);
+      const card = $("card");
+      const rarText = $("rarText");
+      card.className = "card " + rar.toLowerCase();
+      rarText.textContent = rar;
+      $("money").textContent = yen(value);
+
+      // SSRなら虹強化
+      if (rar === "SSR"){
+        $("rainbow").classList.add("show");
+        flash(); setTimeout(flash, 160);
+        sfx.ssr(); vibe(120);
+      }else{
+        $("rainbow").classList.remove("show");
+        sfx.reveal();
+        vibe(rar === "SR" ? 60 : (rar === "R" ? 35 : 18));
+      }
+    }
+
+    function addPill(value){
+      const p = document.createElement("div");
+      p.className = "pill" + (value === CFG.SSR_AMOUNT ? " ssr" : "");
+      p.textContent = yen(value);
+      $("pills").appendChild(p);
+    }
+
+    // ===== Tap flow =====
+    let state = null;
+    let tapLockedUntil = 0;
+
+    function canTap(){
+      const now = Date.now();
+      if (now < tapLockedUntil) return false;
+      tapLockedUntil = now + CFG.TAP_COOLDOWN_MS;
+      return true;
+    }
 
     async function startCinematic(pulls, mode){
       showOverlay();
       $("closeBtn").disabled = true;
-      $("reveal").classList.remove("show");
-      $("stage").classList.add("spinny");
-      $("confetti").innerHTML = "";
-      $("rainbow").classList.remove("show");
+      $("totalBadge").classList.remove("show");
       $("pills").innerHTML = "";
+      $("cardWrap").classList.remove("show");
+      $("rainbow").classList.remove("show");
 
-      $("charL").classList.add("show");
-      $("charR").classList.add("show");
+      $("stage").classList.add("spinny");
+      $("mTitle").textContent = mode === "10" ? "SSR確定！10連ガチャ" : "1回ガチャ";
+      $("mSub").textContent = "ステージをタップして進める";
+      setTapHint("召喚中…", true);
 
-      $("modalTitle").textContent = mode==="10" ? "10連：開封準備…" : "1連：召喚準備…";
-      $("modalSub").textContent = mode==="10" ? "タップで1個ずつ開封" : "タップで結果表示";
-
-      $("lineL").textContent = randPick(LINES_L.start);
-      $("lineR").textContent = randPick(LINES_R.start);
-
-      sfxStart(); vibe(25);
-
-      // ちょい溜め演出
-      for(let i=0;i<6;i++){
-        await new Promise(r=>setTimeout(r, 120));
-        sfxDrum();
-        if(i%2===0) vibe(10);
+      // SSR確定スタンプ（10連だけ最初にドン）
+      if (mode === "10"){
+        showStamp();
+        sfx.ssr(); vibe(60);
       }
 
-      // 開封フェーズへ
+      sfx.start(); vibe(25);
+      for(let i=0;i<6;i++){
+        await new Promise(r=>setTimeout(r, 110));
+        sfx.drum();
+        if (i%2===0) vibe(10);
+      }
       $("stage").classList.remove("spinny");
-      openState = {
+
+      // 開封UIを表示
+      $("cardWrap").classList.add("show");
+      setTapHint(mode === "10" ? "タップで開封（1/10）" : "タップで開封（1/1）", true);
+      $("tapNext").textContent = "タップで開封";
+
+      state = {
         mode,
         pulls,
         idx: 0,
-        hasSSR: pulls.includes(CFG.SSR_AMOUNT),
-        rainbowShown: false,
-        finished: false
+        opened: [],
+        finished: false,
+        readyTotal: false
       };
-
-      setTapHint(mode==="10" ? "タップで開封（1/10）" : "タップで開封（1/1）", true);
-      $("modalTitle").textContent = mode==="10" ? "10連：開封中…" : "1連：開封中…";
-      $("modalSub").textContent = "ステージをタップして進める";
-
-      // 途中煽りを先に一回
-      $("lineL").textContent = randPick(LINES_L.mid);
-      $("lineR").textContent = randPick(LINES_R.mid);
     }
 
-    function rainbowPremonition(){
-      // “予兆”は強すぎない範囲で（虹＋軽フラッシュ）
-      $("rainbow").classList.add("show");
-      flash();
-      sfxNormal("R");
-      vibe(35);
-      confettiBurst("R");
-      setTimeout(()=>{ $("rainbow").classList.remove("show"); }, 850);
-      $("lineL").textContent = randPick(LINES_L.hint);
-      $("lineR").textContent = randPick(LINES_R.hint);
-    }
+    async function totalReveal(){
+      $("tapNext").textContent = "合計へ…";
+      $("mSub").textContent = "合計は・・・・・・";
+      setTapHint("タップで合計表示", true);
 
-    function finishReveal(){
-      const mode = openState.mode;
-      const pulls = openState.pulls;
-
-      let resultAmount;
-      if (mode==="1"){
-        resultAmount = pulls[0];
-      }else{
-        const max = Math.max(...pulls);
-        resultAmount = Math.min(max * 10, CFG.MAX_TENROLL_PAYOUT);
+      // ため演出（タップ不要で進む）
+      flash(); vibe(35);
+      for(let i=0;i<8;i++){
+        await new Promise(r=>setTimeout(r, 140));
+        sfx.drum();
+        if (i%2===0) vibe(10);
       }
 
-      const rar = (mode==="10")
-        ? rarityFromPayout(resultAmount)
-        : (pulls[0] >= 3000 ? "SSR" : (pulls[0] >= 2000 ? "SR" : (pulls[0] >= 1000 ? "R" : "N")));
+      const totalRaw = state.opened.reduce((s,x)=>s+x,0);
+      const total = Math.min(totalRaw, CFG.MAX_TOTAL);
+      const rar = totalRarity(total);
 
-      // 本演出
-      if (rar==="SSR"){
+      if (rar === "ssr"){
         $("rainbow").classList.add("show");
         flash(); setTimeout(flash, 180); setTimeout(flash, 360);
-        sfxSSR(); vibe(140);
+        sfx.ssr(); vibe(140);
       }else{
-        sfxNormal(rar);
-        vibe(rar==="SR" ? 80 : (rar==="R" ? 45 : 25));
+        $("rainbow").classList.remove("show");
+        sfx.reveal(); vibe(rar==="sr" ? 80 : (rar==="r" ? 45 : 25));
       }
-      confettiBurst(rar);
 
-      $("revealMoney").textContent = yen(resultAmount);
-      $("revealRarity").textContent = `${rar}（結果）`;
-
-      $("rollSummary").textContent = (mode==="10")
-        ? `10回の結果：${pulls.map(yen).join(" / ")}（最大値×10で確定）`
-        : `結果：${yen(pulls[0])}`;
-
-      $("lineL").textContent = randPick(LINES_L.end);
-      $("lineR").textContent = randPick(LINES_R.end);
-
-      $("reveal").classList.add("show");
+      setTotalBadge("合計 " + yen(total), rar);
+      $("mSub").textContent = "スクショ推奨：今回の合計";
       $("closeBtn").disabled = false;
+      state.finished = true;
       setTapHint("", false);
-
-      renderResult(resultAmount, rar);
-      render();
-      openState.finished = true;
+      $("tapNext").textContent = "OKで戻る";
     }
 
     function onStageTap(){
-      if (!openState || openState.finished) return;
+      if (!state || state.finished) return;
 
-      sfxTap();
+      // 連打防止
+      if (!canTap()) return;
+
+      sfx.tap();
       vibe(10);
 
-      const { mode, pulls } = openState;
-
-      // 途中でSSRが含まれてる時だけ、5回目あたりで“虹予兆”
-      if (mode==="10" && openState.hasSSR && !openState.rainbowShown && openState.idx === 4){
-        openState.rainbowShown = true;
-        rainbowPremonition();
+      if (state.readyTotal){
+        // 合計表示へ
+        state.readyTotal = false;
+        totalReveal();
+        return;
       }
 
-      // 1つ開封
-      const v = pulls[openState.idx];
-      const pill = document.createElement("div");
-      pill.className = "pill" + (v===CFG.SSR_AMOUNT ? " ssr" : "");
-      pill.textContent = yen(v);
-      $("pills").appendChild(pill);
+      const v = state.pulls[state.idx];
+      state.opened.push(v);
+      addPill(v);
+      setCard(v);
 
-      openState.idx++;
+      state.idx++;
 
-      if (mode==="10"){
-        setTapHint(`タップで開封（${openState.idx+1}/10）`, true);
-        $("modalSub").textContent = `開封：${openState.idx} / 10（タップで次へ）`;
+      if (state.mode === "10"){
+        if (state.idx < 10){
+          setTapHint(`タップで開封（${state.idx+1}/10）`, true);
+          $("mSub").textContent = "次へ（タップ）";
+        }else{
+          // 全部開封完了 → 次のタップで合計へ
+          $("mSub").textContent = "全て開封完了";
+          $("tapNext").textContent = "タップで合計へ";
+          setTapHint("タップで合計へ", true);
+          state.readyTotal = true;
+        }
       }else{
-        setTapHint(`タップで確定`, true);
-        $("modalSub").textContent = `開封：1 / 1`;
-      }
-
-      // 全部開け終わったら結果確定
-      if ((mode==="10" && openState.idx >= 10) || (mode==="1" && openState.idx >= 1)){
-        finishReveal();
+        // 1回はここで終了
+        $("mSub").textContent = "OKで戻る";
+        $("closeBtn").disabled = false;
+        state.finished = true;
+        setTapHint("", false);
+        $("tapNext").textContent = "OKで戻る";
       }
     }
 
     function doOne(){
       const g = getGems();
       if (g < CFG.COST_1){
-        alert("ジェムが足りません（1連は300ジェム必要）");
+        alert("ジェムが足りません（1回は300ジェム必要）");
         return;
       }
       setGems(g - CFG.COST_1);
 
       const cands = parseCandidates();
-      const weightMap = parseWeights();
-      const v = weightedPick(cands, weightMap);
+      const w = parseWeights();
+      const v = weightedPick(cands, w);
 
       startCinematic([v], "1");
     }
@@ -874,8 +964,14 @@
       setGems(g - CFG.COST_10);
 
       const cands = parseCandidates();
-      const weightMap = parseWeights();
-      const pulls = Array.from({length:10}, ()=>weightedPick(cands, weightMap));
+      const w = parseWeights();
+
+      let pulls = Array.from({length:10}, ()=>weightedPick(cands, w));
+
+      // SSR確定：どこか1枠を必ず3000にする
+      if (!pulls.includes(CFG.SSR_AMOUNT)){
+        pulls[Math.floor(Math.random()*10)] = CFG.SSR_AMOUNT;
+      }
 
       startCinematic(pulls, "10");
     }
@@ -889,10 +985,9 @@
       }
       localStorage.removeItem(LS.gems);
       localStorage.removeItem(LS.bonusTaken);
-      renderResult(0, "READY");
+      alert("初期化しました（ログインボーナスが再表示されます）");
       render();
       showToastIfNeeded();
-      alert("初期化しました（ログインボーナスが再表示されます）");
     }
 
     function init(){
@@ -906,10 +1001,13 @@
       $("toast").addEventListener("click", applyBonus);
       $("toastBtn").addEventListener("click", (e)=>{ e.stopPropagation(); applyBonus(); });
 
-      $("closeBtn").addEventListener("click", ()=>{ openState=null; hideOverlay(); });
-      $("overlay").addEventListener("click", (e)=>{ if (e.target === $("overlay")) { openState=null; hideOverlay(); }});
+      $("closeBtn").addEventListener("click", ()=>{ state=null; hideOverlay(); });
 
       $("stage").addEventListener("click", onStageTap);
+
+      $("overlay").addEventListener("click", (e)=>{
+        if (e.target === $("overlay")) { state=null; hideOverlay(); }
+      });
 
       render();
       showToastIfNeeded();
