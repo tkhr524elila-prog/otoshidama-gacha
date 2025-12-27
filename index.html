@@ -721,7 +721,12 @@
             <div class="logoImg">
               <img id="logoImg" alt="" style="display:none;">
             </div>
-           
+            <h1 class="titleText">最大30,000円 お年玉ガチャ！</h1>
+            <p class="titleSub">
+              スマホゲーム風に、ジェムを消費してガチャ！<br>
+              順番に開封 → 最後に合計をド派手表示。
+            </p>
+          </div>
 
           <div class="btnRow">
             <button class="btn btnPrimary" id="btnLogin">ログイン</button>
@@ -752,7 +757,7 @@
               <div class="popupHead">
                 <div>
                   <p class="popupTitle">最大30,000円 お年玉ガチャ！</p>
-                  <div class="small">提供割合</div>
+                  <div class="small">提供割合（同ランク内は等確率）</div>
                 </div>
                 <div class="dragonArt">
                   <img id="dragonImg" alt="" style="display:none;">
@@ -885,7 +890,7 @@
       BONUS_GEMS: 10000,
 
       POOL: { N:[10,50,100], R:[300,500], SR:[1000,2000], SSR:[3000] },
-      RATE: { SSR:0.05, SR:0.30, R:0.32, N:0.33 },
+      RATE: { SSR:0.09, SR:0.39, R:0.35, N:0.17 },
 
       TEN_GUARANTEE_SSR_FIRST_ONLY: true,
       TAP_COOLDOWN_MS: 300,
@@ -1256,7 +1261,7 @@
       const ok = confirm("10000円がかかります。課金しますか？");
       if (!ok) return;
       setGems(getGems() + CFG.CHARGE_GEMS);
-      alert("ジェム +10000 を購入しました（実際に決済はされていません）");
+      alert("ジェム +10000 を購入しました（実際の課金は発生しません）");
     }
 
     function resetAll(){
