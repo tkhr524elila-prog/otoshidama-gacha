@@ -5,25 +5,20 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta name="theme-color" content="#0b1020" />
   <title>最大30,000円 お年玉ガチャ！</title>
-
   <style>
     :root{
       --bg:#070b18;
       --line: rgba(255,255,255,.12);
       --text:#eef3ff;
       --muted:#a7b1d6;
-
+      --gold:#ffd54a;
       --ssr:#ffd54a;
       --sr:#ff8a2a;
       --r:#00d9ff;
       --n:#8ea0c9;
-
       --shadow: 0 24px 70px rgba(0,0,0,.55);
       --radius: 18px;
       --cool: 300ms;
-
-      --panelBg: linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.20));
-      --panelBg2: linear-gradient(180deg, rgba(255,255,255,.08), rgba(0,0,0,.22));
     }
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -40,7 +35,7 @@
       content:"";
       position:fixed; inset:0;
       background-image:
-        linear-gradient(180deg, rgba(0,0,0,.62), rgba(0,0,0,.78)),
+        linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.72)),
         url("assets/bg.jpg");
       background-size: cover;
       background-position: center;
@@ -51,11 +46,11 @@
       content:"";
       position:fixed; inset:0;
       background:
-        radial-gradient(900px 600px at 50% 25%, rgba(255,213,74,.10), transparent 60%),
-        radial-gradient(900px 600px at 20% 85%, rgba(0,217,255,.10), transparent 60%),
-        radial-gradient(900px 600px at 85% 70%, rgba(124,77,255,.10), transparent 60%);
-      pointer-events:none;
+        radial-gradient(900px 650px at 50% 22%, rgba(255,213,74,.12), transparent 60%),
+        radial-gradient(900px 650px at 20% 85%, rgba(0,217,255,.12), transparent 60%),
+        radial-gradient(900px 650px at 85% 55%, rgba(124,77,255,.15), transparent 60%);
       z-index:-1;
+      pointer-events:none;
     }
 
     .safe{
@@ -64,7 +59,6 @@
       min-height:100%;
       display:flex;
       justify-content:center;
-      align-items:flex-start;
     }
     .app{
       width:min(980px, 100%);
@@ -74,10 +68,9 @@
       position:relative;
     }
 
-    /* パネル */
     .panel{
       border:1px solid var(--line);
-      background: var(--panelBg);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.20));
       backdrop-filter: blur(10px);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
@@ -85,61 +78,78 @@
     }
     .panel-in{ padding:16px; }
 
-    /* 画面切り替え */
     .screen{ display:none; }
     .screen.show{ display:block; }
 
     /* ===== Title ===== */
     .titleHero{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:14px;
       text-align:center;
       padding:28px 16px;
-      display:flex;
-      flex-direction:column;
-      gap:14px;
-      align-items:center;
     }
-    .logoBox{
-      width:min(520px, 96%);
+    .logoImg{
+      width:min(540px, 96%);
       aspect-ratio: 2 / 1;
       border-radius: 22px;
       border:1px solid rgba(255,255,255,.12);
-      overflow:hidden;
-      background: radial-gradient(260px 160px at 40% 40%, rgba(255,213,74,.16), transparent 60%);
-      display:flex;align-items:center;justify-content:center;
+      background: rgba(0,0,0,.22);
       box-shadow: 0 24px 80px rgba(0,0,0,.55);
+      display:flex;align-items:center;justify-content:center;
+      overflow:hidden;
+      margin: 0 auto;
       position:relative;
     }
-    .logoBox img{width:100%;height:100%;object-fit:contain;display:none}
-    .logoFallback{
-      font-weight:1300;
-      letter-spacing:.06em;
-      text-shadow:0 18px 70px rgba(0,0,0,.65);
-      padding: 0 14px;
-      line-height:1.25;
-      opacity:.95;
-    }
+    .logoImg img{ width:100%; height:100%; object-fit:contain; display:block; }
     .titleText{
-      margin:0;
       font-size:22px;
-      font-weight:1200;
+      font-weight:1100;
       letter-spacing:.04em;
-      text-shadow:0 18px 70px rgba(0,0,0,.65);
+      margin:0;
+      text-shadow: 0 10px 50px rgba(0,0,0,.60);
     }
     .titleSub{
       margin:0;
       color:var(--muted);
       font-size:13px;
-      line-height:1.6;
+      line-height:1.5;
     }
 
-    /* ボタン */
-    .btnRow{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+    /* ===== Top gems ===== */
+    .topRow{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .gemsBox{
+      display:flex; align-items:center; gap:10px;
+      padding:10px 12px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.25);
+      min-width: 180px;
+    }
+    .gemIcon{
+      width:18px;height:18px;border-radius:6px;
+      background: conic-gradient(from 160deg, #00d9ff, #7c4dff, #ff7a00, #00d9ff);
+      box-shadow: 0 0 18px rgba(0,217,255,.22);
+      transform: rotate(10deg);
+    }
+    .gemsNum{font-weight:1000; letter-spacing:.02em}
+    .small{font-size:12px;color:var(--muted)}
+    .topNote{font-size:12px;color:var(--muted); padding-top:6px}
+
+    /* ===== Buttons ===== */
+    .btnRow{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:10px; }
     .btn{
       border:0;
       cursor:pointer;
-      border-radius:16px;
+      border-radius: 16px;
       padding:14px 16px;
-      font-weight:1200;
+      font-weight:1100;
       letter-spacing:.02em;
       user-select:none;
       -webkit-tap-highlight-color: transparent;
@@ -150,7 +160,6 @@
     }
     .btn:active{ transform: scale(.985); }
     .btn[disabled]{ opacity:.45; cursor:not-allowed; filter:saturate(.75); }
-
     .btnPrimary{
       color:#081022;
       background: linear-gradient(180deg, #ffd54a, #ff7a00);
@@ -166,7 +175,6 @@
       background: linear-gradient(180deg, rgba(255,213,74,.95), rgba(255,138,42,.95));
       box-shadow: 0 18px 44px rgba(255,138,42,.20);
     }
-
     .chip{
       display:inline-flex; align-items:center; gap:6px;
       padding:6px 10px;
@@ -175,45 +183,12 @@
       background: rgba(0,0,0,.22);
       font-size:12px;
       color: rgba(255,255,255,.92);
-      font-weight:1200;
+      font-weight:1000;
       white-space:nowrap;
     }
-    .miniGem{
-      width:12px;height:12px;border-radius:4px;
-      background:linear-gradient(135deg,#00d9ff,#7c4dff);
-    }
+    .miniGem{width:12px;height:12px;border-radius:4px;background:linear-gradient(135deg,#00d9ff,#7c4dff);}
 
-    /* ===== Menu Top ===== */
-    .topRow{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:12px;
-      flex-wrap:wrap;
-    }
-    .gemsBox{
-      display:flex; align-items:center; gap:10px;
-      padding:12px 12px;
-      border-radius:16px;
-      border:1px solid var(--line);
-      background: rgba(0,0,0,.25);
-      min-width: 200px;
-    }
-    .gemImg{
-      width:20px;height:20px;object-fit:contain;
-      filter: drop-shadow(0 0 12px rgba(0,217,255,.25));
-      display:none;
-    }
-    .gemIcon{
-      width:18px;height:18px;border-radius:6px;
-      background: conic-gradient(from 160deg, #00d9ff, #7c4dff, #ff7a00, #00d9ff);
-      box-shadow: 0 0 18px rgba(0,217,255,.22);
-      transform: rotate(10deg);
-    }
-    .gemsNum{font-weight:1200; letter-spacing:.02em}
-    .small{font-size:12px;color:var(--muted)}
-
-    /* メニュー中央 */
+    /* ===== Menu popup ===== */
     .menuPopup{
       position:relative;
       padding:16px;
@@ -228,7 +203,7 @@
     .popupTitle{
       margin:0;
       font-size:18px;
-      font-weight:1300;
+      font-weight:1200;
       letter-spacing:.03em;
     }
     .dragonArt{
@@ -240,9 +215,9 @@
       display:flex; align-items:center; justify-content:center;
       box-shadow: 0 18px 60px rgba(0,0,0,.35);
     }
-    .dragonArt img{ width:100%; height:100%; object-fit:cover; display:none; opacity:.98; }
+    .dragonArt img{ width:100%; height:100%; object-fit:cover; display:block; }
 
-    /* 提供割合 */
+    /* ===== Rates ===== */
     .rateBox{
       margin-top:12px;
       border-radius:16px;
@@ -254,7 +229,7 @@
       padding:10px 12px;
       display:flex; align-items:center; justify-content:space-between; gap:10px;
       border-bottom:1px solid rgba(255,255,255,.08);
-      font-weight:1200;
+      font-weight:1100;
       color: rgba(255,255,255,.92);
       font-size:13px;
     }
@@ -270,7 +245,7 @@
       vertical-align:middle;
       color: rgba(255,255,255,.90);
     }
-    .rateTable th{ color: var(--muted); font-weight:1100; font-size:12px; }
+    .rateTable th{ color: var(--muted); font-weight:1000; font-size:12px; }
     .dot{
       width:10px;height:10px;border-radius:99px; display:inline-block; margin-right:8px;
       box-shadow: 0 0 18px rgba(255,255,255,.08);
@@ -281,7 +256,7 @@
     .dot.n{ background: var(--n); box-shadow: 0 0 22px rgba(142,160,201,.14); }
     .rateNote{ padding:10px 12px; color:var(--muted); font-size:12px; }
 
-    /* 下部ボタン */
+    /* ===== Bottom bar ===== */
     .bottomBar{
       display:flex;
       gap:12px;
@@ -290,53 +265,34 @@
       margin-top: 12px;
     }
     .bottomBar .btn{
-      min-width: min(460px, 100%);
+      min-width: min(420px, 100%);
       justify-content:space-between;
       padding:14px 14px;
-      position:relative;
-      overflow:hidden;
-    }
-    .btnFrameImg{
-      position:absolute; inset:0;
-      width:100%; height:100%;
-      object-fit:cover;
-      opacity:.35;
-      pointer-events:none;
-      mix-blend-mode: screen;
-      display:none;
     }
     .btnMainText{
       display:flex; flex-direction:column; gap:2px; align-items:flex-start;
-      position:relative; z-index:1;
     }
     .btnMainText b{ font-size:14px; }
-    .btnMainText span{ font-size:12px; color: rgba(0,0,0,.65); font-weight:1000; }
+    .btnMainText span{ font-size:12px; color: rgba(0,0,0,.65); font-weight:900; }
     .btnRight{
       display:flex; align-items:center; gap:10px; flex:0 0 auto;
-      position:relative; z-index:1;
     }
 
-    /* SSRスタンプ（ボタン用）画像があれば使う */
-    .stampImg{
-      height:26px;
-      width:auto;
-      display:none;
-      filter: drop-shadow(0 10px 22px rgba(0,0,0,.35));
-    }
-    .stampText{
+    /* SSR stamp in menu (small) */
+    .stampSmall{
       padding:6px 10px;
       border-radius:999px;
       font-size:12px;
-      font-weight:1300;
+      font-weight:1200;
       border:1px solid rgba(255,255,255,.10);
       background: rgba(0,0,0,.18);
       color: rgba(255,255,255,.92);
       white-space:nowrap;
     }
 
-    /* 初期化 */
+    /* Footer reset */
     .footer{
-      margin-top: 10px;
+      margin-top: 8px;
       display:flex;
       justify-content:center;
     }
@@ -350,41 +306,58 @@
       cursor:pointer;
     }
 
-    /* ===== Bonus Banner (消えない) ===== */
-    .bonusBanner{
-      margin-top:12px;
-      border-radius:16px;
-      border:1px solid rgba(255,213,74,.22);
-      background: linear-gradient(180deg, rgba(255,213,74,.12), rgba(0,0,0,.18));
-      padding:12px;
-      display:none;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      box-shadow: 0 18px 60px rgba(0,0,0,.35);
-    }
-    .bonusBanner.show{ display:flex; }
-    .bonusBanner b{ font-weight:1300; }
-    .bonusBanner .small{ color: rgba(255,255,255,.75); }
-    .bonusBanner button{
+    /* ===== Persistent banner (login bonus) ===== */
+    .banner{
+      position:fixed;
+      left:50%;
+      bottom: calc(12px + env(safe-area-inset-bottom));
+      transform: translateX(-50%);
+      width: min(94vw, 760px);
+      border-radius: 18px;
       border:1px solid rgba(255,255,255,.14);
-      background: rgba(255,213,74,.18);
+      background: linear-gradient(180deg, rgba(255,213,74,.14), rgba(0,0,0,.55));
+      box-shadow: 0 20px 70px rgba(0,0,0,.60);
+      padding: 12px 12px;
+      display:none;
+      z-index:120;
+      backdrop-filter: blur(10px);
+    }
+    .banner.show{ display:block; }
+    .bannerRow{display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap;}
+    .bannerL{display:flex; gap:10px; align-items:center;}
+    .bannerIcon{
+      width:34px;height:34px;border-radius:12px;
+      background: conic-gradient(from 160deg, #00d9ff, #7c4dff, #ff7a00, #00d9ff);
+      box-shadow: 0 0 26px rgba(0,217,255,.18);
+      transform: rotate(8deg);
+      border:1px solid rgba(255,255,255,.14);
+    }
+    .bannerTitle{font-weight:1200}
+    .bannerSub{font-size:12px;color:rgba(255,255,255,.85); opacity:.9}
+    .bannerBtns{display:flex; gap:10px; align-items:center;}
+    .bBtn{
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.30);
       color: rgba(255,255,255,.95);
-      border-radius:999px;
-      padding:10px 14px;
+      border-radius: 999px;
+      padding: 10px 14px;
       font-weight:1200;
       cursor:pointer;
       white-space:nowrap;
     }
+    .bBtn.primary{
+      background: rgba(255,213,74,.18);
+      border-color: rgba(255,213,74,.30);
+    }
 
-    /* ===== Overlay / Modal ===== */
+    /* ===== Overlay/Modal ===== */
     .overlay{
       position:fixed; inset:0;
       background: rgba(0,0,0,.78);
       display:none;
       align-items:center; justify-content:center;
       padding: 16px;
-      z-index:100;
+      z-index:200;
     }
     .overlay.show{ display:flex; }
     .modal{
@@ -396,7 +369,7 @@
       background:
         radial-gradient(900px 520px at 35% 20%, rgba(124,77,255,.22), transparent 60%),
         radial-gradient(900px 520px at 70% 90%, rgba(0,217,255,.14), transparent 60%),
-        var(--panelBg2);
+        linear-gradient(180deg, rgba(255,255,255,.08), rgba(0,0,0,.22));
       box-shadow: 0 30px 120px rgba(0,0,0,.70);
       position:relative;
     }
@@ -404,7 +377,7 @@
     .modalTop{
       display:flex; align-items:flex-start; justify-content:space-between; gap:10px; flex-wrap:wrap;
     }
-    .modalTitle{ font-weight:1300; font-size:16px; margin:0; }
+    .modalTitle{ font-weight:1200; font-size:16px; margin:0; }
     .modalSub{ font-size:12px; color:var(--muted); margin-top:6px; }
 
     .modalClose{
@@ -418,7 +391,7 @@
       white-space:nowrap;
     }
 
-    /* Bonus area */
+    /* Bonus */
     .bonusBox{
       margin-top:14px;
       border-radius:18px;
@@ -441,13 +414,120 @@
       background: rgba(0,0,0,.18);
     }
     .bonusAmt{
-      font-size:40px; font-weight:1400; letter-spacing:.02em;
+      font-size:40px; font-weight:1300; letter-spacing:.02em;
       display:flex; align-items:center; gap:10px;
     }
 
-    /* ===== Gacha Cards ===== */
+    /* ===== Summon overlay (magic circle) ===== */
+    .summonOverlay{
+      position:fixed; inset:0;
+      display:none;
+      align-items:center; justify-content:center;
+      z-index:260;
+      pointer-events:none;
+    }
+    .summonOverlay.show{ display:flex; }
+    .circle{
+      width:min(72vw, 420px);
+      aspect-ratio: 1/1;
+      border-radius: 999px;
+      border: 2px solid rgba(255,255,255,.14);
+      background:
+        radial-gradient(circle at 50% 50%, rgba(255,213,74,.12), transparent 55%),
+        conic-gradient(from 140deg,
+          rgba(0,217,255,.0), rgba(0,217,255,.25),
+          rgba(124,77,255,.25),
+          rgba(255,122,0,.25),
+          rgba(255,213,74,.25),
+          rgba(0,217,255,.25),
+          rgba(0,217,255,.0)
+        );
+      box-shadow: 0 0 60px rgba(124,77,255,.18), 0 0 90px rgba(0,217,255,.12);
+      animation: spin 1.05s linear infinite;
+      position:relative;
+      filter:saturate(1.2);
+    }
+    .circle::before{
+      content:"";
+      position:absolute; inset:10%;
+      border-radius:999px;
+      border:1px dashed rgba(255,255,255,.18);
+      opacity:.8;
+    }
+    .circle::after{
+      content:"";
+      position:absolute; inset:26%;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      opacity:.9;
+    }
+    .circle.rainbow{
+      background:
+        radial-gradient(circle at 50% 50%, rgba(255,213,74,.14), transparent 55%),
+        conic-gradient(from 180deg,
+          rgba(255,0,92,.35),
+          rgba(255,214,0,.35),
+          rgba(0,217,255,.35),
+          rgba(124,77,255,.35),
+          rgba(255,122,0,.35),
+          rgba(255,0,92,.35)
+        );
+      box-shadow: 0 0 80px rgba(255,214,0,.18), 0 0 110px rgba(255,0,92,.12);
+    }
+    @keyframes spin{ to{ transform: rotate(360deg); } }
+
+    /* ===== Gacha area ===== */
+    .openGuide{
+      margin-top:6px;
+      font-size:12px;
+      color: var(--muted);
+    }
+
+    /* Big stamp (center -> move top-right) */
+    .stampBigWrap{
+      position:relative;
+      height: 0;
+    }
+    .stampBig{
+      position:absolute;
+      left:50%;
+      top: 6px;
+      transform: translateX(-50%) rotate(-8deg) scale(1);
+      transform-origin: center;
+      display:none;
+      z-index:20;
+    }
+    .stampBig.show{ display:inline-flex; }
+    .stampBig span{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:12px 16px;
+      border-radius: 16px;
+      font-weight:1400;
+      letter-spacing:.10em;
+      background: rgba(255,213,74,.18);
+      border:1px solid rgba(255,213,74,.35);
+      box-shadow: 0 18px 70px rgba(255,213,74,.12);
+    }
+    .stampBig.move{
+      animation: stampMove 850ms ease forwards;
+    }
+    @keyframes stampMove{
+      0%{ transform: translateX(-50%) translateY(0) rotate(-10deg) scale(.95); opacity:0; }
+      18%{ transform: translateX(-50%) translateY(0) rotate(-8deg) scale(1.08); opacity:1; }
+      60%{ transform: translateX(-50%) translateY(0) rotate(-8deg) scale(1); opacity:1; }
+      100%{
+        transform: translateX(0) translateY(0) rotate(10deg) scale(.75);
+        left: auto;
+        right: 10px;
+        opacity: 1;
+      }
+    }
+
+    /* Grid */
     .grid{
-      margin-top:14px;
+      margin-top:18px;
       display:grid;
       grid-template-columns: repeat(2, 1fr);
       gap:12px;
@@ -456,43 +536,53 @@
       .grid{ grid-template-columns: repeat(5, 1fr); }
     }
 
+    /* Card slot */
     .cardSlot{
       border-radius:18px;
       border:1px solid rgba(255,255,255,.12);
       background: rgba(0,0,0,.16);
+      overflow:hidden;
       position:relative;
       aspect-ratio: 4/3;
-      cursor:pointer;
       user-select:none;
       -webkit-tap-highlight-color: transparent;
-      perspective: 1000px;
-      overflow:hidden;
+      perspective: 900px;
     }
-    .cardSlot[aria-disabled="true"]{ opacity:.55; cursor:not-allowed; }
 
+    /* disabled */
+    .cardSlot[aria-disabled="true"]{ opacity:.55; filter:saturate(.8); }
+    .cardSlot[aria-disabled="true"] *{ cursor:not-allowed; }
+
+    /* enabled only current */
+    .cardSlot.enabled{
+      cursor:pointer;
+      outline: 2px solid rgba(255,255,255,.06);
+    }
+    .cardSlot.enabled:active{ transform: scale(.988); }
+
+    /* index */
     .idxTxt{
       position:absolute; top:10px; left:10px;
-      font-size:12px; color: rgba(255,255,255,.82);
+      font-size:12px; color: rgba(255,255,255,.80);
       padding:6px 10px; border-radius:999px;
       background: rgba(0,0,0,.25);
       border:1px solid rgba(255,255,255,.10);
       z-index:5;
     }
 
-    /* 3D flip wrapper */
+    /* flip container */
     .flip{
-      position:absolute; inset:0;
+      position:absolute; inset:10px;
+      border-radius:16px;
       transform-style: preserve-3d;
-      transition: transform 520ms cubic-bezier(.2,.9,.2,1);
+      transition: transform 560ms cubic-bezier(.2,.8,.2,1);
     }
-    .cardSlot.opened .flip{
-      transform: rotateY(180deg);
-    }
+    .cardSlot.flipped .flip{ transform: rotateY(180deg); }
 
-    .side{
+    .face{
       position:absolute; inset:0;
-      backface-visibility: hidden;
-      border-radius:18px;
+      border-radius:16px;
+      backface-visibility:hidden;
       overflow:hidden;
       display:flex; align-items:center; justify-content:center;
     }
@@ -500,159 +590,213 @@
     /* back */
     .back{
       background:
-        radial-gradient(90px 70px at 30% 30%, rgba(255,213,74,.12), transparent 55%),
+        radial-gradient(120px 90px at 30% 30%, rgba(255,213,74,.14), transparent 55%),
         linear-gradient(135deg, rgba(255,255,255,.08), rgba(0,0,0,.22));
-    }
-    .backImg{
-      position:absolute; inset:0;
-      width:100%; height:100%;
-      object-fit:cover;
-      opacity:.95;
-      display:none;
-      filter: saturate(1.05) contrast(1.03);
+      border:1px solid rgba(255,255,255,.10);
     }
     .tapHint{
-      position:relative;
-      padding:7px 12px;
+      padding:6px 10px;
       border-radius:999px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.28);
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.25);
       font-size:12px;
-      font-weight:1300;
+      font-weight:1200;
       letter-spacing:.12em;
+      color: rgba(255,255,255,.92);
     }
 
     /* front */
     .front{
       transform: rotateY(180deg);
-      background: rgba(0,0,0,.10);
-    }
-    /* front readability */
-    .front::before{
-      content:"";
-      position:absolute; inset:0;
-      background: rgba(0,0,0,.55);
-      pointer-events:none;
-    }
-    .frontIn{
-      position:relative;
-      z-index:1;
-      display:flex; flex-direction:column;
-      align-items:center; justify-content:center;
+      background: rgba(0,0,0,.14); /* 柄は残さない（読みやすさ重視） */
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
       gap:6px;
       text-align:center;
       padding:10px;
-      width:100%;
-      height:100%;
     }
     .rarTxt{ font-weight:1400; letter-spacing:.14em; font-size:14px; }
     .amtTxt{ font-weight:1500; font-size:30px; letter-spacing:.02em; text-shadow: 0 18px 60px rgba(0,0,0,.55); }
 
-    /* frame */
-    .frame{ position:absolute; inset:0; border-radius:18px; border:2px solid rgba(255,255,255,.10); pointer-events:none; z-index:3; }
-    .frame.n{ border-color: rgba(142,160,201,.55); box-shadow: 0 0 22px rgba(142,160,201,.10); }
-    .frame.r{ border-color: rgba(0,217,255,.55); box-shadow: 0 0 24px rgba(0,217,255,.12); }
-    .frame.sr{ border-color: rgba(255,138,42,.55); box-shadow: 0 0 26px rgba(255,138,42,.12); }
-    .frame.ssr{ border-color: rgba(255,213,74,.70); box-shadow: 0 0 36px rgba(255,213,74,.18); }
-
-    /* ===== SSR FX (回転→割れ→光漏れ) ===== */
-    .ssrFx{
-      position:absolute; inset:-40%;
-      background: conic-gradient(from 180deg,
-        rgba(255,0,92,.0), rgba(255,0,92,.45),
-        rgba(255,214,0,.45),
-        rgba(0,217,255,.45),
-        rgba(124,77,255,.45),
-        rgba(255,122,0,.45),
-        rgba(255,0,92,.45),
-        rgba(255,0,92,.0));
+    /* aura */
+    .aura{
+      position:absolute; inset:-30%;
       opacity:0;
-      filter: blur(10px) saturate(1.25);
-      mix-blend-mode: screen;
       pointer-events:none;
+      mix-blend-mode: screen;
+      filter: blur(10px) saturate(1.25);
+      transition: opacity .18s ease;
+    }
+    .cardSlot.revealed .aura{ opacity:.95; }
+    .aura.n{
+      background: radial-gradient(circle at 50% 50%, rgba(142,160,201,.28), transparent 60%);
+    }
+    .aura.r{
+      background: radial-gradient(circle at 50% 50%, rgba(0,217,255,.30), transparent 60%);
+    }
+    .aura.sr{
+      background: radial-gradient(circle at 50% 50%, rgba(255,138,42,.30), transparent 60%);
+    }
+    .aura.ssr{
+      background: conic-gradient(from 180deg,
+        rgba(255,0,92,.0), rgba(255,0,92,.40),
+        rgba(255,214,0,.40),
+        rgba(0,217,255,.40),
+        rgba(124,77,255,.40),
+        rgba(255,122,0,.40),
+        rgba(255,0,92,.40),
+        rgba(255,0,92,.0)
+      );
+    }
+
+    /* frame */
+    .frame{
+      position:absolute; inset:6px;
+      border-radius:16px;
+      border:2px solid rgba(255,255,255,.10);
+      pointer-events:none;
+      z-index:3;
+    }
+    .frame.n{ border-color: rgba(142,160,201,.55); box-shadow: 0 0 18px rgba(142,160,201,.10); }
+    .frame.r{ border-color: rgba(0,217,255,.55); box-shadow: 0 0 20px rgba(0,217,255,.12); }
+    .frame.sr{ border-color: rgba(255,138,42,.55); box-shadow: 0 0 22px rgba(255,138,42,.12); }
+    .frame.ssr{ border-color: rgba(255,213,74,.65); box-shadow: 0 0 32px rgba(255,213,74,.16); }
+
+    /* charge (0.25s) */
+    .charge{
+      position:absolute; inset:0;
+      display:flex; align-items:center; justify-content:center;
+      opacity:0;
+      pointer-events:none;
+      z-index:10;
+    }
+    .cardSlot.charging .charge{ opacity:1; }
+    .chargeRing{
+      width:56px;height:56px;border-radius:999px;
+      border:2px solid rgba(255,255,255,.18);
+      background: radial-gradient(circle at 50% 50%, rgba(255,213,74,.18), transparent 60%);
+      box-shadow: 0 0 30px rgba(255,213,74,.10);
+      animation: spin .8s linear infinite;
+    }
+
+    /* cooldown hint */
+    .cooldown{
+      position:absolute;
+      right:10px; top:10px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.25);
+      color: rgba(255,255,255,.88);
+      font-size:12px;
+      font-weight:1200;
+      z-index:6;
+      opacity:0;
+      transform: translateY(-2px);
+      transition: opacity .12s ease, transform .12s ease;
+      pointer-events:none;
+    }
+    .cardSlot.cooling .cooldown{
+      opacity:1;
+      transform: translateY(0);
+    }
+
+    /* SSR character composite */
+    .charLayer{
+      position:absolute; inset:0;
+      pointer-events:none;
+      display:none;
       z-index:4;
     }
+    .cardSlot.hasChar .charLayer{ display:block; }
+    .charImg{
+      position:absolute;
+      left:50%;
+      top:54%;
+      transform: translate(-50%,-50%);
+      width: 88%;
+      height: 88%;
+      object-fit: contain;
+      filter: drop-shadow(0 18px 40px rgba(0,0,0,.55));
+      opacity: .98;
+    }
+    /* SSR: dragon back + spirit front */
+    .charDragon{
+      transform: translate(-50%,-52%) scale(1.02);
+      opacity:.95;
+    }
+    .charSpirit{
+      transform: translate(-50%,-44%) scale(.94);
+      opacity:.98;
+    }
+    /* SR: summoner */
+    .charSummoner{
+      transform: translate(-50%,-48%) scale(.98);
+      opacity:.98;
+    }
+
+    /* SSR reveal extra: crack/light */
     .ssrCrack{
       position:absolute; inset:0;
       opacity:0;
       pointer-events:none;
-      z-index:4;
       background:
         linear-gradient(45deg, rgba(255,255,255,.0) 45%, rgba(255,255,255,.35) 50%, rgba(255,255,255,.0) 55%),
         linear-gradient(-20deg, rgba(255,255,255,.0) 45%, rgba(255,255,255,.25) 50%, rgba(255,255,255,.0) 55%),
-        radial-gradient(120px 90px at 60% 40%, rgba(255,213,74,.20), transparent 60%);
-      transform: scale(1.02);
+        radial-gradient(120px 90px at 60% 40%, rgba(255,213,74,.22), transparent 60%);
+      z-index:8;
+      mix-blend-mode: screen;
     }
     .ssrLight{
       position:absolute; inset:-20%;
       opacity:0;
       pointer-events:none;
-      z-index:4;
-      background: radial-gradient(circle at 50% 55%, rgba(255,213,74,.90), rgba(255,213,74,.18) 45%, rgba(255,213,74,0) 70%);
+      background: radial-gradient(circle at 50% 55%, rgba(255,213,74,.90), rgba(255,213,74,.22) 45%, rgba(255,213,74,0) 70%);
       filter: blur(2px);
       mix-blend-mode: screen;
+      z-index:7;
     }
-
-    /* SSR when opened */
-    .cardSlot.ssr-reveal .ssrCrack{ animation: ssrCrack 520ms ease-in-out both; }
-    .cardSlot.ssr-reveal .ssrLight{ animation: ssrLight 680ms ease-in-out both; }
-    .cardSlot.ssr-reveal .ssrFx{ animation: ssrFx 900ms linear both; }
-
-    @keyframes ssrCrack{
-      0%{opacity:0; transform: scale(1.02)}
+    .cardSlot.ssr-reveal .ssrCrack{ animation: crack 520ms ease-in-out both; }
+    .cardSlot.ssr-reveal .ssrLight{ animation: light 680ms ease-in-out both; }
+    @keyframes crack{
+      0%{opacity:0}
       35%{opacity:.25}
       55%{opacity:.95}
       100%{opacity:0}
     }
-    @keyframes ssrLight{
+    @keyframes light{
       0%{opacity:0; transform: scale(.96)}
       40%{opacity:.55}
       60%{opacity:1}
       100%{opacity:0}
     }
-    @keyframes ssrFx{
-      0%{opacity:0; transform: rotate(0deg)}
-      20%{opacity:.95}
-      100%{opacity:0; transform: rotate(360deg)}
+
+    /* ===== Screen shake + flash ===== */
+    .shakeStrong{ animation: shake 380ms ease both; }
+    .shakeWeak{ animation: shake 220ms ease both; }
+    @keyframes shake{
+      0%{ transform: translate(0,0); }
+      18%{ transform: translate(-6px,2px); }
+      34%{ transform: translate(6px,-2px); }
+      52%{ transform: translate(-5px,-1px); }
+      70%{ transform: translate(4px,2px); }
+      100%{ transform: translate(0,0); }
     }
 
-    /* ===== SSR確定スタンプ（10連開始時） ===== */
-    .bigStamp{
-      margin-top:12px;
-      display:none;
-      width:100%;
-      justify-content:center;
+    .flash{
+      position:fixed; inset:0;
+      background: rgba(255,255,255,1);
+      opacity:0;
+      pointer-events:none;
+      z-index:500;
     }
-    .bigStamp.show{ display:flex; }
-    .bigStamp img{
-      width:min(520px, 92%);
-      height:auto;
-      display:none;
-      filter: drop-shadow(0 18px 60px rgba(0,0,0,.55));
-      transform: rotate(-6deg);
-      animation: stampIn 420ms ease both;
-    }
-    .bigStamp span{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:8px;
-      padding:10px 14px;
-      border-radius: 14px;
-      font-weight:1400;
-      letter-spacing:.10em;
-      background: rgba(255,213,74,.16);
-      border:1px solid rgba(255,213,74,.35);
-      box-shadow: 0 18px 60px rgba(255,213,74,.12);
-      transform: rotate(-6deg);
-      animation: stampIn 420ms ease both;
-    }
-    @keyframes stampIn{
-      0%{ transform: translateY(-10px) rotate(-10deg) scale(.88); opacity:0; }
-      100%{ transform: translateY(0) rotate(-6deg) scale(1); opacity:1; }
-    }
+    .flash.on{ animation: flash 520ms ease; }
+    .flash.weak{ animation-duration: 320ms; }
+    @keyframes flash{ 0%{opacity:0} 12%{opacity:.92} 100%{opacity:0} }
 
-    /* ===== 合計演出（最初は非表示） ===== */
+    /* ===== Sum box ===== */
     .sumBox{
       margin-top:14px;
       border-radius:18px;
@@ -671,15 +815,18 @@
       background: radial-gradient(circle at 50% 50%, rgba(255,213,74,.22), transparent 60%);
       pointer-events:none;
     }
-    .sumLabel{ color: var(--muted); font-weight:1200; font-size:12px; letter-spacing:.12em; }
-    .sumMoney{ font-size:52px; font-weight:1600; letter-spacing:.02em; margin-top:6px; text-shadow: 0 18px 80px rgba(0,0,0,.65); }
-    .sumMoney.pop{ animation: pop 520ms ease both; }
-    @keyframes pop{
-      0%{ transform: scale(.90); opacity:.15; filter: blur(1px); }
-      45%{ transform: scale(1.06); opacity:1; filter: blur(0); }
-      100%{ transform: scale(1); opacity:1; }
+    .sumLabel{ color: var(--muted); font-weight:1100; font-size:12px; letter-spacing:.12em; }
+    .sumMoney{ font-size:52px; font-weight:1500; letter-spacing:.02em; margin-top:6px; text-shadow: 0 18px 80px rgba(0,0,0,.65); }
+    .sumSub{ font-size:12px; color: var(--muted); margin-top:6px; }
+
+    /* ===== Confetti canvas ===== */
+    #fxCanvas{
+      position:fixed; inset:0;
+      pointer-events:none;
+      z-index:520;
     }
 
+    /* Small screens */
     @media (max-width: 430px){
       .btn{ min-width: 100%; }
       .bottomBar .btn{ min-width: 100%; }
@@ -688,53 +835,42 @@
     }
   </style>
 </head>
-
 <body>
   <div class="safe">
-    <div class="app">
+    <div class="app" id="appRoot">
 
-      <!-- TITLE -->
+      <!-- TITLE SCREEN -->
       <div class="screen panel" id="screenTitle">
         <div class="titleHero">
-          <div class="logoBox">
+          <div class="logoImg">
             <img id="logoImg" alt="logo">
-            <div class="logoFallback" id="logoFallback">最大30,000円<br>お年玉ガチャ！</div>
           </div>
           <h1 class="titleText">最大30,000円 お年玉ガチャ！</h1>
           <p class="titleSub">
-            ジェムを消費してガチャ！<br>
-            1枚ずつ開封して、最後に合計をド派手に表示。
+            1枚ずつ開封 → 最後に合計をド派手表示。<br>
+            10連はSSR（3,000円）が最低1枚確定！
           </p>
+
           <div class="btnRow">
             <button class="btn btnPrimary" id="btnLogin">ログイン</button>
           </div>
-          <div class="small">※ ログインは端末内だけ（サーバー無し）</div>
+          <div class="small">※ 端末内だけで動作（サーバー無し）</div>
         </div>
       </div>
 
-      <!-- MENU -->
+      <!-- MENU SCREEN -->
       <div class="screen" id="screenMenu">
         <div class="topRow">
           <div class="gemsBox panel">
             <div class="panel-in" style="display:flex;align-items:center;gap:10px;padding:12px;">
-              <img id="gemImg" class="gemImg" alt="gem">
-              <div id="gemIcon" class="gemIcon"></div>
+              <div class="gemIcon"></div>
               <div>
                 <div class="gemsNum"><span id="gems">0</span> <span class="small">GEMS</span></div>
                 <div class="small">所持ジェム</div>
               </div>
             </div>
           </div>
-          <div class="small" style="padding-top:6px;">※ 10連合計の最大は 30,000円（SSR=3,000円×10）</div>
-        </div>
-
-        <!-- 受け取るまで消えない通知 -->
-        <div class="bonusBanner" id="bonusBanner">
-          <div>
-            <b>ログインボーナス</b>
-            <div class="small">初回限定：ジェム3,000個を受け取れます！</div>
-          </div>
-          <button id="bonusBannerBtn">受け取る</button>
+          <div class="topNote">※ 10連合計の最大は 30,000円（3,000円×10）</div>
         </div>
 
         <div class="panel">
@@ -746,7 +882,7 @@
                   <div class="small">提供割合（同ランク内は等確率）</div>
                 </div>
                 <div class="dragonArt">
-                  <img id="dragonImg" alt="dragon">
+                  <img id="dragonImg" alt="dragon spirit">
                 </div>
               </div>
 
@@ -770,7 +906,6 @@
 
               <div class="bottomBar">
                 <button class="btn btnBlue" id="btnOne">
-                  <img id="btnFrame1" class="btnFrameImg" alt="">
                   <div class="btnMainText">
                     <b>1回ガチャ</b>
                     <span>1回：300ジェム</span>
@@ -781,14 +916,12 @@
                 </button>
 
                 <button class="btn btnOrange" id="btnTen">
-                  <img id="btnFrame2" class="btnFrameImg" alt="">
                   <div class="btnMainText">
-                    <b>10連ガチャ</b>
+                    <b>SSR確定！10連ガチャ</b>
                     <span>10回：3000ジェム</span>
                   </div>
                   <div class="btnRight">
-                    <img id="stampBtnImg" class="stampImg" alt="SSR確定">
-                    <span id="stampBtnText" class="stampText">SSR確定！</span>
+                    <span class="stampSmall">SSR確定！</span>
                     <span class="chip"><span class="miniGem"></span>-3000</span>
                   </div>
                 </button>
@@ -802,7 +935,23 @@
         </div>
       </div>
 
-      <!-- OVERLAY -->
+      <!-- Persistent banner (login bonus) -->
+      <div class="banner" id="bonusBanner">
+        <div class="bannerRow">
+          <div class="bannerL">
+            <div class="bannerIcon"></div>
+            <div>
+              <div class="bannerTitle">ログインボーナス</div>
+              <div class="bannerSub">初回限定：ジェム +3000 を受け取れます</div>
+            </div>
+          </div>
+          <div class="bannerBtns">
+            <button class="bBtn primary" id="bannerTake">受け取る</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Overlay / Modal -->
       <div class="overlay" id="overlay" role="dialog" aria-modal="true">
         <div class="modal" id="modal">
           <div class="modalIn">
@@ -828,13 +977,12 @@
               </div>
             </div>
 
-            <!-- GACHA -->
+            <!-- GACHA RESULT -->
             <div id="gachaArea" style="display:none;">
-              <div class="modalSub" id="openGuide">タップで1枚ずつ開封（0.3秒クールダウン）</div>
+              <div class="openGuide" id="openGuide">順番にタップして1枚ずつ開封（0.3秒クールダウン）</div>
 
-              <div class="bigStamp" id="ssrStamp">
-                <img id="ssrStampImg" alt="SSR確定">
-                <span id="ssrStampText">SSR確定！！</span>
+              <div class="stampBigWrap">
+                <div class="stampBig" id="stampBig"><span>SSR確定！！</span></div>
               </div>
 
               <div class="grid" id="grid"></div>
@@ -842,7 +990,7 @@
               <div class="sumBox" id="sumBox">
                 <div class="sumLabel" id="sumLabel">合計は・・・・・・</div>
                 <div class="sumMoney" id="sumMoney">¥---</div>
-                <div class="small" id="sumSub"></div>
+                <div class="sumSub" id="sumSub"></div>
               </div>
 
               <div class="btnRow" style="margin-top:12px;">
@@ -854,13 +1002,22 @@
         </div>
       </div>
 
+      <!-- Summon overlay -->
+      <div class="summonOverlay" id="summonOverlay" aria-hidden="true">
+        <div class="circle" id="magicCircle"></div>
+      </div>
+
     </div>
   </div>
 
+  <!-- FX -->
+  <div class="flash" id="flash"></div>
+  <canvas id="fxCanvas"></canvas>
+
   <script>
-    /****************
-     * CONFIG
-     ****************/
+    /***************
+     * 設定
+     ***************/
     const CFG = {
       PARENT_PIN: "2525",
 
@@ -868,6 +1025,7 @@
       COST_TEN: 3000,
       BONUS_GEMS: 3000,
 
+      // 金額（同ランク内は等確率）
       POOL: {
         N: [10, 50, 100],
         R: [300, 500],
@@ -875,25 +1033,30 @@
         SSR: [3000]
       },
 
-      // 同ランク内は等確率 / ランク別確率（合計100%）
+      // 提供割合（合計1.0）
+      // 期待値（1回あたり） ≒ 1000円 になるように調整
+      // N avg=53.33 / R avg=400 / SR avg=1500 / SSR=3000
+      // => 3000a +1500b +400c +53.33d =1000 , a+b+c+d=1
+      // 採用：SSR 7% / SR 41% / R 39% / N 13%
       RATE: {
-        SSR: 0.09,
-        SR:  0.39,
-        R:   0.35,
-        N:   0.17
+        SSR: 0.07,
+        SR:  0.41,
+        R:   0.39,
+        N:   0.13
       },
 
       TEN_GUARANTEE_SSR: true,
-      TAP_COOLDOWN_MS: 300,
 
+      TAP_COOLDOWN_MS: 300,
+      CHARGE_MS: 250,
+
+      // 画像
       ASSET: {
-        logo: "assets/logo.png",
         bg: "assets/bg.jpg",
-        gem: "assets/gem.png",
-        dragon: "assets/dragon_spirit.png", // あなたの手持ちに合わせて
-        cardBack: "assets/card_back.png",
-        ssrStamp: "assets/ssr_stamp.png",
-        buttonFrame: "assets/button_frame.png",
+        logo: "assets/logo.png",
+        dragon: "assets/dragon_spirit.png",
+        summoner: "assets/summoner.png",
+        spirit: "assets/spirit.png"
       }
     };
 
@@ -905,56 +1068,30 @@
 
     const $ = (id)=>document.getElementById(id);
     const yen = (n)=> "¥" + Number(n).toLocaleString("ja-JP");
+    const clamp0 = (n)=> { n = Number(n); return Number.isFinite(n) ? Math.max(0,n) : 0; };
 
-    function clamp0(n){ n = Number(n); return Number.isFinite(n) ? Math.max(0, n) : 0; }
     function isLoggedIn(){ return localStorage.getItem(LS.loggedIn) === "1"; }
     function setLoggedIn(){ localStorage.setItem(LS.loggedIn, "1"); }
-
     function getGems(){ return clamp0(localStorage.getItem(LS.gems) || 0); }
     function setGems(n){ localStorage.setItem(LS.gems, String(clamp0(n))); renderHeader(); }
-
     function bonusTaken(){ return localStorage.getItem(LS.bonusTaken) === "1"; }
     function setBonusTaken(){ localStorage.setItem(LS.bonusTaken, "1"); }
 
     function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 
-    /****************
-     * weighted rarity pick
-     ****************/
-    function pickRarity(){
-      const r = Math.random();
-      let acc = 0;
-      const order = ["SSR","SR","R","N"];
-      for(const k of order){
-        acc += CFG.RATE[k];
-        if (r <= acc) return k;
-      }
-      return "N";
-    }
-
-    function drawOne(forceRarity=null){
-      const rar = forceRarity || pickRarity();
-      const amt = pick(CFG.POOL[rar]);
-      return { rar, amt };
-    }
-
-    /****************
-     * image helper
-     ****************/
-    function trySetImg(imgEl, src, onOk){
+    /***************
+     * 画像読み込み
+     ***************/
+    function setImgOrHide(imgEl, src){
       const img = new Image();
-      img.onload = ()=>{
-        imgEl.src = src;
-        imgEl.style.display = "block";
-        if (onOk) onOk();
-      };
-      img.onerror = ()=>{};
+      img.onload = ()=>{ imgEl.src = src; imgEl.style.display="block"; };
+      img.onerror = ()=>{ imgEl.style.display="none"; };
       img.src = src;
     }
 
-    /****************
-     * screens
-     ****************/
+    /***************
+     * 画面制御
+     ***************/
     function showScreen(name){
       $("screenTitle").classList.remove("show");
       $("screenMenu").classList.remove("show");
@@ -962,8 +1099,30 @@
       if(name==="menu") $("screenMenu").classList.add("show");
     }
 
+    /***************
+     * モーダル中スクロール封鎖（iOS対策）
+     ***************/
+    let scrollY = 0;
+    function lockBody(){
+      scrollY = window.scrollY || 0;
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.left = "0";
+      document.body.style.right = "0";
+      document.body.style.width = "100%";
+    }
+    function unlockBody(){
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.left = "";
+      document.body.style.right = "";
+      document.body.style.width = "";
+      window.scrollTo(0, scrollY);
+    }
+
     function openModal(mode){
       $("overlay").classList.add("show");
+      lockBody();
       if(mode==="bonus"){
         $("modalTitle").textContent = "ログインボーナス";
         $("modalSub").textContent = "初回限定：ジェム3,000個をプレゼント！";
@@ -976,23 +1135,12 @@
     }
     function closeModal(){
       $("overlay").classList.remove("show");
+      unlockBody();
     }
 
-    /****************
-     * persistent bonus banner (消えない)
-     ****************/
-    function renderBonusBanner(){
-      const banner = $("bonusBanner");
-      if (bonusTaken()){
-        banner.classList.remove("show");
-        return;
-      }
-      banner.classList.add("show"); // 受け取るまで常に表示
-    }
-
-    /****************
-     * rate UI
-     ****************/
+    /***************
+     * 提供割合UI
+     ***************/
     function renderRate(){
       const rows = [
         {k:"SSR", dot:"ssr", money:"¥3,000", rate: CFG.RATE.SSR},
@@ -1014,11 +1162,175 @@
       $("rateNote").textContent = "※ 同ランク内の金額は等確率（例：SRは1000円/2000円が1:1）";
     }
 
-    /****************
-     * tap cooldown
-     ****************/
+    /***************
+     * 抽選
+     ***************/
+    function pickRarity(){
+      const r = Math.random();
+      let acc = 0;
+      const order = ["SSR","SR","R","N"];
+      for(const k of order){
+        acc += CFG.RATE[k];
+        if (r <= acc) return k;
+      }
+      return "N";
+    }
+    function drawOne(forceRarity=null){
+      const rar = forceRarity || pickRarity();
+      const amt = pick(CFG.POOL[rar]); // 同ランク内等確率
+      return { rar, amt };
+    }
+
+    /***************
+     * SE / Vibe / Flash / Shake
+     ***************/
+    let audioCtx;
+    function beep(seq){
+      try{
+        audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+        const t0 = audioCtx.currentTime + 0.01;
+        seq.forEach((s)=>{
+          const o = audioCtx.createOscillator();
+          const g = audioCtx.createGain();
+          o.type = s.type || "sine";
+          o.frequency.value = s.f;
+          g.gain.value = 0.0001;
+          o.connect(g); g.connect(audioCtx.destination);
+          o.start(t0 + s.at);
+          g.gain.setValueAtTime(0.0001, t0 + s.at);
+          g.gain.exponentialRampToValueAtTime(s.v || 0.10, t0 + s.at + 0.02);
+          g.gain.exponentialRampToValueAtTime(0.0001, t0 + s.at + s.d);
+          o.stop(t0 + s.at + s.d + 0.03);
+        });
+      }catch(e){}
+    }
+    function vibe(ms){ if (navigator.vibrate) navigator.vibrate(ms); }
+
+    function sfxOpenN(){ beep([{at:0,f:260,d:0.07,v:0.07,type:"square"}]); }
+    function sfxOpenR(){ beep([{at:0,f:330,d:0.08,v:0.08,type:"square"},{at:0.09,f:392,d:0.10,v:0.08,type:"square"}]); }
+    function sfxOpenSR(){ beep([{at:0,f:392,d:0.10,v:0.10,type:"square"},{at:0.12,f:523,d:0.12,v:0.11,type:"square"}]); }
+    function sfxOpenSSR(){
+      // ジャーン（2〜3音）
+      beep([
+        {at:0.00,f:523,d:0.14,v:0.14,type:"sawtooth"},
+        {at:0.16,f:659,d:0.14,v:0.14,type:"sawtooth"},
+        {at:0.34,f:784,d:0.22,v:0.16,type:"sawtooth"},
+        {at:0.58,f:1046,d:0.20,v:0.18,type:"sine"}
+      ]);
+    }
+    function sfxSummonStart(){ beep([{at:0,f:196,d:0.12,v:0.10,type:"sine"},{at:0.14,f:246,d:0.12,v:0.10,type:"sine"}]); }
+    function sfxSum(){ beep([{at:0,f:262,d:0.12,v:0.10,type:"square"},{at:0.12,f:330,d:0.12,v:0.11,type:"square"},{at:0.24,f:392,d:0.14,v:0.12,type:"square"},{at:0.40,f:523,d:0.16,v:0.13,type:"square"}]); }
+
+    function flash(strong=true){
+      const f = $("flash");
+      f.classList.remove("on","weak");
+      if (!strong) f.classList.add("weak");
+      void f.offsetWidth;
+      f.classList.add("on");
+    }
+    function shake(strong=true){
+      const root = $("appRoot");
+      root.classList.remove("shakeStrong","shakeWeak");
+      void root.offsetWidth;
+      root.classList.add(strong ? "shakeStrong" : "shakeWeak");
+      setTimeout(()=>root.classList.remove("shakeStrong","shakeWeak"), 450);
+    }
+
+    /***************
+     * 紙吹雪（Canvas）
+     ***************/
+    const fx = {
+      canvas: null,
+      ctx: null,
+      w: 0,
+      h: 0,
+      parts: [],
+      raf: 0
+    };
+    function fxResize(){
+      fx.w = fx.canvas.width = window.innerWidth * devicePixelRatio;
+      fx.h = fx.canvas.height = window.innerHeight * devicePixelRatio;
+      fx.ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+    }
+    function fxStartBurst(power=1){
+      // power: 1=通常, 1.6=SSR/合計
+      const count = Math.floor(90 * power);
+      const cols = ["#ffd54a","#ff8a2a","#00d9ff","#7c4dff","#ff005c","#ffffff"];
+      for(let i=0;i<count;i++){
+        fx.parts.push({
+          x: Math.random()*window.innerWidth,
+          y: -20 - Math.random()*140,
+          vx: (Math.random()*2-1) * (3.2*power),
+          vy: (2.6 + Math.random()*3.0) * power,
+          r: 3 + Math.random()*6,
+          rot: Math.random()*Math.PI,
+          vr: (Math.random()*2-1)*0.16,
+          col: cols[(Math.random()*cols.length)|0],
+          life: 110 + Math.random()*80
+        });
+      }
+      if (!fx.raf) fxLoop();
+    }
+    function fxLoop(){
+      fx.raf = requestAnimationFrame(fxLoop);
+      const ctx = fx.ctx;
+      ctx.clearRect(0,0,window.innerWidth,window.innerHeight);
+
+      fx.parts.forEach(p=>{
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.04; // gravity
+        p.rot += p.vr;
+        p.life -= 1;
+      });
+      fx.parts = fx.parts.filter(p=>p.life>0 && p.y < window.innerHeight + 80);
+
+      for(const p of fx.parts){
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot);
+        ctx.fillStyle = p.col;
+        ctx.globalAlpha = Math.min(1, p.life/50);
+        ctx.fillRect(-p.r, -p.r*0.6, p.r*2, p.r*1.2);
+        ctx.restore();
+      }
+      if (fx.parts.length === 0){
+        cancelAnimationFrame(fx.raf);
+        fx.raf = 0;
+        ctx.clearRect(0,0,window.innerWidth,window.innerHeight);
+      }
+    }
+
+    /***************
+     * ログインボーナス（受け取るまで消えない）
+     ***************/
+    function showBonusBannerIfNeeded(){
+      const banner = $("bonusBanner");
+      if (!bonusTaken()){
+        banner.classList.add("show");
+      }else{
+        banner.classList.remove("show");
+      }
+    }
+    function takeBonus(){
+      if (bonusTaken()) return;
+      setBonusTaken();
+      setGems(getGems() + CFG.BONUS_GEMS);
+      showBonusBannerIfNeeded();
+      closeModal();
+      // 受け取り時は派手に
+      flash(true);
+      fxStartBurst(1.4);
+      vibe(60);
+      sfxOpenSSR();
+    }
+
+    /***************
+     * ガチャ結果UI（順番強制）
+     ***************/
     let tapLocked = false;
     let lastTapAt = 0;
+
     function canTap(){
       const now = Date.now();
       if (tapLocked) return false;
@@ -1031,36 +1343,37 @@
       setTimeout(()=> tapLocked = false, ms);
     }
 
-    /****************
-     * mini sfx (no files)
-     ****************/
-    let audioCtx;
-    function beep(freq=440, dur=0.08, type="sine", vol=0.10){
-      try{
-        audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
-        const o = audioCtx.createOscillator();
-        const g = audioCtx.createGain();
-        o.type = type;
-        o.frequency.value = freq;
-        g.gain.value = 0.0001;
-        o.connect(g); g.connect(audioCtx.destination);
-        const t = audioCtx.currentTime;
-        o.start(t);
-        g.gain.setValueAtTime(0.0001, t);
-        g.gain.exponentialRampToValueAtTime(vol, t + 0.01);
-        g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-        o.stop(t + dur + 0.02);
-      }catch(e){}
+    function setFrameClass(slot, rar){
+      const frame = slot.querySelector(".frame");
+      frame.className = "frame " + (rar==="SSR"?"ssr":rar==="SR"?"sr":rar==="R"?"r":"n");
+      const aura = slot.querySelector(".aura");
+      aura.className = "aura " + (rar==="SSR"?"ssr":rar==="SR"?"sr":rar==="R"?"r":"n");
     }
-    function sfxOpen(){ beep(330,0.06,"square",0.08); }
-    function sfxSSR(){ beep(523,0.12,"sawtooth",0.16); setTimeout(()=>beep(784,0.18,"sawtooth",0.16),140); setTimeout(()=>beep(1046,0.20,"sine",0.18),320); }
-    function sfxSum(){ beep(262,0.12,"square",0.10); setTimeout(()=>beep(330,0.12,"square",0.11),120); setTimeout(()=>beep(392,0.14,"square",0.12),240); setTimeout(()=>beep(523,0.16,"square",0.13),380); }
 
-    /****************
-     * card builder
-     ****************/
-    function frameClass(rar){
-      return rar==="SSR" ? "ssr" : rar==="SR" ? "sr" : rar==="R" ? "r" : "n";
+    function attachChar(slot, rar){
+      const layer = slot.querySelector(".charLayer");
+      layer.innerHTML = "";
+      slot.classList.remove("hasChar");
+
+      if (rar === "SR"){
+        slot.classList.add("hasChar");
+        const img = document.createElement("img");
+        img.src = CFG.ASSET.summoner;
+        img.className = "charImg charSummoner";
+        layer.appendChild(img);
+      }
+
+      if (rar === "SSR"){
+        slot.classList.add("hasChar");
+        const d = document.createElement("img");
+        d.src = CFG.ASSET.dragon;
+        d.className = "charImg charDragon";
+        const s = document.createElement("img");
+        s.src = CFG.ASSET.spirit;
+        s.className = "charImg charSpirit";
+        layer.appendChild(d);
+        layer.appendChild(s);
+      }
     }
 
     function buildCardSlot(i, total){
@@ -1069,62 +1382,92 @@
       slot.dataset.index = String(i);
       slot.dataset.opened = "0";
       slot.setAttribute("role","button");
-      slot.setAttribute("aria-disabled","false");
+      slot.setAttribute("aria-disabled","true"); // 初期は全部無効（順番制御）
 
       slot.innerHTML = `
         <div class="idxTxt">${i+1}/${total}</div>
+        <div class="cooldown">…</div>
+        <div class="aura n"></div>
+        <div class="ssrLight"></div>
+        <div class="ssrCrack"></div>
 
-        <div class="flip">
-          <div class="side back">
-            <img class="backImg" alt="card back">
-            <span class="tapHint">TAP</span>
-          </div>
-
-          <div class="side front">
-            <div class="frontIn">
-              <div class="rarTxt">-</div>
-              <div class="amtTxt">-</div>
-            </div>
-          </div>
-        </div>
+        <div class="charLayer"></div>
 
         <div class="frame n"></div>
-        <div class="ssrFx"></div>
-        <div class="ssrCrack"></div>
-        <div class="ssrLight"></div>
+
+        <div class="charge"><div class="chargeRing"></div></div>
+
+        <div class="flip">
+          <div class="face back">
+            <span class="tapHint">TAP</span>
+          </div>
+          <div class="face front">
+            <div class="rarTxt">-</div>
+            <div class="amtTxt">-</div>
+          </div>
+        </div>
       `;
       return slot;
     }
 
-    function revealSlot(slot, result){
-      if (slot.dataset.opened === "1") return;
-
-      slot.dataset.opened = "1";
-      slot.classList.add("opened");
-      slot.setAttribute("aria-disabled","true");
-
-      const rarEl = slot.querySelector(".rarTxt");
-      const amtEl = slot.querySelector(".amtTxt");
-      rarEl.textContent = result.rar;
-      amtEl.textContent = yen(result.amt);
-
-      const frame = slot.querySelector(".frame");
-      frame.className = "frame " + frameClass(result.rar);
-
-      // SSR演出
-      if (result.rar === "SSR"){
-        slot.classList.add("ssr-reveal");
-      }
-
-      // TAPを消す（残らない）
-      const tap = slot.querySelector(".tapHint");
-      if (tap) tap.remove();
+    function enableOnly(slots, idx){
+      slots.forEach((s,i)=>{
+        const enabled = (i===idx);
+        if (enabled){
+          s.classList.add("enabled");
+          s.setAttribute("aria-disabled","false");
+        }else{
+          s.classList.remove("enabled");
+          s.setAttribute("aria-disabled","true");
+        }
+      });
     }
 
-    /****************
-     * sum show (最初は非表示)
-     ****************/
-    async function showSum(total, opened, maxPossible){
+    async function revealSlot(slot, result){
+      // charge
+      slot.classList.add("charging");
+      lockFor(CFG.CHARGE_MS);
+      await new Promise(r=>setTimeout(r, CFG.CHARGE_MS));
+      slot.classList.remove("charging");
+
+      // set texts BEFORE flip to show instantly after flip
+      const front = slot.querySelector(".front");
+      front.querySelector(".rarTxt").textContent = result.rar;
+      front.querySelector(".amtTxt").textContent = yen(result.amt);
+
+      // frame + aura + char
+      setFrameClass(slot, result.rar);
+      attachChar(slot, result.rar);
+
+      // flip
+      slot.classList.add("flipped","revealed");
+      slot.dataset.opened = "1";
+
+      // remove TAP label
+      const tap = slot.querySelector(".tapHint");
+      if (tap) tap.remove();
+
+      // fx by rarity
+      if (result.rar === "SSR"){
+        slot.classList.add("ssr-reveal");
+        flash(true);
+        shake(true);
+        vibe(120);
+        sfxOpenSSR();
+        fxStartBurst(1.2);
+      }else if (result.rar === "SR"){
+        flash(false);
+        shake(false);
+        vibe(60);
+        sfxOpenSR();
+      }else if (result.rar === "R"){
+        sfxOpenR();
+      }else{
+        sfxOpenN();
+      }
+    }
+
+    async function showSumWithCountUp(total, opened){
       const box = $("sumBox");
       const label = $("sumLabel");
       const money = $("sumMoney");
@@ -1133,105 +1476,115 @@
       box.classList.add("show");
       label.textContent = "合計は・・・・・・";
       money.textContent = "¥---";
-      money.classList.remove("pop");
       sub.textContent = "";
 
+      // 溜め
       await new Promise(r=>setTimeout(r, 850));
 
-      money.textContent = yen(total);
-      money.classList.add("pop");
-      sub.textContent = `開封数：${opened} / 最大合計：${yen(maxPossible)}`;
+      // 合計演出：フラッシュ＋紙吹雪＋振動＋カウントアップ
+      flash(true);
+      fxStartBurst(1.6);
+      vibe(160);
+      sfxSum();
+      shake(true);
+
+      const duration = 650;
+      const t0 = performance.now();
+      function easeOut(t){ return 1 - Math.pow(1-t, 3); }
+
+      function tick(now){
+        const p = Math.min(1, (now - t0) / duration);
+        const v = Math.round(total * easeOut(p));
+        money.textContent = yen(v);
+        if (p < 1) requestAnimationFrame(tick);
+        else {
+          money.textContent = yen(total);
+          label.textContent = "合計！";
+          sub.textContent = `開封数：${opened} / 最大合計：${yen(30000)}`;
+        }
+      }
+      requestAnimationFrame(tick);
     }
 
-    /****************
-     * gacha modal UI
-     ****************/
-    function setStampVisibility(mode){
-      const wrap = $("ssrStamp");
-      const img = $("ssrStampImg");
-      const text = $("ssrStampText");
-      if (mode === "ten"){
-        wrap.classList.add("show");
-        // 画像があるなら画像、なければテキスト
-        if (img.style.display === "block"){
-          text.style.display = "none";
-        }else{
-          text.style.display = "inline-flex";
-        }
-      }else{
-        wrap.classList.remove("show");
-      }
+    async function summonSequence(hasSSR){
+      const so = $("summonOverlay");
+      const circle = $("magicCircle");
+      circle.classList.toggle("rainbow", !!hasSSR); // 虹フラグ（文言なし）
+      so.classList.add("show");
+      sfxSummonStart();
+      vibe(40);
+      await new Promise(r=>setTimeout(r, 1050));
+      so.classList.remove("show");
+      circle.classList.remove("rainbow");
     }
 
     function gachaOpenUI(mode, results){
       openModal("gacha");
       $("btnDone").disabled = true;
-
-      // 合計は最初非表示（0円問題を根絶）
       $("sumBox").classList.remove("show");
-      $("sumMoney").classList.remove("pop");
       $("sumMoney").textContent = "¥---";
-      $("sumSub").textContent = "";
 
       // stamp
-      setStampVisibility(mode);
+      const stamp = $("stampBig");
+      stamp.classList.remove("show","move");
+      if (mode==="ten"){
+        stamp.classList.add("show");
+        // 中央ドン → 右上へ移動
+        requestAnimationFrame(()=> {
+          stamp.classList.add("move");
+        });
+      }
 
-      // grid
+      // grid build
       const totalCount = results.length;
       const grid = $("grid");
       grid.innerHTML = "";
-
       const slots = [];
       for(let i=0;i<totalCount;i++){
-        const slot = buildCardSlot(i, totalCount);
-        // card back image
-        const backImg = slot.querySelector(".backImg");
-        if (backImg && window.__asset_cardBackOK) backImg.style.display = "block";
-        if (backImg) backImg.src = CFG.ASSET.cardBack;
-        grid.appendChild(slot);
-        slots.push(slot);
+        const s = buildCardSlot(i, totalCount);
+        grid.appendChild(s);
+        slots.push(s);
       }
 
+      // 順番強制：最初だけ有効
+      let current = 0;
+      enableOnly(slots, current);
+
+      // 集計
       let opened = 0;
       let sum = 0;
 
-      // 10連：SSR確定なので、SSRが含まれる時の“虹予兆”を最初のSSR直前に1回だけ
-      const firstSsrIndex = results.findIndex(x=>x.rar==="SSR");
-      let rainbowShown = false;
-
-      async function rainbowPremonition(){
-        // 0.35秒だけ上部に「虹の予感…」を出したいが、今回は軽量にSE＋微待ち
-        beep(659,0.10,"sawtooth",0.12);
-        lockFor(420);
-        await new Promise(r=>setTimeout(r, 420));
-      }
-
+      // click handler
       slots.forEach((slot, idx)=>{
         slot.addEventListener("click", async ()=>{
-          if (!canTap()) return;
-          if (slot.dataset.opened === "1") return;
-
-          // 虹予兆（必要なら残せるが、文言は出さない）
-          if (mode==="ten" && !rainbowShown && firstSsrIndex !== -1 && idx === firstSsrIndex){
-            rainbowShown = true;
-            await rainbowPremonition();
+          if (!canTap()) {
+            // cooldown visible
+            slot.classList.add("cooling");
+            setTimeout(()=>slot.classList.remove("cooling"), 200);
+            return;
           }
+          if (idx !== current) return;              // 順番強制
+          if (slot.dataset.opened === "1") return;  // 二重防止
 
           lockFor(CFG.TAP_COOLDOWN_MS);
 
           const res = results[idx];
-          revealSlot(slot, res);
-
-          sfxOpen();
-          if (res.rar==="SSR") sfxSSR();
+          await revealSlot(slot, res);
 
           opened += 1;
           sum += res.amt;
 
+          // 次を開放
+          current += 1;
+          if (current < totalCount){
+            enableOnly(slots, current);
+          }
+
+          // 全部開封したら合計
           if (opened === totalCount){
             $("btnDone").disabled = false;
-            sfxSum();
-            await showSum(sum, opened, 30000);
+            enableOnly(slots, -1); // 全部無効
+            await showSumWithCountUp(sum, opened);
           }
         }, {passive:true});
       });
@@ -1239,61 +1592,53 @@
       $("btnDone").onclick = ()=> closeModal();
     }
 
-    /****************
-     * gems requirement
-     ****************/
+    /***************
+     * ガチャ実行
+     ***************/
     function requireGems(cost){
       if (getGems() < cost){
+        flash(false);
+        vibe(40);
+        sfxOpenR();
         alert("ジェムが足りません");
         return false;
       }
       return true;
     }
 
-    function doOne(){
+    async function doOne(){
       if (!requireGems(CFG.COST_ONE)) return;
       setGems(getGems() - CFG.COST_ONE);
-      gachaOpenUI("one", [drawOne()]);
+
+      const r = drawOne();
+      await summonSequence(r.rar === "SSR");
+      gachaOpenUI("one", [r]);
     }
 
-    function doTen(){
+    async function doTen(){
       if (!requireGems(CFG.COST_TEN)) return;
       setGems(getGems() - CFG.COST_TEN);
 
       const results = [];
       for(let i=0;i<10;i++) results.push(drawOne());
 
+      // SSR最低1枚保証
       if (CFG.TEN_GUARANTEE_SSR){
-        if (!results.some(x=>x.rar==="SSR")){
+        const hasSSR = results.some(x=>x.rar==="SSR");
+        if (!hasSSR){
           const idx = Math.floor(Math.random()*10);
           results[idx] = drawOne("SSR");
         }
       }
+
+      const hasSSR = results.some(x=>x.rar==="SSR");
+      await summonSequence(hasSSR); // 虹フラグ含む
       gachaOpenUI("ten", results);
     }
 
-    /****************
-     * login bonus
-     ****************/
-    function takeBonus(){
-      if (bonusTaken()){
-        return;
-      }
-      setBonusTaken();
-      setGems(getGems() + CFG.BONUS_GEMS);
-
-      renderBonusBanner(); // 受け取った瞬間に二度と出さない
-      closeModal();
-      alert("ジェム +3000 を受け取りました！");
-    }
-
-    function openBonusModal(){
-      openModal("bonus");
-    }
-
-    /****************
-     * reset
-     ****************/
+    /***************
+     * 初期化（親PIN）
+     ***************/
     function resetAll(){
       const pin = prompt("親PINを入力してください");
       if (pin === null) return;
@@ -1307,61 +1652,39 @@
       location.reload();
     }
 
-    /****************
-     * header render
-     ****************/
+    /***************
+     * 表示更新
+     ***************/
     function renderHeader(){
       $("gems").textContent = getGems();
       $("btnOne").disabled = getGems() < CFG.COST_ONE;
       $("btnTen").disabled = getGems() < CFG.COST_TEN;
     }
 
-    /****************
-     * init
-     ****************/
+    /***************
+     * 起動
+     ***************/
     function init(){
-      // logo
-      trySetImg($("logoImg"), CFG.ASSET.logo, ()=>{
-        $("logoFallback").style.display = "none";
-      });
+      // images
+      setImgOrHide($("logoImg"), CFG.ASSET.logo);
+      setImgOrHide($("dragonImg"), CFG.ASSET.dragon);
 
-      // dragon
-      trySetImg($("dragonImg"), CFG.ASSET.dragon);
-
-      // gem icon
-      trySetImg($("gemImg"), CFG.ASSET.gem, ()=>{
-        $("gemIcon").style.display="none";
-      });
-
-      // stamp image (button & modal)
-      trySetImg($("stampBtnImg"), CFG.ASSET.ssrStamp, ()=>{
-        $("stampBtnText").style.display="none";
-      });
-      trySetImg($("ssrStampImg"), CFG.ASSET.ssrStamp, ()=>{
-        $("ssrStampText").style.display="none";
-      });
-
-      // button frame
-      trySetImg($("btnFrame1"), CFG.ASSET.buttonFrame, ()=>{ $("btnFrame1").style.display="block"; });
-      trySetImg($("btnFrame2"), CFG.ASSET.buttonFrame, ()=>{ $("btnFrame2").style.display="block"; });
-
-      // card back availability flag
-      window.__asset_cardBackOK = false;
-      const probe = new Image();
-      probe.onload = ()=>{ window.__asset_cardBackOK = true; };
-      probe.onerror = ()=>{ window.__asset_cardBackOK = false; };
-      probe.src = CFG.ASSET.cardBack;
-
-      // rate ui
+      // rates
       renderRate();
 
-      // screen
+      // canvas
+      fx.canvas = $("fxCanvas");
+      fx.ctx = fx.canvas.getContext("2d");
+      fxResize();
+      window.addEventListener("resize", fxResize);
+
+      // first screen
       if (!isLoggedIn()){
         showScreen("title");
       }else{
         showScreen("menu");
         renderHeader();
-        renderBonusBanner(); // 受け取るまで消えない
+        showBonusBannerIfNeeded();
       }
 
       // login
@@ -1369,13 +1692,13 @@
         setLoggedIn();
         showScreen("menu");
         renderHeader();
-        renderBonusBanner();
+        showBonusBannerIfNeeded(); // 受け取るまで消えない
       });
 
-      // bonus banner
-      $("bonusBannerBtn").addEventListener("click", openBonusModal);
+      // banner take -> open bonus modal
+      $("bannerTake").addEventListener("click", ()=> openModal("bonus"));
 
-      // modal bonus
+      // bonus take
       $("btnTakeBonus").addEventListener("click", takeBonus);
 
       // gacha
