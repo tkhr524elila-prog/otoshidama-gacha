@@ -3,298 +3,192 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <meta name="theme-color" content="#0b1022">
-  <title>最大30000円 お年玉ガチャ！</title>
+  <meta name="theme-color" content="#ff7a00">
+  <title>お年玉ガチャ（10連）</title>
   <style>
     :root{
-      --text:#eef3ff; --muted:#b9c3ea;
-      --glass: rgba(10,12,24,.55);
-      --glass2: rgba(255,255,255,.08);
-      --line: rgba(255,255,255,.12);
-      --shadow: 0 22px 70px rgba(0,0,0,.55);
+      --bg1:#070b18; --bg2:#140a2b;
+      --text:#eef3ff; --muted:#a9b4da;
+      --accent:#ff7a00; --gold:#ffd54a;
+      --cyan:#00e5ff; --vio:#7c4dff;
+      --shadow: 0 18px 60px rgba(0,0,0,.55);
       --radius: 18px;
-
-      --n:#9aa6c6;
-      --r:#2dd4ff;
-      --sr:#ff8a00;
-      --ssr:#ffd54a;
-
-      --btn1: linear-gradient(180deg,#3b82f6,#2563eb);
-      --btn2: linear-gradient(180deg,#ffd54a,#ff7a00);
     }
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
-      margin:0;
-      color:var(--text);
+      margin:0;color:var(--text);
       font-family: system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans JP",sans-serif;
       background:
-        linear-gradient(180deg, rgba(0,0,0,.48), rgba(0,0,0,.78)),
-        url('bg.jpg') center/cover no-repeat fixed;
-      padding: 14px;
-      padding-bottom: calc(14px + env(safe-area-inset-bottom));
+        radial-gradient(1200px 700px at 18% 10%, rgba(124,77,255,.30), transparent 60%),
+        radial-gradient(900px 600px at 90% 30%, rgba(0,229,255,.22), transparent 55%),
+        radial-gradient(900px 600px at 60% 110%, rgba(255,122,0,.22), transparent 55%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
+      padding: clamp(12px, 3.5vw, 22px);
+      padding-bottom: calc(clamp(12px, 3.5vw, 22px) + env(safe-area-inset-bottom));
+      min-height:100%;
     }
-    .wrap{max-width:820px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;gap:14px}
+    .wrap{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
 
-    /* Top HUD */
-    .hud{
+    .topbar{
       display:flex;align-items:center;justify-content:space-between;gap:12px;
-    }
-    .gems{
-      display:inline-flex;align-items:center;gap:10px;
-      padding:10px 12px;border-radius:16px;
-      border:1px solid var(--line);
-      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(0,0,0,.22));
+      padding:12px 14px;border:1px solid rgba(255,255,255,.10);
+      background:linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.02));
+      border-radius: var(--radius);
       box-shadow: var(--shadow);
       backdrop-filter: blur(10px);
     }
+    .title{font-weight:1100;letter-spacing:.03em}
+    .sub{font-size:12px;color:var(--muted);line-height:1.25}
+    .badge{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:6px 10px;border-radius:999px;
+      background:rgba(0,0,0,.20);
+      border:1px solid rgba(255,255,255,.10);
+      font-size:12px;color:var(--text);font-weight:1000;
+    }
+
+    .gem{
+      display:flex;align-items:center;gap:10px;
+      padding:10px 12px;border-radius:14px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(0,0,0,.16);
+      min-width:200px;justify-content:space-between;
+    }
+    .gemL{display:flex;align-items:center;gap:10px}
     .gemIcon{
-      width:22px;height:22px;border-radius:8px;
-      background: url('gem.png') center/cover no-repeat;
-      filter: drop-shadow(0 8px 16px rgba(0,0,0,.45));
+      width:18px;height:18px;border-radius:6px;
+      background: conic-gradient(from 160deg, var(--cyan), var(--vio), var(--accent), var(--cyan));
+      box-shadow: 0 0 18px rgba(0,229,255,.34);
+      transform: rotate(12deg);
     }
-    .gems b{font-weight:1000}
-    .gems small{display:block;color:var(--muted);font-size:11px;margin-top:2px;line-height:1}
+    .gemCount{font-weight:1100}
+    .gemSmall{font-size:11px;color:var(--muted)}
 
-    /* Center popup card */
-    .popup{
-      margin-top:4px;
-      border-radius: 24px;
-      border:1px solid var(--line);
-      background:
-        radial-gradient(900px 420px at 20% 10%, rgba(255,213,74,.18), transparent 55%),
-        radial-gradient(900px 420px at 85% 20%, rgba(45,212,255,.18), transparent 55%),
-        linear-gradient(180deg, rgba(255,255,255,.10), rgba(0,0,0,.28));
+    .card{
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.10);
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(0,0,0,.16));
       box-shadow: var(--shadow);
       backdrop-filter: blur(10px);
       overflow:hidden;
-      position:relative;
     }
-    .popupIn{padding:18px 16px 16px}
-    .title{
-      font-size:18px;
-      font-weight:1100;
-      letter-spacing:.02em;
-      line-height:1.25;
-    }
-    .sub{
-      margin-top:6px;
-      color:var(--muted);
-      font-size:12px;
-      line-height:1.35;
-    }
-    .maxBadge{
-      display:inline-flex;align-items:center;gap:8px;
-      margin-top:10px;
-      padding:8px 12px;border-radius:999px;
-      background: rgba(0,0,0,.25);
-      border:1px solid rgba(255,255,255,.12);
-      font-weight:1000;
-      font-size:12px;
-    }
-    .maxBadge .dot{
-      width:10px;height:10px;border-radius:999px;background: var(--ssr);
-      box-shadow: 0 0 18px rgba(255,213,74,.35);
-    }
+    .cardIn{padding:16px}
 
-    /* rates table */
-    .rates{
-      margin-top:12px;
-      border-radius:18px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.22);
-      overflow:hidden;
-    }
-    .ratesHead{
-      padding:10px 12px;
-      display:flex;align-items:center;justify-content:space-between;gap:10px;
-      border-bottom:1px solid rgba(255,255,255,.10);
-    }
-    .ratesHead b{font-weight:1100}
-    .ratesHead span{font-size:11px;color:var(--muted)}
-    table{
+    label{display:block;font-size:12px;color:var(--muted);margin:6px 0}
+    input, textarea{
       width:100%;
-      border-collapse:collapse;
-      font-size:12px;
+      color:var(--text);
+      background:rgba(0,0,0,.22);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:14px;
+      padding:12px 12px;
+      font-size:14px;
+      outline:none;
     }
-    th,td{padding:10px 12px;text-align:left}
-    th{color:var(--muted);font-weight:900;background: rgba(255,255,255,.04)}
-    tr+tr td{border-top:1px solid rgba(255,255,255,.07)}
-    .tag{
-      display:inline-flex;align-items:center;gap:8px;
-      font-weight:1100;
-    }
-    .tag i{width:10px;height:10px;border-radius:999px;display:inline-block}
-    .iN{background:var(--n)}
-    .iR{background:var(--r)}
-    .iSR{background:var(--sr)}
-    .iSSR{background:var(--ssr)}
+    textarea{min-height:84px;resize:vertical}
+    .hint{font-size:12px;color:var(--muted);line-height:1.45;margin-top:6px}
 
-    /* bottom buttons */
-    .bottomBar{
-      margin-top:auto;
-      display:flex;gap:12px;
-      position:sticky;
-      bottom: calc(12px + env(safe-area-inset-bottom));
-    }
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
     .btn{
-      flex:1;
-      border:0;
-      border-radius: 20px;
-      padding:16px 16px;
-      color:#091022;
-      font-weight:1200;
+      border:0;cursor:pointer;
+      border-radius:16px;
+      padding:14px 16px;
+      font-weight:1100;
       letter-spacing:.02em;
-      cursor:pointer;
-      box-shadow: 0 18px 40px rgba(0,0,0,.35);
-      position:relative;
-      user-select:none;
-      -webkit-tap-highlight-color: transparent;
-      min-height:64px;
-      display:flex;flex-direction:column;align-items:flex-start;justify-content:center;
-      gap:4px;
-      overflow:hidden;
+      color:#091021;
+      background: linear-gradient(180deg, #ffd54a, #ff7a00);
+      box-shadow: 0 16px 32px rgba(255,122,0,.30);
+      display:flex;align-items:center;gap:10px;
+      transition: transform .08s ease, filter .12s ease, opacity .12s ease;
+      user-select:none;-webkit-tap-highlight-color: transparent;
     }
-    .btn:active{transform: translateY(1px)}
-    .btn[disabled]{opacity:.45;cursor:not-allowed}
-    .btnOne{background: var(--btn1)}
-    .btnTen{background: var(--btn2)}
-    .btnTitle{font-size:16px}
-    .btnSub{font-size:11px;font-weight:1000;opacity:.9}
-    .cost{
-      position:absolute;right:12px;top:12px;
+    .btn:active{transform: scale(.985)}
+    .btn[disabled]{opacity:.45;cursor:not-allowed;filter:saturate(.75)}
+    .btn2{
+      border:1px solid rgba(255,255,255,.14);
+      color:var(--text);
+      background: rgba(0,0,0,.16);
+      box-shadow:none;
+    }
+    .costBadge{
+      margin-left:auto;
+      display:flex;align-items:center;gap:6px;
       padding:6px 10px;border-radius:999px;
       background: rgba(0,0,0,.22);
-      border:1px solid rgba(255,255,255,.18);
-      color:#fff;
-      font-size:12px;font-weight:1100;
-      display:flex;align-items:center;gap:8px;
+      border:1px solid rgba(255,255,255,.10);
+      font-size:12px;color:var(--text);
     }
-    .cost .miniGem{
-      width:14px;height:14px;border-radius:6px;
-      background: url('gem.png') center/cover no-repeat;
-      filter: drop-shadow(0 6px 12px rgba(0,0,0,.35));
-    }
+    .miniGem{width:12px;height:12px;border-radius:4px;background:linear-gradient(135deg,var(--cyan),var(--vio));}
 
-    /* Stamp (avoid overlap) */
-    .stampWrap{
-      position:absolute;
-      left:10px;
-      top:10px;
-      display:flex;
-      gap:10px;
-      align-items:center;
-      pointer-events:none;
-    }
-    .stampImg{
-      width:110px;
-      transform: rotate(-12deg);
-      filter: drop-shadow(0 10px 18px rgba(0,0,0,.35));
-    }
-    .tenHint{
-      font-size:11px;
-      font-weight:1200;
-      color:#112;
-      background: rgba(255,255,255,.75);
-      padding:6px 10px;
-      border-radius:999px;
-      transform: rotate(-6deg);
-    }
-
-    /* Reset area bottom */
-    .footer{
-      margin-top:14px;
-      display:flex;justify-content:center;
-    }
-    .resetBtn{
-      border:1px solid rgba(255,255,255,.18);
-      background: rgba(0,0,0,.22);
-      color: var(--text);
-      border-radius:999px;
-      padding:10px 14px;
-      font-weight:1100;
-      cursor:pointer;
-      backdrop-filter: blur(8px);
-    }
-
-    /* Toast (login bonus notify) */
-    .toast{
-      position:fixed;
-      left:12px; right:12px;
-      top:12px;
-      max-width:820px;
-      margin:0 auto;
-      z-index:80;
-      display:none;
-      border-radius:18px;
-      border:1px solid rgba(255,255,255,.16);
-      background: linear-gradient(180deg, rgba(255,255,255,.12), rgba(0,0,0,.35));
-      backdrop-filter: blur(10px);
-      box-shadow: 0 22px 80px rgba(0,0,0,.55);
+    .resultPanel{
+      margin-top:12px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.16);
+      padding:14px;
+      position:relative;
       overflow:hidden;
     }
-    .toast.show{display:block}
-    .toastIn{
-      padding:12px 12px;
-      display:flex;gap:12px;align-items:center;justify-content:space-between;
-      cursor:pointer;
-      -webkit-tap-highlight-color: transparent;
+    .money{font-size:48px;font-weight:1200;letter-spacing:.02em;line-height:1.05}
+    .rarity{
+      display:inline-flex;align-items:center;gap:8px;
+      margin-top:8px;
+      padding:6px 10px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.05);
+      color:var(--muted);
+      font-size:12px;font-weight:1100;
+      text-transform:uppercase;
     }
-    .toastL{display:flex;gap:12px;align-items:center}
-    .toastGem{width:40px;height:40px;border-radius:14px;background: url('gem.png') center/cover no-repeat;}
-    .toastTitle{font-weight:1200}
-    .toastSub{font-size:12px;color:var(--muted);margin-top:2px}
-    .toastTap{font-size:12px;font-weight:1200;color:#fff;opacity:.9}
+    .rarDot{width:8px;height:8px;border-radius:999px;background:rgba(255,255,255,.25)}
+    .smallnote{font-size:11px;color:var(--muted);margin-top:10px}
 
-    /* Overlay for gacha */
+    /* Login bonus modal */
     .overlay{
-      position:fixed; inset:0;
-      background: rgba(0,0,0,.78);
-      display:none;
-      align-items:center;justify-content:center;
-      padding:14px;
-      padding-bottom: calc(14px + env(safe-area-inset-bottom));
-      z-index:70;
+      position:fixed;inset:0;
+      background:rgba(0,0,0,.78);
+      display:none;align-items:center;justify-content:center;
+      padding:18px;z-index:60;
     }
     .overlay.show{display:flex}
     .modal{
-      width:min(860px, 100%);
-      max-height: min(92vh, 920px);
-      border-radius:26px;
-      border:1px solid rgba(255,255,255,.14);
+      width:min(680px, 100%);
+      border-radius:24px;
+      border:1px solid rgba(255,255,255,.12);
       background:
-        radial-gradient(900px 420px at 20% 10%, rgba(255,213,74,.18), transparent 55%),
-        radial-gradient(900px 420px at 85% 20%, rgba(45,212,255,.18), transparent 55%),
-        linear-gradient(180deg, rgba(255,255,255,.10), rgba(0,0,0,.30));
-      box-shadow: 0 30px 120px rgba(0,0,0,.70);
+        radial-gradient(700px 400px at 30% 10%, rgba(124,77,255,.38), transparent 60%),
+        radial-gradient(700px 400px at 70% 90%, rgba(0,229,255,.28), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.10), rgba(0,0,0,.18));
+      box-shadow: 0 30px 110px rgba(0,0,0,.70);
       overflow:hidden;
       position:relative;
-      display:flex;
-      flex-direction:column;
     }
-    .modalTop{
-      padding:12px 14px;
-      border-bottom:1px solid rgba(255,255,255,.10);
-      display:flex;align-items:center;justify-content:space-between;gap:10px;
-    }
-    .modalTop b{font-weight:1200}
-    .modalTop span{font-size:12px;color:var(--muted)}
-    .modalBody{
-      padding:12px;
-      overflow:auto; /* スクロールできるように */
-      -webkit-overflow-scrolling: touch;
+    .modalIn{padding:18px}
+    .modalTitle{font-weight:1200;font-size:16px}
+    .modalSub{font-size:12px;color:var(--muted);margin-top:6px}
+    .heroRow{display:flex;gap:14px;align-items:center;margin-top:14px;flex-wrap:wrap}
+    .gift{
+      width:86px;height:86px;border-radius:22px;
+      background: conic-gradient(from 160deg, var(--cyan), var(--vio), var(--accent), var(--cyan));
+      box-shadow: 0 0 30px rgba(0,229,255,.18), 0 0 60px rgba(124,77,255,.18);
       position:relative;
-      flex:1;
     }
-    .modalFooter{
-      padding:12px;
-      border-top:1px solid rgba(255,255,255,.10);
-      display:flex;justify-content:flex-end;gap:10px;
+    .gift::after{
+      content:"";
+      position:absolute;inset:10px;border-radius:18px;
+      border:1px solid rgba(255,255,255,.20);
       background: rgba(0,0,0,.18);
     }
-    .ok{
-      border:1px solid rgba(255,255,255,.16);
-      background: rgba(0,0,0,.18);
+    .bonusAmt{
+      font-size:38px;font-weight:1300;letter-spacing:.02em
+    }
+    .bonusRow{display:flex;align-items:center;gap:10px}
+    .tinyGem{width:14px;height:14px;border-radius:5px;background:linear-gradient(135deg,var(--cyan),var(--vio))}
+    .footerRow{display:flex;gap:10px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap}
+    .okbtn{
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.16);
       color:var(--text);
       border-radius:999px;
       padding:10px 14px;
@@ -302,427 +196,329 @@
       cursor:pointer;
     }
 
-    /* Illustration characters in modal */
-    .ill{
-      position:absolute;
-      bottom:-6px;
-      width:min(40vw, 280px);
-      pointer-events:none;
-      filter: drop-shadow(0 18px 40px rgba(0,0,0,.65));
-      opacity:.95;
+    /* Gacha cinematic overlay (reuse same overlay) */
+    .stage{
+      margin-top:12px;
+      height:290px;
+      border-radius:20px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.20);
+      position:relative;overflow:hidden;
+      display:flex;align-items:center;justify-content:center;
     }
-    .illL{ left:-10px; }
-    .illR{ right:-10px; transform: scaleX(-1); }
-
-    /* Grid cards for 10-pull */
-    .grid{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:12px;
-      padding-bottom: 10px;
-    }
-    @media (max-width: 520px){
-      .grid{grid-template-columns:1fr;gap:10px}
-      .ill{opacity:.55}
-    }
-
-    .gcard{
-      border-radius:18px;
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(0,0,0,.24);
-      min-height:118px;
-      position:relative;
-      overflow:hidden;
-      padding:12px;
-      display:flex;flex-direction:column;justify-content:space-between;
-      cursor:pointer;
-      -webkit-tap-highlight-color: transparent;
-      user-select:none;
-    }
-    .gcard.back::before{
-      content:"";
-      position:absolute; inset:0;
-      background: radial-gradient(900px 340px at 20% 10%, rgba(255,255,255,.08), transparent 60%);
-      opacity:.55;
-    }
-    .gcard.back::after{
-      content:"";
-      position:absolute;
-      inset:10px;
-      border-radius:14px;
-      background: url('card_back.png') center/cover no-repeat;
-      border:1px solid rgba(255,255,255,.18);
-      opacity:.95;
-    }
-    .gcard .meta{
-      position:relative;
-      display:flex;justify-content:space-between;align-items:center;
-      color:var(--muted);
-      font-size:12px;font-weight:1100;
-    }
-    .gcard .tap{
-      position:relative;
-      font-size:14px;
-      font-weight:1200;
-      letter-spacing:.08em;
-      opacity:.92;
-    }
-
-    /* opened card */
-    .gcard.open{
-      cursor:default;
-      background: rgba(0,0,0,.30);
-    }
-    .rar{
-      position:relative;
-      font-weight:1300;
-      letter-spacing:.10em;
-      font-size:14px;
-    }
-    .amt{
-      position:relative;
-      font-size:34px;
-      font-weight:1300;
-      line-height:1.05;
-    }
-    .frameN{border-color: rgba(154,166,198,.55)}
-    .frameR{border-color: rgba(45,212,255,.55); box-shadow: 0 0 34px rgba(45,212,255,.12)}
-    .frameSR{border-color: rgba(255,138,0,.55); box-shadow: 0 0 34px rgba(255,138,0,.14)}
-    .frameSSR{border-color: rgba(255,213,74,.70); box-shadow: 0 0 46px rgba(255,213,74,.18)}
-    .rarN{color: rgba(154,166,198,.95)}
-    .rarR{color: rgba(45,212,255,.95)}
-    .rarSR{color: rgba(255,138,0,.95)}
-    .rarSSR{color: rgba(255,213,74,.98)}
-
-    /* Tap hint - only while back */
-    .gcard.back .tap{
-      animation: pulse 1.0s ease-in-out infinite;
-    }
-    @keyframes pulse{
-      0%,100%{opacity:.55; transform: translateY(0)}
-      50%{opacity:1; transform: translateY(-1px)}
-    }
-
-    /* Rainbow premonition */
-    .premonition{
-      display:none;
-      margin-bottom:12px;
-      border-radius:16px;
-      border:1px solid rgba(255,255,255,.16);
-      background:
-        conic-gradient(from 180deg,
-          rgba(255,0,92,.28), rgba(255,214,0,.28),
-          rgba(0,229,255,.28), rgba(124,77,255,.28),
-          rgba(255,122,0,.28), rgba(255,0,92,.28)
-        );
-      padding:10px 12px;
-      font-weight:1200;
-      text-align:center;
-      box-shadow: 0 18px 50px rgba(0,0,0,.35);
-    }
-    .premonition.show{display:block}
-    .premonition small{display:block;color:#0b1022;font-weight:1100;opacity:.9}
-
-    /* SSR reveal anime: rotate -> crack -> light */
-    .ssrFX{
-      position:absolute; inset:0;
-      pointer-events:none;
+    .beam{
+      position:absolute;inset:-40%;
+      background: conic-gradient(from 180deg, rgba(255,213,74,.0), rgba(255,213,74,.45), rgba(255,122,0,.0));
+      animation: beam 1.05s linear infinite;
+      mix-blend-mode: screen;
       opacity:0;
     }
-    .gcard.open.frameSSR .ssrFX{
-      opacity:1;
+    @keyframes beam{to{transform: rotate(360deg)}}
+
+    .orb{
+      width:132px;height:132px;border-radius:999px;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(255,255,255,.95), rgba(255,255,255,.16) 30%, rgba(0,0,0,.0) 60%),
+        conic-gradient(from 140deg, var(--cyan), var(--vio), var(--accent), var(--cyan));
+      filter:saturate(1.25);
+      box-shadow: 0 0 50px rgba(124,77,255,.30), 0 0 90px rgba(0,229,255,.18);
+      animation: float 1.7s ease-in-out infinite;
     }
-    .ssrLight{
-      position:absolute; inset:-40%;
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-11px)}}
+    .spinny .orb{animation: spin 0.95s linear infinite}
+    .spinny .beam{opacity:.9}
+    @keyframes spin{to{transform: rotate(360deg)}}
+
+    .rainbow{
+      position:absolute;inset:-60%;
       background: conic-gradient(from 180deg,
-        rgba(255,0,92,.0), rgba(255,0,92,.45),
+        rgba(255,0,92,.0), rgba(255,0,92,.55),
         rgba(255,214,0,.55),
-        rgba(0,229,255,.45),
-        rgba(124,77,255,.45),
+        rgba(0,229,255,.55),
+        rgba(124,77,255,.55),
         rgba(255,122,0,.55),
-        rgba(255,0,92,.45),
+        rgba(255,0,92,.55),
         rgba(255,0,92,.0)
       );
+      opacity:0;
       filter: blur(10px) saturate(1.25);
-      mix-blend-mode: screen;
       animation: spin 1.2s linear infinite;
-      opacity:.95;
+      mix-blend-mode: screen;
+      pointer-events:none;
+      transition: opacity .18s ease;
     }
-    @keyframes spin{to{transform: rotate(360deg)}}
-    .ssrCrack{
-      position:absolute; inset:0;
-      background:
-        radial-gradient(circle at 50% 55%, rgba(255,255,255,.85), rgba(255,255,255,.0) 60%),
-        linear-gradient(135deg, rgba(255,255,255,.0), rgba(255,255,255,.55), rgba(255,255,255,.0));
-      opacity:0;
-      animation: crack 700ms ease forwards;
+    .rainbow.show{opacity:.95}
+    .flash{
+      position:absolute;inset:0;background: rgba(255,255,255,1);
+      opacity:0;pointer-events:none;
     }
-    @keyframes crack{
-      0%{opacity:0; transform: scale(.85) rotate(0deg)}
-      35%{opacity:.25; transform: scale(1.02) rotate(6deg)}
-      70%{opacity:.55; transform: scale(1.05) rotate(-4deg)}
-      100%{opacity:.18; transform: scale(1.10) rotate(2deg)}
-    }
-    .ssrBurst{
-      position:absolute; inset:0;
-      background: rgba(255,255,255,1);
-      opacity:0;
-      animation: burst 650ms ease forwards;
-    }
-    @keyframes burst{
-      0%{opacity:0}
-      12%{opacity:.95}
-      100%{opacity:0}
-    }
+    .flash.on{animation: flash 0.55s ease}
+    @keyframes flash{0%{opacity:0}12%{opacity:.95}100%{opacity:0}}
 
-    /* Total reveal */
-    .totalBox{
-      margin-top:14px;
-      border-radius:18px;
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(0,0,0,.25);
-      padding:12px;
-      text-align:center;
+    .chars{position:absolute;inset:0;pointer-events:none}
+    .char{
+      position:absolute;bottom:18px;
+      width:156px;height:190px;border-radius:22px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.14);
+      backdrop-filter: blur(6px);
+      box-shadow: 0 18px 60px rgba(0,0,0,.35);
+      overflow:hidden;
+      opacity:0; transform: translateY(10px);
+      transition: opacity .22s ease, transform .22s ease;
     }
-    .totalLead{
-      font-size:14px;font-weight:1200;letter-spacing:.08em;
-      color:var(--muted);
+    .char.show{opacity:1;transform: translateY(0)}
+    .char.left{left:14px}
+    .char.right{right:14px}
+    .charFace{
+      position:absolute;left:16px;top:16px;
+      width:56px;height:56px;border-radius:16px;
+      background: linear-gradient(135deg, rgba(255,255,255,.20), rgba(255,255,255,.06));
+      border:1px solid rgba(255,255,255,.10);
     }
-    .totalAmt{
-      margin-top:8px;
-      font-size:52px;
-      font-weight:1400;
-      letter-spacing:.02em;
-      line-height:1;
-      text-shadow: 0 12px 40px rgba(0,0,0,.55);
+    .charFace::before,.charFace::after{
+      content:"";position:absolute;top:20px;width:8px;height:10px;border-radius:6px;background:rgba(255,255,255,.75);
     }
-    .totalAmt.pop{
-      animation: pop 520ms ease forwards;
+    .charFace::before{left:16px}
+    .charFace::after{right:16px}
+    .charName{position:absolute;left:84px;top:18px;font-weight:1200;font-size:12px}
+    .charRole{position:absolute;left:84px;top:38px;font-weight:1000;font-size:11px;color:var(--muted)}
+    .bubble{
+      position:absolute;left:12px;right:12px;top:84px;
+      padding:10px 10px;border-radius:16px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.18);
+      color: var(--text);
+      font-size:12px;line-height:1.35;
     }
-    @keyframes pop{
-      0%{transform: scale(.92); opacity:.2}
-      45%{transform: scale(1.06); opacity:1}
-      100%{transform: scale(1.0); opacity:1}
-    }
+    .bubble small{color:var(--muted)}
 
-    /* confetti (simple) */
-    .confetti{position:absolute; inset:0; pointer-events:none; overflow:hidden}
+    .reveal{
+      position:absolute;inset:0;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      gap:6px;text-align:center;padding:16px;
+      opacity:0;transform: scale(.98);
+      transition: opacity .22s ease, transform .22s ease;
+    }
+    .reveal.show{opacity:1;transform:scale(1)}
+    .revealMoney{font-size:54px;font-weight:1300}
+    .revealRarity{font-size:14px;font-weight:1200;letter-spacing:.08em}
+    .rollSummary{margin-top:8px;font-size:12px;color:var(--muted);max-width:520px}
+    .pills{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:8px}
+    .pill{
+      font-size:11px;font-weight:1100;
+      padding:6px 10px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.16);
+      color: var(--text);
+    }
+    .pill.ssr{border-color: rgba(255,213,74,.45);box-shadow: 0 0 24px rgba(255,213,74,.18)}
+    .confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden}
   </style>
 </head>
 <body>
   <div class="wrap">
-    <div class="hud">
-      <div class="gems" aria-label="所持ジェム">
-        <div class="gemIcon" aria-hidden="true"></div>
-        <div>
-          <div><b id="gems">0</b> <span style="font-weight:1000;opacity:.9">GEMS</span></div>
-          <small>所持ジェム</small>
-        </div>
-      </div>
-      <div style="color:var(--muted);font-size:12px;font-weight:1100">※ 10連は合計最大30,000円</div>
-    </div>
-
-    <div class="popup">
-      <div class="popupIn">
-        <div class="title">最大30,000円 お年玉ガチャ！</div>
+    <div class="topbar">
+      <div>
+        <div class="title">お年玉ガチャ（10連）</div>
         <div class="sub">
-          1回ごとに金額が確定 → 10回開封 → 最後に合計をド派手に表示。<br>
-          10連は<strong>SSR確定</strong>（3,000円が最低1枚）。
+          <span class="badge">10連：100ジェム</span>
+          <span class="badge">最大値採用</span>
+          <span class="badge">最大30,000円</span>
         </div>
-
-        <div class="maxBadge"><span class="dot"></span> 10連合計 最大 <strong>¥30,000</strong>（SSR×10）</div>
-
-        <div class="rates">
-          <div class="ratesHead">
-            <b>提供割合</b>
-            <span>（同ランク内は均等）</span>
+      </div>
+      <div class="gem">
+        <div class="gemL">
+          <div class="gemIcon"></div>
+          <div>
+            <div class="gemCount"><span id="gems">--</span> <span class="gemSmall">GEMS</span></div>
+            <div class="gemSmall">所持ジェム</div>
           </div>
-          <table>
-            <thead>
-              <tr>
-                <th>レアリティ</th>
-                <th>金額</th>
-                <th>確率</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><span class="tag"><i class="iSSR"></i>SSR</span></td>
-                <td>¥3,000</td>
-                <td><span id="pSSR">--</span>%</td>
-              </tr>
-              <tr>
-                <td><span class="tag"><i class="iSR"></i>SR</span></td>
-                <td>¥1,000 / ¥2,000</td>
-                <td><span id="pSR">--</span>%</td>
-              </tr>
-              <tr>
-                <td><span class="tag"><i class="iR"></i>R</span></td>
-                <td>¥300 / ¥500</td>
-                <td><span id="pR">--</span>%</td>
-              </tr>
-              <tr>
-                <td><span class="tag"><i class="iN"></i>N</span></td>
-                <td>¥10 / ¥50 / ¥100</td>
-                <td><span id="pN">--</span>%</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="sub" style="margin-top:10px">
-          10連の途中でSSRが眠っていると… <strong>虹予兆</strong>が1回だけ出る。
         </div>
       </div>
     </div>
 
-    <!-- bottom buttons -->
-    <div class="bottomBar">
-      <button class="btn btnOne" id="btnOne">
-        <div class="btnTitle">1回ガチャ</div>
-        <div class="btnSub">1回：300ジェム</div>
-        <div class="cost"><span class="miniGem"></span><span>-300</span></div>
-      </button>
+    <div class="card">
+      <div class="cardIn">
 
-      <button class="btn btnTen" id="btnTen">
-        <div class="stampWrap" id="stampWrap" style="display:none;">
-          <img class="stampImg" src="ssr_stamp.png" alt="SSR確定">
-          <div class="tenHint">SSR確定！</div>
+        <div class="actions" style="margin-top:0">
+          <button class="btn btn2" id="loginBonusBtn">ログインボーナスを受け取る</button>
+          <button class="btn btn2" id="resetBtn">初期化（親PIN）</button>
         </div>
-        <div class="btnTitle">SSR確定！10連ガチャ</div>
-        <div class="btnSub">10連：3000ジェム（1枚ずつ開封）</div>
-        <div class="cost"><span class="miniGem"></span><span>-3000</span></div>
-      </button>
-    </div>
 
-    <!-- reset at page bottom -->
-    <div class="footer">
-      <button class="resetBtn" id="resetBtn">初期化（親PIN）</button>
-    </div>
-  </div>
+        <label style="margin-top:10px;">候補金額（カンマ区切り）</label>
+        <input id="candidates" />
+        <div class="hint">SSRは 3,000円（虹演出）。SSRが出ると10連最大 30,000円！</div>
 
-  <!-- Login bonus toast -->
-  <div class="toast" id="toast" role="button" aria-label="ログインボーナス通知">
-    <div class="toastIn" id="toastTap">
-      <div class="toastL">
-        <div class="toastGem" aria-hidden="true"></div>
-        <div>
-          <div class="toastTitle">ログインボーナス獲得！</div>
-          <div class="toastSub">タップでジェム3,000個を受け取る</div>
+        <label style="margin-top:10px;">確率（任意：金額:重み）</label>
+        <textarea id="weights"></textarea>
+        <div class="hint">重みが大きいほど出やすい。書かなければ均等抽選。</div>
+
+        <div class="actions">
+          <button class="btn" id="tenRollBtn">
+            10連ガチャを回す
+            <span class="costBadge"><span class="miniGem"></span>-<span id="cost">100</span></span>
+          </button>
         </div>
+
+        <div class="resultPanel">
+          <div class="money" id="money">¥---</div>
+          <div class="rarity" id="rarity"><span class="rarDot"></span><span id="rarText">READY</span></div>
+          <div class="smallnote">※ ジェムが無いと回せません（ゲームと同じ）</div>
+        </div>
+
       </div>
-      <div class="toastTap">TAP</div>
     </div>
   </div>
 
-  <!-- Gacha overlay -->
-  <div class="overlay" id="overlay" aria-modal="true" role="dialog">
+  <!-- Overlay (ログインボーナス & ガチャ演出) -->
+  <div class="overlay" id="overlay" role="dialog" aria-modal="true">
     <div class="modal">
-      <img class="ill illL" src="dragon_spirit.png" alt="">
-      <img class="ill illR" src="summoner.png" alt="">
-
-      <div class="modalTop">
-        <div>
-          <b id="modalTitle">ガチャ結果</b>
-          <div><span id="modalSub">タップで1枚ずつ開封</span></div>
-        </div>
-        <span id="step">-</span>
-      </div>
-
-      <div class="modalBody" id="modalBody">
-        <div class="premonition" id="premonition">
-          🌈 虹の気配がする……<small>（SSRが眠っている）</small>
-        </div>
-
-        <div class="grid" id="grid"></div>
-
-        <div class="totalBox" id="totalBox" style="display:none;">
-          <div class="totalLead" id="totalLead">合計は・・・・・・</div>
-          <div class="totalAmt" id="totalAmt">¥---</div>
-        </div>
-      </div>
-
-      <div class="modalFooter">
-        <button class="ok" id="closeBtn">閉じる</button>
-      </div>
-
+      <div class="rainbow" id="rainbow"></div>
+      <div class="flash" id="flash"></div>
       <div class="confetti" id="confetti"></div>
+      <div class="modalIn">
+        <div class="modalTitle" id="modalTitle">ログインボーナス</div>
+        <div class="modalSub" id="modalSub">受け取って10連を回そう！</div>
+
+        <div id="bonusArea">
+          <div class="heroRow">
+            <div class="gift"></div>
+            <div>
+              <div class="bonusRow">
+                <div class="tinyGem"></div>
+                <div class="bonusAmt">+3000</div>
+                <div class="badge">GEMS</div>
+              </div>
+              <div class="modalSub">初回限定：ジェム3,000個をプレゼント！</div>
+            </div>
+          </div>
+
+          <div class="footerRow">
+            <button class="okbtn" id="bonusGetBtn">受け取る</button>
+            <button class="okbtn" id="bonusCloseBtn">あとで</button>
+          </div>
+        </div>
+
+        <div id="gachaArea" style="display:none;">
+          <div class="stage spinny" id="stage">
+            <div class="beam" aria-hidden="true"></div>
+            <div class="orb" aria-hidden="true"></div>
+
+            <div class="chars">
+              <div class="char left" id="charL">
+                <div class="charFace"></div>
+                <div class="charName">召喚士 ハヤブサ</div>
+                <div class="charRole">煽り担当</div>
+                <div class="bubble" id="lineL">いくぞ… 最大値を掴め。</div>
+              </div>
+              <div class="char right" id="charR">
+                <div class="charFace"></div>
+                <div class="charName">精霊 ミオ</div>
+                <div class="charRole">運命担当</div>
+                <div class="bubble" id="lineR">SSRは3,000円。虹が見えたら勝ち。</div>
+              </div>
+            </div>
+
+            <div class="reveal" id="reveal">
+              <div class="revealRarity" id="revealRarity">R</div>
+              <div class="revealMoney" id="revealMoney">¥---</div>
+              <div class="rollSummary" id="rollSummary">10回の結果：—</div>
+              <div class="pills" id="pills"></div>
+              <div class="modalSub">スクショ推奨：これが今回の結果</div>
+            </div>
+          </div>
+
+          <div class="footerRow">
+            <button class="okbtn" id="closeBtn" disabled>OK</button>
+          </div>
+        </div>
+
+      </div>
     </div>
   </div>
 
   <script>
-    /********************
-     * Config
-     ********************/
     const CFG = {
-      BONUS_GEMS: 3000,
-      COST_ONE: 300,
-      COST_TEN: 3000,
+      BONUS_GEMS: 3000,         // ログボで受け取る量
+      COST_TENROLL: 100,        // 10連コスト
+      MAX_TENROLL_PAYOUT: 30000,// 最大3万円
+      SSR_AMOUNT: 3000,         // SSR=3000円
       PARENT_PIN: "2525",
-      TAP_COOLDOWN_MS: 300,
-
-      // Amounts (same rarity = equal probability)
-      AMOUNTS: {
-        N:  [10, 50, 100],
-        R:  [300, 500],
-        SR: [1000, 2000],
-        SSR:[3000]
-      },
-
-      // Rarity probabilities (sum=1)
-      // tuned for "gamey" and high expected value
-      // EV per pull ≈ 1000 (so 10-pull EV ≈ 10000)
-      PROB: {
-        SSR: 0.09,
-        SR:  0.39,
-        R:   0.35,
-        N:   0.17
-      }
+      CANDIDATES: "500,1000,2000,3000",
+      WEIGHTS: `500:55
+1000:30
+2000:12
+3000:3`
     };
 
     const LS = {
-      gems: "otg_gems_v2",
-      bonusTaken: "otg_bonus_taken_v2"
+      gems: "otg3_gems_v1",
+      bonusTaken: "otg3_bonus_taken_v1"
     };
 
     const $ = (id) => document.getElementById(id);
     const yen = (n) => "¥" + Number(n).toLocaleString("ja-JP");
 
-    /********************
-     * State helpers
-     ********************/
     function getGems(){
       const v = localStorage.getItem(LS.gems);
+      if (!v) return 0;
       const n = Number(v);
       return Number.isFinite(n) ? n : 0;
     }
     function setGems(n){
-      localStorage.setItem(LS.gems, String(Math.max(0, Math.floor(n))));
-      renderHUD();
-    }
-    function bonusTaken(){
-      return localStorage.getItem(LS.bonusTaken) === "1";
-    }
-    function setBonusTaken(){
-      localStorage.setItem(LS.bonusTaken, "1");
+      localStorage.setItem(LS.gems, String(n));
+      render();
     }
 
-    function renderHUD(){
-      $("gems").textContent = getGems();
-      $("btnOne").disabled = getGems() < CFG.COST_ONE;
-      $("btnTen").disabled = getGems() < CFG.COST_TEN;
+    function parseCandidates() {
+      const raw = $("candidates").value.trim();
+      const arr = raw.split(",").map(s => s.trim()).filter(Boolean).map(Number).filter(n => Number.isFinite(n) && n >= 0);
+      return arr.length ? arr : [500,1000,2000,3000];
+    }
+    function parseWeights() {
+      const text = $("weights").value.trim();
+      if (!text) return null;
+      const lines = text.split("\n").map(l => l.trim()).filter(Boolean);
+      const map = new Map();
+      for (const line of lines) {
+        const [a,b] = line.split(":").map(s => s.trim());
+        const amount = Number(a);
+        const w = Number(b);
+        if (Number.isFinite(amount) && Number.isFinite(w) && w > 0) map.set(amount, w);
+      }
+      return map.size ? map : null;
+    }
+    function weightedPick(cands, weightMap) {
+      if (!weightMap) return cands[Math.floor(Math.random() * cands.length)];
+      const items = cands.map(a => ({ a, w: weightMap.get(a) ?? 1 })).filter(x => x.w > 0);
+      const total = items.reduce((s,x) => s + x.w, 0);
+      let r = Math.random() * total;
+      for (const it of items) {
+        r -= it.w;
+        if (r <= 0) return it.a;
+      }
+      return items[items.length - 1].a;
     }
 
-    function renderRates(){
-      $("pSSR").textContent = (CFG.PROB.SSR*100).toFixed(1);
-      $("pSR").textContent  = (CFG.PROB.SR*100).toFixed(1);
-      $("pR").textContent   = (CFG.PROB.R*100).toFixed(1);
-      $("pN").textContent   = (CFG.PROB.N*100).toFixed(1);
+    function setDot(r){
+      const dot = $("rarity").querySelector(".rarDot");
+      dot.style.background =
+        r==="SSR" ? "rgba(255,213,74,.95)" :
+        r==="SR" ? "rgba(255,122,0,.95)" :
+        r==="R" ? "rgba(0,229,255,.95)" :
+        r==="N" ? "rgba(168,179,214,.65)" :
+        "rgba(255,255,255,.25)";
     }
 
-    /********************
-     * Audio / vibe (no files)
-     ********************/
+    function rarityFromPayout(p){
+      if (p >= 30000) return "SSR";
+      if (p >= 20000) return "SR";
+      if (p >= 10000) return "R";
+      return "N";
+    }
+
+    // WebAudio (no files)
     let audioCtx;
     function beep(seq){
       try{
@@ -745,92 +541,36 @@
     }
     function vibe(ms){ if (navigator.vibrate) navigator.vibrate(ms); }
 
-    const sfx = {
-      tap(){ beep([{at:0,f:392,d:0.08,v:0.08,type:"square"}]); },
-      open(){ beep([{at:0,f:262,d:0.10,v:0.09},{at:0.10,f:330,d:0.10,v:0.09}]); },
-      sr(){ beep([{at:0,f:440,d:0.14,v:0.12,type:"sawtooth"},{at:0.14,f:659.25,d:0.16,v:0.12,type:"sawtooth"}]); },
-      ssr(){
-        beep([
-          {at:0.00,f:523.25,d:0.14,v:0.14,type:"sawtooth"},
-          {at:0.14,f:659.25,d:0.14,v:0.14,type:"sawtooth"},
-          {at:0.28,f:783.99,d:0.22,v:0.16,type:"sawtooth"},
-          {at:0.52,f:1046.5,d:0.25,v:0.18,type:"sine"}
-        ]);
-      },
-      total(){ beep([{at:0,f:330,d:0.12,v:0.10},{at:0.12,f:392,d:0.12,v:0.11},{at:0.24,f:523.25,d:0.18,v:0.12}]); }
-    };
-
-    /********************
-     * Gacha logic
-     ********************/
-    function pickRarity(){
-      const r = Math.random();
-      const pSSR = CFG.PROB.SSR;
-      const pSR  = pSSR + CFG.PROB.SR;
-      const pR   = pSR  + CFG.PROB.R;
-      if (r < pSSR) return "SSR";
-      if (r < pSR)  return "SR";
-      if (r < pR)   return "R";
-      return "N";
+    function sfxBonus(){ beep([{at:0,f:523.25,d:0.12,v:0.10,type:"square"},{at:0.12,f:659.25,d:0.12,v:0.11,type:"square"}]); }
+    function sfxTenStart(){ beep([{at:0,f:196,d:0.10,v:0.10,type:"square"},{at:0.10,f:247,d:0.10,v:0.10,type:"square"}]); }
+    function sfxDrum(){ beep([{at:0,f:110,d:0.07,v:0.08,type:"sine"},{at:0.08,f:98,d:0.08,v:0.08,type:"sine"}]); }
+    function sfxSSR(){
+      beep([
+        {at:0.00,f:523.25,d:0.14,v:0.14,type:"sawtooth"},
+        {at:0.14,f:659.25,d:0.14,v:0.14,type:"sawtooth"},
+        {at:0.28,f:783.99,d:0.22,v:0.16,type:"sawtooth"},
+        {at:0.52,f:1046.5,d:0.25,v:0.18,type:"sine"}
+      ]);
+    }
+    function sfxNormal(r){
+      if (r==="SR") beep([{at:0,f:392,d:0.14,v:0.12},{at:0.14,f:523.25,d:0.20,v:0.13}]);
+      else if (r==="R") beep([{at:0,f:330,d:0.14,v:0.10},{at:0.14,f:440,d:0.18,v:0.11}]);
+      else beep([{at:0,f:262,d:0.12,v:0.08}]);
     }
 
-    function pickAmount(rarity){
-      const arr = CFG.AMOUNTS[rarity];
-      return arr[Math.floor(Math.random() * arr.length)];
-    }
-
-    function rollOne(){
-      const rar = pickRarity();
-      const amt = pickAmount(rar);
-      return { rar, amt };
-    }
-
-    function ensureTenSSR(results){
-      if (results.some(x => x.rar === "SSR")) return results;
-      // upgrade 1 random to SSR
-      const i = Math.floor(Math.random() * results.length);
-      results[i] = { rar: "SSR", amt: 3000 };
-      return results;
-    }
-
-    /********************
-     * UI - Overlay
-     ********************/
-    let tapLock = false;
-    function canTap(){
-      if (tapLock) return false;
-      tapLock = true;
-      setTimeout(()=> tapLock=false, CFG.TAP_COOLDOWN_MS);
-      return true;
-    }
-
-    function showOverlay(title, sub){
-      $("modalTitle").textContent = title;
-      $("modalSub").textContent = sub;
-      $("overlay").classList.add("show");
-      document.body.style.overflow = "hidden";
-    }
-    function hideOverlay(){
-      $("overlay").classList.remove("show");
-      document.body.style.overflow = "";
-      $("confetti").innerHTML = "";
-    }
-
-    function frameClass(rar){
-      return rar==="SSR" ? "frameSSR" : rar==="SR" ? "frameSR" : rar==="R" ? "frameR" : "frameN";
-    }
-    function rarClass(rar){
-      return rar==="SSR" ? "rarSSR" : rar==="SR" ? "rarSR" : rar==="R" ? "rarR" : "rarN";
+    function flash(){
+      const f = $("flash");
+      f.classList.remove("on"); void f.offsetWidth; f.classList.add("on");
     }
 
     function confettiBurst(kind){
       const wrap = $("confetti");
       wrap.innerHTML = "";
-      const count = kind==="SSR" ? 80 : (kind==="SR" ? 40 : 18);
+      const count = kind==="SSR" ? 70 : (kind==="SR" ? 36 : (kind==="R" ? 22 : 12));
       for(let i=0;i<count;i++){
         const el = document.createElement("div");
         el.style.position="absolute";
-        el.style.top="-30px";
+        el.style.top="-24px";
         el.style.left = (Math.random()*100) + "%";
         const w = 6 + Math.random()*10;
         const h = 10 + Math.random()*18;
@@ -839,17 +579,18 @@
         el.style.borderRadius = "4px";
         const col =
           kind==="SSR" ? ["rgba(255,0,92,.95)","rgba(255,214,0,.95)","rgba(0,229,255,.95)","rgba(124,77,255,.95)","rgba(255,122,0,.95)"][Math.floor(Math.random()*5)]
-          : kind==="SR" ? (Math.random()<.5 ? "rgba(255,213,74,.95)" : "rgba(255,138,0,.95)")
-          : "rgba(255,255,255,.85)";
+          : kind==="SR" ? (Math.random()<.5 ? "rgba(255,213,74,.95)" : "rgba(255,122,0,.95)")
+          : kind==="R" ? (Math.random()<.5 ? "rgba(0,229,255,.95)" : "rgba(255,255,255,.85)")
+          : (Math.random()<.5 ? "rgba(255,255,255,.75)" : "rgba(168,179,214,.75)");
         el.style.background = col;
 
-        const dur = 900 + Math.random()*900;
+        const dur = 800 + Math.random()*900;
         const rot = Math.random()*360;
-        const drift = (Math.random()*160 - 80);
+        const drift = (Math.random()*140 - 70);
         el.animate(
           [
             { transform:`translate(0px,-10px) rotate(${rot}deg)`, opacity:1 },
-            { transform:`translate(${drift}px,420px) rotate(${rot+760}deg)`, opacity:0.95 }
+            { transform:`translate(${drift}px,340px) rotate(${rot+700}deg)`, opacity:0.95 }
           ],
           { duration: dur, delay: Math.random()*180, easing: "linear", fill:"forwards" }
         );
@@ -857,223 +598,166 @@
       }
     }
 
-    /********************
-     * Session for opening cards
-     ********************/
-    let session = null; // { mode, results, opened[], totalShown, rainbowShown }
-    function buildGrid(results){
-      const grid = $("grid");
-      grid.innerHTML = "";
-      results.forEach((_, idx)=>{
-        const card = document.createElement("div");
-        card.className = "gcard back";
-        card.dataset.idx = String(idx);
-        card.innerHTML = `
-          <div class="meta">
-            <span>${idx+1}/10</span>
-            <span> </span>
-          </div>
-          <div class="tap">TAP</div>
-        `;
-        card.addEventListener("click", ()=> onTapCard(idx));
-        grid.appendChild(card);
-      });
-      $("totalBox").style.display = "none";
-      $("premonition").classList.remove("show");
-      $("modalBody").scrollTop = 0;
-    }
+    const LINES_L = {
+      start: [
+        "いくぞ… 最大値を掴め。",
+        "ジェム100の価値、見せてみろ。",
+        "虹が見えたら…終わりだ。勝ちだ。"
+      ],
+      mid: [
+        "…来い、SSR（3,000円）",
+        "最大3万円。引けるか？",
+        "その指で運命を決めろ。"
+      ],
+      end: [
+        "よし、受け取れ。",
+        "スクショしろ。証拠は強い。",
+        "次は…ジェムがある時だけだ。"
+      ]
+    };
+    const LINES_R = {
+      start: [
+        "10回の運命が、動き出すよ。",
+        "最大値だけが残る…強い。",
+        "SSRは3,000円。虹で祝福するね。"
+      ],
+      mid: [
+        "虹、見たい？見せてあげる。",
+        "SSRが出たら…画面が光るよ。",
+        "最大30,000円。届くかな？"
+      ],
+      end: [
+        "おめでとう。これが今回の結果。",
+        "ジェムが足りない時は…また今度。",
+        "保存してね。"
+      ]
+    };
+    function randPick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 
-    function updateStep(){
-      const opened = session.opened.filter(Boolean).length;
-      $("step").textContent = `${opened}/10 開封`;
-    }
-
-    function showRainbowPremonitionIfNeeded(){
-      if (session.rainbowShown) return;
-      const openedCount = session.opened.filter(Boolean).length;
-      if (openedCount < 2) return; // 早すぎるとネタバレ感
-      const remain = session.results.filter((_,i)=>!session.opened[i]);
-      const hasSSR = remain.some(x => x.rar === "SSR");
-      if (!hasSSR) return;
-
-      // 一回だけ虹予兆
-      session.rainbowShown = true;
-      $("premonition").classList.add("show");
-      sfx.ssr(); vibe(80);
-      setTimeout(()=> $("premonition").classList.remove("show"), 1400);
-    }
-
-    function openCardEl(cardEl, result){
-      cardEl.classList.remove("back");
-      cardEl.classList.add("open", frameClass(result.rar));
-      cardEl.innerHTML = `
-        <div class="ssrFX">
-          <div class="ssrLight" style="display:${result.rar==="SSR"?"block":"none"}"></div>
-          <div class="ssrBurst" style="display:${result.rar==="SSR"?"block":"none"}"></div>
-          <div class="ssrCrack" style="display:${result.rar==="SSR"?"block":"none"}"></div>
-        </div>
-        <div class="meta">
-          <span>確定</span>
-          <span class="rar ${rarClass(result.rar)}">${result.rar}</span>
-        </div>
-        <div class="amt">${yen(result.amt)}</div>
-      `;
-    }
-
-    async function showTotal(){
-      const total = session.results.reduce((s,x)=> s + x.amt, 0);
-      $("totalBox").style.display = "block";
-      $("totalLead").textContent = "合計は・・・・・・";
-      $("totalAmt").textContent = "¥---";
-      $("totalAmt").classList.remove("pop");
-
-      // 溜め
-      await new Promise(r=>setTimeout(r, 700));
-      $("totalAmt").textContent = yen(total);
-      $("totalAmt").classList.add("pop");
-      sfx.total(); vibe(70);
-      confettiBurst(total >= 20000 ? "SSR" : (total >= 12000 ? "SR" : "R"));
-    }
-
-    async function onTapCard(idx){
-      if (!session) return;
-      if (!canTap()) return;
-
-      const grid = $("grid");
-      const cardEl = grid.querySelector(`.gcard[data-idx="${idx}"]`);
-      if (!cardEl) return;
-      if (session.opened[idx]) return;
-
-      session.opened[idx] = true;
-
-      // SFX by rarity
-      const result = session.results[idx];
-      if (result.rar === "SSR"){ sfx.ssr(); vibe(120); }
-      else if (result.rar === "SR"){ sfx.sr(); vibe(55); }
-      else { sfx.open(); vibe(25); }
-
-      openCardEl(cardEl, result);
-      updateStep();
-
-      // rainbow premonition (once) while SSR still remaining
-      showRainbowPremonitionIfNeeded();
-
-      // if all opened => show total
-      const openedCount = session.opened.filter(Boolean).length;
-      if (openedCount === session.results.length){
-        await showTotal();
+    function showOverlay(mode){
+      $("overlay").classList.add("show");
+      if (mode==="bonus"){
+        $("modalTitle").textContent = "ログインボーナス";
+        $("modalSub").textContent = "初回限定：ジェム3,000個をプレゼント！";
+        $("bonusArea").style.display = "block";
+        $("gachaArea").style.display = "none";
+      }else{
+        $("bonusArea").style.display = "none";
+        $("gachaArea").style.display = "block";
       }
     }
+    function hideOverlay(){
+      $("overlay").classList.remove("show");
+    }
 
-    /********************
-     * Start gacha
-     ********************/
-    function startOne(){
-      if (getGems() < CFG.COST_ONE){
-        alert("ジェムが足りません（1回は300ジェム）");
+    async function cinematic(rolls, payout, rar){
+      showOverlay("gacha");
+      $("reveal").classList.remove("show");
+      $("closeBtn").disabled = true;
+      $("stage").classList.add("spinny");
+      $("confetti").innerHTML = "";
+      $("rainbow").classList.remove("show");
+
+      $("charL").classList.add("show");
+      $("charR").classList.add("show");
+      $("lineL").innerHTML = randPick(LINES_L.start) + "<br><small>（最大値採用）</small>";
+      $("lineR").innerHTML = randPick(LINES_R.start) + "<br><small>（SSR=3,000円）</small>";
+
+      sfxTenStart(); vibe(25);
+
+      for(let i=0;i<10;i++){
+        await new Promise(r=>setTimeout(r, 140));
+        sfxDrum();
+        if (i%2===0) vibe(10);
+        if (i===4){
+          $("lineL").textContent = randPick(LINES_L.mid);
+          $("lineR").textContent = randPick(LINES_R.mid);
+        }
+      }
+
+      await new Promise(r=>setTimeout(r, 420));
+      $("stage").classList.remove("spinny");
+
+      if (rar==="SSR"){
+        $("rainbow").classList.add("show");
+        flash(); setTimeout(flash, 180); setTimeout(flash, 360);
+        sfxSSR(); vibe(140);
+      }else{
+        sfxNormal(rar);
+        vibe(rar==="SR" ? 80 : (rar==="R" ? 45 : 25));
+      }
+      confettiBurst(rar);
+
+      const pills = $("pills");
+      pills.innerHTML = "";
+      rolls.forEach(v=>{
+        const p = document.createElement("div");
+        p.className = "pill" + (v===3000 ? " ssr" : "");
+        p.textContent = yen(v);
+        pills.appendChild(p);
+      });
+
+      $("revealMoney").textContent = yen(payout);
+      $("revealRarity").textContent = rar + "（結果）";
+      $("rollSummary").textContent = "10回の結果：" + rolls.map(yen).join(" / ");
+
+      $("lineL").textContent = randPick(LINES_L.end);
+      $("lineR").textContent = randPick(LINES_R.end);
+
+      $("reveal").classList.add("show");
+      $("closeBtn").disabled = false;
+      renderResult(payout, rar);
+    }
+
+    function render(){
+      $("gems").textContent = getGems();
+      $("tenRollBtn").disabled = getGems() < CFG.COST_TENROLL;
+      $("candidates").value ||= CFG.CANDIDATES;
+      $("weights").value ||= CFG.WEIGHTS;
+    }
+
+    function renderResult(payout, rar){
+      $("money").textContent = yen(payout);
+      $("rarText").textContent = rar;
+      setDot(rar);
+    }
+
+    function doTenRoll(){
+      const gems = getGems();
+      if (gems < CFG.COST_TENROLL){
+        alert("ジェムが足りません（10連は100ジェム必要）");
         return;
       }
-      setGems(getGems() - CFG.COST_ONE);
+      setGems(gems - CFG.COST_TENROLL);
 
-      const r = rollOne();
-      // 1回は“即開封”演出
-      showOverlay("1回ガチャ", "結果が確定！");
-      session = {
-        mode:"one",
-        results:[r],
-        opened:[false],
-        rainbowShown:true
-      };
+      const cands = parseCandidates();
+      const weightMap = parseWeights();
+      const rolls = Array.from({length:10}, ()=>weightedPick(cands, weightMap));
 
-      // single grid style (still reuse)
-      $("grid").innerHTML = "";
-      const single = document.createElement("div");
-      single.className = "gcard back";
-      single.style.minHeight = "160px";
-      single.style.maxWidth = "520px";
-      single.style.margin = "0 auto";
-      single.innerHTML = `
-        <div class="meta"><span>1/1</span><span> </span></div>
-        <div class="tap">TAP</div>
-      `;
-      single.addEventListener("click", async ()=>{
-        if (!canTap()) return;
-        if (session.opened[0]) return;
-        session.opened[0] = true;
+      const max = Math.max(...rolls);
+      // “10連で最大3万円”を成立させる：最大値×10（SSR=3000なら30000）
+      const payout = Math.min(max * 10, CFG.MAX_TENROLL_PAYOUT);
 
-        if (r.rar === "SSR"){ sfx.ssr(); vibe(120); confettiBurst("SSR"); }
-        else if (r.rar === "SR"){ sfx.sr(); vibe(55); confettiBurst("SR"); }
-        else { sfx.open(); vibe(25); }
+      const rar = rarityFromPayout(payout);
 
-        openCardEl(single, r);
-        $("step").textContent = "1/1 開封";
-        $("totalBox").style.display = "block";
-        $("totalLead").textContent = "結果は……";
-        $("totalAmt").textContent = yen(r.amt);
-        $("totalAmt").classList.add("pop");
-      });
-      $("grid").appendChild(single);
-
-      $("totalBox").style.display = "none";
-      $("premonition").classList.remove("show");
-      $("step").textContent = "0/1 開封";
-      $("modalBody").scrollTop = 0;
-
-      renderHUD();
+      cinematic(rolls, payout, rar);
+      render();
     }
 
-    function startTen(){
-      if (getGems() < CFG.COST_TEN){
-        alert("ジェムが足りません（10連は3000ジェム）");
-        return;
-      }
-      setGems(getGems() - CFG.COST_TEN);
-
-      // Create 10 results + SSR guarantee
-      let results = Array.from({length:10}, ()=> rollOne());
-      results = ensureTenSSR(results);
-
-      showOverlay("SSR確定！10連ガチャ", "タップで1枚ずつ開封（0.3秒クールダウン）");
-      session = {
-        mode:"ten",
-        results,
-        opened: Array(10).fill(false),
-        rainbowShown:false
-      };
-
-      buildGrid(results);
-      updateStep();
-
-      // show SSR guarantee stamp animation on the button (quick flash)
-      $("stampWrap").style.display = "flex";
-      setTimeout(()=>{ $("stampWrap").style.display = "none"; }, 1200);
-
-      // also start with a little “stamp” feel
-      sfx.tap(); vibe(25);
-
-      renderHUD();
-    }
-
-    /********************
-     * Login bonus toast
-     ********************/
-    function maybeShowBonusToast(){
-      if (bonusTaken()) return;
-      // show once on first load
-      $("toast").classList.add("show");
-    }
     function takeBonus(){
-      if (bonusTaken()) return;
-      setBonusTaken();
-      setGems(getGems() + CFG.BONUS_GEMS);
-      $("toast").classList.remove("show");
-      confettiBurst("SSR");
-      sfx.ssr(); vibe(90);
+      const taken = localStorage.getItem(LS.bonusTaken) === "1";
+      if (taken){
+        alert("ログインボーナスは受け取り済みです");
+        return;
+      }
+      const next = getGems() + CFG.BONUS_GEMS;
+      localStorage.setItem(LS.bonusTaken, "1");
+      setGems(next);
+      sfxBonus(); vibe(40);
+      confettiBurst("SSR"); // 派手に
+      setTimeout(()=>{ hideOverlay(); }, 400);
     }
 
-    /********************
-     * Reset
-     ********************/
     function resetAll(){
       const pin = prompt("親PINを入力してください");
       if (pin === null) return;
@@ -1083,41 +767,27 @@
       }
       localStorage.removeItem(LS.gems);
       localStorage.removeItem(LS.bonusTaken);
-      session = null;
-      $("toast").classList.remove("show");
-      hideOverlay();
-      renderHUD();
-      maybeShowBonusToast();
-      alert("初期化しました（ログインボーナスも受け取り直せます）");
+      renderResult(0, "READY");
+      render();
+      alert("初期化しました（ボーナスも受け取り直せます）");
     }
 
-    /********************
-     * Init
-     ********************/
     function init(){
-      renderRates();
-      renderHUD();
-      maybeShowBonusToast();
+      $("candidates").value = CFG.CANDIDATES;
+      $("weights").value = CFG.WEIGHTS;
 
-      $("btnOne").addEventListener("click", startOne);
-      $("btnTen").addEventListener("click", startTen);
-
-      $("toastTap").addEventListener("click", takeBonus);
-
+      $("tenRollBtn").addEventListener("click", doTenRoll);
+      $("loginBonusBtn").addEventListener("click", ()=>showOverlay("bonus"));
+      $("bonusGetBtn").addEventListener("click", takeBonus);
+      $("bonusCloseBtn").addEventListener("click", hideOverlay);
       $("resetBtn").addEventListener("click", resetAll);
 
-      $("closeBtn").addEventListener("click", ()=> {
-        session = null;
-        hideOverlay();
+      $("closeBtn").addEventListener("click", hideOverlay);
+      $("overlay").addEventListener("click", (e)=>{
+        if (e.target === $("overlay")) hideOverlay();
       });
 
-      // click outside modal closes
-      $("overlay").addEventListener("click", (e)=>{
-        if (e.target === $("overlay")) {
-          session = null;
-          hideOverlay();
-        }
-      });
+      render();
     }
     init();
   </script>
