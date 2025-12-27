@@ -30,7 +30,6 @@
       overflow-x:hidden;
     }
 
-    /* 背景 */
     body::before{
       content:"";
       position:fixed; inset:0;
@@ -81,7 +80,6 @@
     .screen{ display:none; }
     .screen.show{ display:block; }
 
-    /* ===== Title ===== */
     .titleHero{
       display:grid;
       grid-template-columns: 1fr;
@@ -116,7 +114,6 @@
       line-height:1.5;
     }
 
-    /* ===== Top gems ===== */
     .topRow{
       display:flex;
       align-items:flex-start;
@@ -142,7 +139,6 @@
     .small{font-size:12px;color:var(--muted)}
     .topNote{font-size:12px;color:var(--muted); padding-top:6px}
 
-    /* ===== Buttons ===== */
     .btnRow{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:10px; }
     .btn{
       border:0;
@@ -175,6 +171,11 @@
       background: linear-gradient(180deg, rgba(255,213,74,.95), rgba(255,138,42,.95));
       box-shadow: 0 18px 44px rgba(255,138,42,.20);
     }
+    .btnPay{
+      color:#071021;
+      background: linear-gradient(180deg, rgba(124,77,255,.95), rgba(0,140,255,.95));
+      box-shadow: 0 18px 44px rgba(124,77,255,.18);
+    }
     .chip{
       display:inline-flex; align-items:center; gap:6px;
       padding:6px 10px;
@@ -188,7 +189,6 @@
     }
     .miniGem{width:12px;height:12px;border-radius:4px;background:linear-gradient(135deg,#00d9ff,#7c4dff);}
 
-    /* ===== Menu popup ===== */
     .menuPopup{
       position:relative;
       padding:16px;
@@ -217,7 +217,6 @@
     }
     .dragonArt img{ width:100%; height:100%; object-fit:cover; display:block; }
 
-    /* ===== Rates ===== */
     .rateBox{
       margin-top:12px;
       border-radius:16px;
@@ -256,7 +255,6 @@
     .dot.n{ background: var(--n); box-shadow: 0 0 22px rgba(142,160,201,.14); }
     .rateNote{ padding:10px 12px; color:var(--muted); font-size:12px; }
 
-    /* ===== Bottom bar ===== */
     .bottomBar{
       display:flex;
       gap:12px;
@@ -277,8 +275,6 @@
     .btnRight{
       display:flex; align-items:center; gap:10px; flex:0 0 auto;
     }
-
-    /* SSR stamp in menu (small) */
     .stampSmall{
       padding:6px 10px;
       border-radius:999px;
@@ -290,7 +286,6 @@
       white-space:nowrap;
     }
 
-    /* Footer reset */
     .footer{
       margin-top: 8px;
       display:flex;
@@ -306,7 +301,6 @@
       cursor:pointer;
     }
 
-    /* ===== Persistent banner (login bonus) ===== */
     .banner{
       position:fixed;
       left:50%;
@@ -350,7 +344,6 @@
       border-color: rgba(255,213,74,.30);
     }
 
-    /* ===== Overlay/Modal ===== */
     .overlay{
       position:fixed; inset:0;
       background: rgba(0,0,0,.78);
@@ -391,7 +384,6 @@
       white-space:nowrap;
     }
 
-    /* Bonus */
     .bonusBox{
       margin-top:14px;
       border-radius:18px;
@@ -418,7 +410,6 @@
       display:flex; align-items:center; gap:10px;
     }
 
-    /* ===== Summon overlay (magic circle) ===== */
     .summonOverlay{
       position:fixed; inset:0;
       display:none;
@@ -476,18 +467,13 @@
     }
     @keyframes spin{ to{ transform: rotate(360deg); } }
 
-    /* ===== Gacha area ===== */
     .openGuide{
       margin-top:6px;
       font-size:12px;
       color: var(--muted);
     }
 
-    /* Big stamp (center -> move top-right) */
-    .stampBigWrap{
-      position:relative;
-      height: 0;
-    }
+    .stampBigWrap{ position:relative; height:0; }
     .stampBig{
       position:absolute;
       left:50%;
@@ -510,9 +496,7 @@
       border:1px solid rgba(255,213,74,.35);
       box-shadow: 0 18px 70px rgba(255,213,74,.12);
     }
-    .stampBig.move{
-      animation: stampMove 850ms ease forwards;
-    }
+    .stampBig.move{ animation: stampMove 850ms ease forwards; }
     @keyframes stampMove{
       0%{ transform: translateX(-50%) translateY(0) rotate(-10deg) scale(.95); opacity:0; }
       18%{ transform: translateX(-50%) translateY(0) rotate(-8deg) scale(1.08); opacity:1; }
@@ -525,7 +509,6 @@
       }
     }
 
-    /* Grid */
     .grid{
       margin-top:18px;
       display:grid;
@@ -536,7 +519,6 @@
       .grid{ grid-template-columns: repeat(5, 1fr); }
     }
 
-    /* Card slot */
     .cardSlot{
       border-radius:18px;
       border:1px solid rgba(255,255,255,.12);
@@ -548,19 +530,10 @@
       -webkit-tap-highlight-color: transparent;
       perspective: 900px;
     }
-
-    /* disabled */
     .cardSlot[aria-disabled="true"]{ opacity:.55; filter:saturate(.8); }
-    .cardSlot[aria-disabled="true"] *{ cursor:not-allowed; }
-
-    /* enabled only current */
-    .cardSlot.enabled{
-      cursor:pointer;
-      outline: 2px solid rgba(255,255,255,.06);
-    }
+    .cardSlot.enabled{ cursor:pointer; outline: 2px solid rgba(255,255,255,.06); }
     .cardSlot.enabled:active{ transform: scale(.988); }
 
-    /* index */
     .idxTxt{
       position:absolute; top:10px; left:10px;
       font-size:12px; color: rgba(255,255,255,.80);
@@ -570,7 +543,6 @@
       z-index:5;
     }
 
-    /* flip container */
     .flip{
       position:absolute; inset:10px;
       border-radius:16px;
@@ -586,8 +558,6 @@
       overflow:hidden;
       display:flex; align-items:center; justify-content:center;
     }
-
-    /* back */
     .back{
       background:
         radial-gradient(120px 90px at 30% 30%, rgba(255,213,74,.14), transparent 55%),
@@ -604,11 +574,9 @@
       letter-spacing:.12em;
       color: rgba(255,255,255,.92);
     }
-
-    /* front */
     .front{
       transform: rotateY(180deg);
-      background: rgba(0,0,0,.14); /* 柄は残さない（読みやすさ重視） */
+      background: rgba(0,0,0,.14);
       display:flex;
       flex-direction:column;
       align-items:center;
@@ -620,7 +588,6 @@
     .rarTxt{ font-weight:1400; letter-spacing:.14em; font-size:14px; }
     .amtTxt{ font-weight:1500; font-size:30px; letter-spacing:.02em; text-shadow: 0 18px 60px rgba(0,0,0,.55); }
 
-    /* aura */
     .aura{
       position:absolute; inset:-30%;
       opacity:0;
@@ -630,15 +597,9 @@
       transition: opacity .18s ease;
     }
     .cardSlot.revealed .aura{ opacity:.95; }
-    .aura.n{
-      background: radial-gradient(circle at 50% 50%, rgba(142,160,201,.28), transparent 60%);
-    }
-    .aura.r{
-      background: radial-gradient(circle at 50% 50%, rgba(0,217,255,.30), transparent 60%);
-    }
-    .aura.sr{
-      background: radial-gradient(circle at 50% 50%, rgba(255,138,42,.30), transparent 60%);
-    }
+    .aura.n{ background: radial-gradient(circle at 50% 50%, rgba(142,160,201,.28), transparent 60%); }
+    .aura.r{ background: radial-gradient(circle at 50% 50%, rgba(0,217,255,.30), transparent 60%); }
+    .aura.sr{ background: radial-gradient(circle at 50% 50%, rgba(255,138,42,.30), transparent 60%); }
     .aura.ssr{
       background: conic-gradient(from 180deg,
         rgba(255,0,92,.0), rgba(255,0,92,.40),
@@ -651,7 +612,6 @@
       );
     }
 
-    /* frame */
     .frame{
       position:absolute; inset:6px;
       border-radius:16px;
@@ -664,7 +624,6 @@
     .frame.sr{ border-color: rgba(255,138,42,.55); box-shadow: 0 0 22px rgba(255,138,42,.12); }
     .frame.ssr{ border-color: rgba(255,213,74,.65); box-shadow: 0 0 32px rgba(255,213,74,.16); }
 
-    /* charge (0.25s) */
     .charge{
       position:absolute; inset:0;
       display:flex; align-items:center; justify-content:center;
@@ -681,7 +640,6 @@
       animation: spin .8s linear infinite;
     }
 
-    /* cooldown hint */
     .cooldown{
       position:absolute;
       right:10px; top:10px;
@@ -698,12 +656,8 @@
       transition: opacity .12s ease, transform .12s ease;
       pointer-events:none;
     }
-    .cardSlot.cooling .cooldown{
-      opacity:1;
-      transform: translateY(0);
-    }
+    .cardSlot.cooling .cooldown{ opacity:1; transform: translateY(0); }
 
-    /* SSR character composite */
     .charLayer{
       position:absolute; inset:0;
       pointer-events:none;
@@ -722,22 +676,10 @@
       filter: drop-shadow(0 18px 40px rgba(0,0,0,.55));
       opacity: .98;
     }
-    /* SSR: dragon back + spirit front */
-    .charDragon{
-      transform: translate(-50%,-52%) scale(1.02);
-      opacity:.95;
-    }
-    .charSpirit{
-      transform: translate(-50%,-44%) scale(.94);
-      opacity:.98;
-    }
-    /* SR: summoner */
-    .charSummoner{
-      transform: translate(-50%,-48%) scale(.98);
-      opacity:.98;
-    }
+    .charDragon{ transform: translate(-50%,-52%) scale(1.02); opacity:.95; }
+    .charSpirit{ transform: translate(-50%,-44%) scale(.94); opacity:.98; }
+    .charSummoner{ transform: translate(-50%,-48%) scale(.98); opacity:.98; }
 
-    /* SSR reveal extra: crack/light */
     .ssrCrack{
       position:absolute; inset:0;
       opacity:0;
@@ -773,7 +715,6 @@
       100%{opacity:0}
     }
 
-    /* ===== Screen shake + flash ===== */
     .shakeStrong{ animation: shake 380ms ease both; }
     .shakeWeak{ animation: shake 220ms ease both; }
     @keyframes shake{
@@ -796,7 +737,6 @@
     .flash.weak{ animation-duration: 320ms; }
     @keyframes flash{ 0%{opacity:0} 12%{opacity:.92} 100%{opacity:0} }
 
-    /* ===== Sum box ===== */
     .sumBox{
       margin-top:14px;
       border-radius:18px;
@@ -819,14 +759,12 @@
     .sumMoney{ font-size:52px; font-weight:1500; letter-spacing:.02em; margin-top:6px; text-shadow: 0 18px 80px rgba(0,0,0,.65); }
     .sumSub{ font-size:12px; color: var(--muted); margin-top:6px; }
 
-    /* ===== Confetti canvas ===== */
     #fxCanvas{
       position:fixed; inset:0;
       pointer-events:none;
       z-index:520;
     }
 
-    /* Small screens */
     @media (max-width: 430px){
       .btn{ min-width: 100%; }
       .bottomBar .btn{ min-width: 100%; }
@@ -839,7 +777,6 @@
   <div class="safe">
     <div class="app" id="appRoot">
 
-      <!-- TITLE SCREEN -->
       <div class="screen panel" id="screenTitle">
         <div class="titleHero">
           <div class="logoImg">
@@ -848,7 +785,7 @@
           <h1 class="titleText">最大30,000円 お年玉ガチャ！</h1>
           <p class="titleSub">
             1枚ずつ開封 → 最後に合計をド派手表示。<br>
-            10連はSSR（3,000円）が最低1枚確定！
+            初回の10連のみSSR（3,000円）が最低1枚確定！
           </p>
 
           <div class="btnRow">
@@ -858,7 +795,6 @@
         </div>
       </div>
 
-      <!-- MENU SCREEN -->
       <div class="screen" id="screenMenu">
         <div class="topRow">
           <div class="gemsBox panel">
@@ -908,21 +844,31 @@
                 <button class="btn btnBlue" id="btnOne">
                   <div class="btnMainText">
                     <b>1回ガチャ</b>
-                    <span>1回：300ジェム</span>
+                    <span>1回：1000ジェム</span>
                   </div>
                   <div class="btnRight">
-                    <span class="chip"><span class="miniGem"></span>-300</span>
+                    <span class="chip"><span class="miniGem"></span>-1000</span>
                   </div>
                 </button>
 
                 <button class="btn btnOrange" id="btnTen">
                   <div class="btnMainText">
-                    <b>SSR確定！10連ガチャ</b>
-                    <span>10回：3000ジェム</span>
+                    <b>10連ガチャ</b>
+                    <span>10回：10000ジェム</span>
                   </div>
                   <div class="btnRight">
-                    <span class="stampSmall">SSR確定！</span>
-                    <span class="chip"><span class="miniGem"></span>-3000</span>
+                    <span class="stampSmall" id="tenBadge">初回SSR確定</span>
+                    <span class="chip"><span class="miniGem"></span>-10000</span>
+                  </div>
+                </button>
+
+                <button class="btn btnPay" id="btnPay">
+                  <div class="btnMainText">
+                    <b>課金（擬似）</b>
+                    <span>10000ジェム（¥10,000）</span>
+                  </div>
+                  <div class="btnRight">
+                    <span class="chip">+10000</span>
                   </div>
                 </button>
               </div>
@@ -935,7 +881,6 @@
         </div>
       </div>
 
-      <!-- Persistent banner (login bonus) -->
       <div class="banner" id="bonusBanner">
         <div class="bannerRow">
           <div class="bannerL">
@@ -951,7 +896,6 @@
         </div>
       </div>
 
-      <!-- Overlay / Modal -->
       <div class="overlay" id="overlay" role="dialog" aria-modal="true">
         <div class="modal" id="modal">
           <div class="modalIn">
@@ -963,7 +907,6 @@
               <button class="modalClose" id="modalClose">閉じる</button>
             </div>
 
-            <!-- BONUS -->
             <div id="bonusArea">
               <div class="bonusBox">
                 <div class="gift"></div>
@@ -977,7 +920,6 @@
               </div>
             </div>
 
-            <!-- GACHA RESULT -->
             <div id="gachaArea" style="display:none;">
               <div class="openGuide" id="openGuide">順番にタップして1枚ずつ開封（0.3秒クールダウン）</div>
 
@@ -1002,7 +944,6 @@
         </div>
       </div>
 
-      <!-- Summon overlay -->
       <div class="summonOverlay" id="summonOverlay" aria-hidden="true">
         <div class="circle" id="magicCircle"></div>
       </div>
@@ -1010,7 +951,6 @@
     </div>
   </div>
 
-  <!-- FX -->
   <div class="flash" id="flash"></div>
   <canvas id="fxCanvas"></canvas>
 
@@ -1021,11 +961,16 @@
     const CFG = {
       PARENT_PIN: "2525",
 
-      COST_ONE: 300,
-      COST_TEN: 3000,
+      // コスト変更
+      COST_ONE: 1000,
+      COST_TEN: 10000,
+
+      // 擬似課金
+      PAY_JPY: 10000,
+      PAY_GEMS: 10000,
+
       BONUS_GEMS: 3000,
 
-      // 金額（同ランク内は等確率）
       POOL: {
         N: [10, 50, 100],
         R: [300, 500],
@@ -1033,11 +978,7 @@
         SSR: [3000]
       },
 
-      // 提供割合（合計1.0）
-      // 期待値（1回あたり） ≒ 1000円 になるように調整
-      // N avg=53.33 / R avg=400 / SR avg=1500 / SSR=3000
-      // => 3000a +1500b +400c +53.33d =1000 , a+b+c+d=1
-      // 採用：SSR 7% / SR 41% / R 39% / N 13%
+      // 期待値（1回あたり） ≒ 1000円想定の配分（そのまま）
       RATE: {
         SSR: 0.07,
         SR:  0.41,
@@ -1045,14 +986,13 @@
         N:   0.13
       },
 
-      TEN_GUARANTEE_SSR: true,
+      // SSR確定10連：初回のみ
+      TEN_GUARANTEE_SSR_FIRST_ONLY: true,
 
       TAP_COOLDOWN_MS: 300,
       CHARGE_MS: 250,
 
-      // 画像
       ASSET: {
-        bg: "assets/bg.jpg",
         logo: "assets/logo.png",
         dragon: "assets/dragon_spirit.png",
         summoner: "assets/summoner.png",
@@ -1061,9 +1001,10 @@
     };
 
     const LS = {
-      loggedIn: "otg_login_v2",
-      gems: "otg_gems_v2",
-      bonusTaken: "otg_bonus_taken_v2"
+      loggedIn: "otg_login_v3",
+      gems: "otg_gems_v3",
+      bonusTaken: "otg_bonus_taken_v3",
+      firstTenDone: "otg_first_ten_done_v3"
     };
 
     const $ = (id)=>document.getElementById(id);
@@ -1077,11 +1018,11 @@
     function bonusTaken(){ return localStorage.getItem(LS.bonusTaken) === "1"; }
     function setBonusTaken(){ localStorage.setItem(LS.bonusTaken, "1"); }
 
+    function isFirstTenDone(){ return localStorage.getItem(LS.firstTenDone) === "1"; }
+    function markFirstTenDone(){ localStorage.setItem(LS.firstTenDone, "1"); }
+
     function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 
-    /***************
-     * 画像読み込み
-     ***************/
     function setImgOrHide(imgEl, src){
       const img = new Image();
       img.onload = ()=>{ imgEl.src = src; imgEl.style.display="block"; };
@@ -1089,9 +1030,6 @@
       img.src = src;
     }
 
-    /***************
-     * 画面制御
-     ***************/
     function showScreen(name){
       $("screenTitle").classList.remove("show");
       $("screenMenu").classList.remove("show");
@@ -1099,9 +1037,6 @@
       if(name==="menu") $("screenMenu").classList.add("show");
     }
 
-    /***************
-     * モーダル中スクロール封鎖（iOS対策）
-     ***************/
     let scrollY = 0;
     function lockBody(){
       scrollY = window.scrollY || 0;
@@ -1138,9 +1073,6 @@
       unlockBody();
     }
 
-    /***************
-     * 提供割合UI
-     ***************/
     function renderRate(){
       const rows = [
         {k:"SSR", dot:"ssr", money:"¥3,000", rate: CFG.RATE.SSR},
@@ -1162,9 +1094,6 @@
       $("rateNote").textContent = "※ 同ランク内の金額は等確率（例：SRは1000円/2000円が1:1）";
     }
 
-    /***************
-     * 抽選
-     ***************/
     function pickRarity(){
       const r = Math.random();
       let acc = 0;
@@ -1177,13 +1106,10 @@
     }
     function drawOne(forceRarity=null){
       const rar = forceRarity || pickRarity();
-      const amt = pick(CFG.POOL[rar]); // 同ランク内等確率
+      const amt = pick(CFG.POOL[rar]);
       return { rar, amt };
     }
 
-    /***************
-     * SE / Vibe / Flash / Shake
-     ***************/
     let audioCtx;
     function beep(seq){
       try{
@@ -1210,7 +1136,6 @@
     function sfxOpenR(){ beep([{at:0,f:330,d:0.08,v:0.08,type:"square"},{at:0.09,f:392,d:0.10,v:0.08,type:"square"}]); }
     function sfxOpenSR(){ beep([{at:0,f:392,d:0.10,v:0.10,type:"square"},{at:0.12,f:523,d:0.12,v:0.11,type:"square"}]); }
     function sfxOpenSSR(){
-      // ジャーン（2〜3音）
       beep([
         {at:0.00,f:523,d:0.14,v:0.14,type:"sawtooth"},
         {at:0.16,f:659,d:0.14,v:0.14,type:"sawtooth"},
@@ -1236,24 +1161,13 @@
       setTimeout(()=>root.classList.remove("shakeStrong","shakeWeak"), 450);
     }
 
-    /***************
-     * 紙吹雪（Canvas）
-     ***************/
-    const fx = {
-      canvas: null,
-      ctx: null,
-      w: 0,
-      h: 0,
-      parts: [],
-      raf: 0
-    };
+    const fx = { canvas:null, ctx:null, w:0, h:0, parts:[], raf:0 };
     function fxResize(){
       fx.w = fx.canvas.width = window.innerWidth * devicePixelRatio;
       fx.h = fx.canvas.height = window.innerHeight * devicePixelRatio;
       fx.ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
     }
     function fxStartBurst(power=1){
-      // power: 1=通常, 1.6=SSR/合計
       const count = Math.floor(90 * power);
       const cols = ["#ffd54a","#ff8a2a","#00d9ff","#7c4dff","#ff005c","#ffffff"];
       for(let i=0;i<count;i++){
@@ -1277,11 +1191,7 @@
       ctx.clearRect(0,0,window.innerWidth,window.innerHeight);
 
       fx.parts.forEach(p=>{
-        p.x += p.vx;
-        p.y += p.vy;
-        p.vy += 0.04; // gravity
-        p.rot += p.vr;
-        p.life -= 1;
+        p.x += p.vx; p.y += p.vy; p.vy += 0.04; p.rot += p.vr; p.life -= 1;
       });
       fx.parts = fx.parts.filter(p=>p.life>0 && p.y < window.innerHeight + 80);
 
@@ -1301,16 +1211,10 @@
       }
     }
 
-    /***************
-     * ログインボーナス（受け取るまで消えない）
-     ***************/
     function showBonusBannerIfNeeded(){
       const banner = $("bonusBanner");
-      if (!bonusTaken()){
-        banner.classList.add("show");
-      }else{
-        banner.classList.remove("show");
-      }
+      if (!bonusTaken()) banner.classList.add("show");
+      else banner.classList.remove("show");
     }
     function takeBonus(){
       if (bonusTaken()) return;
@@ -1318,30 +1222,18 @@
       setGems(getGems() + CFG.BONUS_GEMS);
       showBonusBannerIfNeeded();
       closeModal();
-      // 受け取り時は派手に
-      flash(true);
-      fxStartBurst(1.4);
-      vibe(60);
-      sfxOpenSSR();
+      flash(true); fxStartBurst(1.4); vibe(60); sfxOpenSSR();
     }
 
-    /***************
-     * ガチャ結果UI（順番強制）
-     ***************/
     let tapLocked = false;
     let lastTapAt = 0;
-
     function canTap(){
       const now = Date.now();
       if (tapLocked) return false;
       if (now - lastTapAt < CFG.TAP_COOLDOWN_MS) return false;
-      lastTapAt = now;
-      return true;
+      lastTapAt = now; return true;
     }
-    function lockFor(ms){
-      tapLocked = true;
-      setTimeout(()=> tapLocked = false, ms);
-    }
+    function lockFor(ms){ tapLocked = true; setTimeout(()=> tapLocked = false, ms); }
 
     function setFrameClass(slot, rar){
       const frame = slot.querySelector(".frame");
@@ -1382,7 +1274,7 @@
       slot.dataset.index = String(i);
       slot.dataset.opened = "0";
       slot.setAttribute("role","button");
-      slot.setAttribute("aria-disabled","true"); // 初期は全部無効（順番制御）
+      slot.setAttribute("aria-disabled","true");
 
       slot.innerHTML = `
         <div class="idxTxt">${i+1}/${total}</div>
@@ -1390,17 +1282,11 @@
         <div class="aura n"></div>
         <div class="ssrLight"></div>
         <div class="ssrCrack"></div>
-
         <div class="charLayer"></div>
-
         <div class="frame n"></div>
-
         <div class="charge"><div class="chargeRing"></div></div>
-
         <div class="flip">
-          <div class="face back">
-            <span class="tapHint">TAP</span>
-          </div>
+          <div class="face back"><span class="tapHint">TAP</span></div>
           <div class="face front">
             <div class="rarTxt">-</div>
             <div class="amtTxt">-</div>
@@ -1424,42 +1310,29 @@
     }
 
     async function revealSlot(slot, result){
-      // charge
       slot.classList.add("charging");
       lockFor(CFG.CHARGE_MS);
       await new Promise(r=>setTimeout(r, CFG.CHARGE_MS));
       slot.classList.remove("charging");
 
-      // set texts BEFORE flip to show instantly after flip
       const front = slot.querySelector(".front");
       front.querySelector(".rarTxt").textContent = result.rar;
       front.querySelector(".amtTxt").textContent = yen(result.amt);
 
-      // frame + aura + char
       setFrameClass(slot, result.rar);
       attachChar(slot, result.rar);
 
-      // flip
       slot.classList.add("flipped","revealed");
       slot.dataset.opened = "1";
 
-      // remove TAP label
       const tap = slot.querySelector(".tapHint");
       if (tap) tap.remove();
 
-      // fx by rarity
       if (result.rar === "SSR"){
         slot.classList.add("ssr-reveal");
-        flash(true);
-        shake(true);
-        vibe(120);
-        sfxOpenSSR();
-        fxStartBurst(1.2);
+        flash(true); shake(true); vibe(120); sfxOpenSSR(); fxStartBurst(1.2);
       }else if (result.rar === "SR"){
-        flash(false);
-        shake(false);
-        vibe(60);
-        sfxOpenSR();
+        flash(false); shake(false); vibe(60); sfxOpenSR();
       }else if (result.rar === "R"){
         sfxOpenR();
       }else{
@@ -1478,19 +1351,13 @@
       money.textContent = "¥---";
       sub.textContent = "";
 
-      // 溜め
       await new Promise(r=>setTimeout(r, 850));
 
-      // 合計演出：フラッシュ＋紙吹雪＋振動＋カウントアップ
-      flash(true);
-      fxStartBurst(1.6);
-      vibe(160);
-      sfxSum();
-      shake(true);
+      flash(true); fxStartBurst(1.6); vibe(160); sfxSum(); shake(true);
 
       const duration = 650;
       const t0 = performance.now();
-      function easeOut(t){ return 1 - Math.pow(1-t, 3); }
+      const easeOut = (t)=> 1 - Math.pow(1-t, 3);
 
       function tick(now){
         const p = Math.min(1, (now - t0) / duration);
@@ -1509,7 +1376,7 @@
     async function summonSequence(hasSSR){
       const so = $("summonOverlay");
       const circle = $("magicCircle");
-      circle.classList.toggle("rainbow", !!hasSSR); // 虹フラグ（文言なし）
+      circle.classList.toggle("rainbow", !!hasSSR);
       so.classList.add("show");
       sfxSummonStart();
       vibe(40);
@@ -1518,24 +1385,19 @@
       circle.classList.remove("rainbow");
     }
 
-    function gachaOpenUI(mode, results){
+    function gachaOpenUI(mode, results, showSsrStamp){
       openModal("gacha");
       $("btnDone").disabled = true;
       $("sumBox").classList.remove("show");
       $("sumMoney").textContent = "¥---";
 
-      // stamp
       const stamp = $("stampBig");
       stamp.classList.remove("show","move");
-      if (mode==="ten"){
+      if (showSsrStamp){
         stamp.classList.add("show");
-        // 中央ドン → 右上へ移動
-        requestAnimationFrame(()=> {
-          stamp.classList.add("move");
-        });
+        requestAnimationFrame(()=> stamp.classList.add("move"));
       }
 
-      // grid build
       const totalCount = results.length;
       const grid = $("grid");
       grid.innerHTML = "";
@@ -1546,25 +1408,21 @@
         slots.push(s);
       }
 
-      // 順番強制：最初だけ有効
       let current = 0;
       enableOnly(slots, current);
 
-      // 集計
       let opened = 0;
       let sum = 0;
 
-      // click handler
       slots.forEach((slot, idx)=>{
         slot.addEventListener("click", async ()=>{
           if (!canTap()) {
-            // cooldown visible
             slot.classList.add("cooling");
             setTimeout(()=>slot.classList.remove("cooling"), 200);
             return;
           }
-          if (idx !== current) return;              // 順番強制
-          if (slot.dataset.opened === "1") return;  // 二重防止
+          if (idx !== current) return;
+          if (slot.dataset.opened === "1") return;
 
           lockFor(CFG.TAP_COOLDOWN_MS);
 
@@ -1574,16 +1432,14 @@
           opened += 1;
           sum += res.amt;
 
-          // 次を開放
           current += 1;
           if (current < totalCount){
             enableOnly(slots, current);
           }
 
-          // 全部開封したら合計
           if (opened === totalCount){
             $("btnDone").disabled = false;
-            enableOnly(slots, -1); // 全部無効
+            enableOnly(slots, -1);
             await showSumWithCountUp(sum, opened);
           }
         }, {passive:true});
@@ -1592,14 +1448,9 @@
       $("btnDone").onclick = ()=> closeModal();
     }
 
-    /***************
-     * ガチャ実行
-     ***************/
     function requireGems(cost){
       if (getGems() < cost){
-        flash(false);
-        vibe(40);
-        sfxOpenR();
+        flash(false); vibe(40); sfxOpenR();
         alert("ジェムが足りません");
         return false;
       }
@@ -1609,10 +1460,9 @@
     async function doOne(){
       if (!requireGems(CFG.COST_ONE)) return;
       setGems(getGems() - CFG.COST_ONE);
-
       const r = drawOne();
       await summonSequence(r.rar === "SSR");
-      gachaOpenUI("one", [r]);
+      gachaOpenUI("one", [r], false);
     }
 
     async function doTen(){
@@ -1622,23 +1472,57 @@
       const results = [];
       for(let i=0;i<10;i++) results.push(drawOne());
 
-      // SSR最低1枚保証
-      if (CFG.TEN_GUARANTEE_SSR){
+      const firstOnly = CFG.TEN_GUARANTEE_SSR_FIRST_ONLY;
+      const isFirstTen = !isFirstTenDone();
+
+      // 初回10連だけSSR最低1枚保証
+      let showStamp = false;
+      if (firstOnly && isFirstTen){
+        showStamp = true;
         const hasSSR = results.some(x=>x.rar==="SSR");
         if (!hasSSR){
           const idx = Math.floor(Math.random()*10);
           results[idx] = drawOne("SSR");
         }
+        markFirstTenDone();
       }
 
-      const hasSSR = results.some(x=>x.rar==="SSR");
-      await summonSequence(hasSSR); // 虹フラグ含む
-      gachaOpenUI("ten", results);
+      // 虹フラグ（SSRが含まれる場合）
+      const hasSSRNow = results.some(x=>x.rar==="SSR");
+      await summonSequence(hasSSRNow);
+
+      gachaOpenUI("ten", results, showStamp);
+
+      // メニューのバッジ表示更新
+      renderTenBadge();
     }
 
-    /***************
-     * 初期化（親PIN）
-     ***************/
+    function renderTenBadge(){
+      const badge = $("tenBadge");
+      if (!badge) return;
+      if (!isFirstTenDone()){
+        badge.textContent = "初回SSR確定";
+        badge.style.opacity = "1";
+      }else{
+        badge.textContent = "通常10連";
+        badge.style.opacity = "0.85";
+      }
+    }
+
+    function pseudoPay(){
+      const ok = confirm(`${CFG.PAY_JPY.toLocaleString("ja-JP")}円がかかります。課金しますか？`);
+      if (!ok) return;
+
+      // 実課金はしない：端末内でジェム加算のみ
+      setGems(getGems() + CFG.PAY_GEMS);
+
+      // それっぽい演出
+      flash(true);
+      fxStartBurst(1.2);
+      vibe(70);
+      sfxOpenSSR();
+    }
+
     function resetAll(){
       const pin = prompt("親PINを入力してください");
       if (pin === null) return;
@@ -1649,66 +1533,53 @@
       localStorage.removeItem(LS.loggedIn);
       localStorage.removeItem(LS.gems);
       localStorage.removeItem(LS.bonusTaken);
+      localStorage.removeItem(LS.firstTenDone);
       location.reload();
     }
 
-    /***************
-     * 表示更新
-     ***************/
     function renderHeader(){
       $("gems").textContent = getGems();
       $("btnOne").disabled = getGems() < CFG.COST_ONE;
       $("btnTen").disabled = getGems() < CFG.COST_TEN;
     }
 
-    /***************
-     * 起動
-     ***************/
     function init(){
-      // images
       setImgOrHide($("logoImg"), CFG.ASSET.logo);
       setImgOrHide($("dragonImg"), CFG.ASSET.dragon);
 
-      // rates
       renderRate();
 
-      // canvas
       fx.canvas = $("fxCanvas");
       fx.ctx = fx.canvas.getContext("2d");
       fxResize();
       window.addEventListener("resize", fxResize);
 
-      // first screen
       if (!isLoggedIn()){
         showScreen("title");
       }else{
         showScreen("menu");
         renderHeader();
+        renderTenBadge();
         showBonusBannerIfNeeded();
       }
 
-      // login
       $("btnLogin").addEventListener("click", ()=>{
         setLoggedIn();
         showScreen("menu");
         renderHeader();
-        showBonusBannerIfNeeded(); // 受け取るまで消えない
+        renderTenBadge();
+        showBonusBannerIfNeeded();
       });
 
-      // banner take -> open bonus modal
       $("bannerTake").addEventListener("click", ()=> openModal("bonus"));
-
-      // bonus take
       $("btnTakeBonus").addEventListener("click", takeBonus);
 
-      // gacha
       $("btnOne").addEventListener("click", doOne);
       $("btnTen").addEventListener("click", doTen);
+      $("btnPay").addEventListener("click", pseudoPay);
 
-      // reset
       $("btnReset").addEventListener("click", resetAll);
 
-      // modal close
       $("modalClose").addEventListener("click", closeModal);
       $("overlay").addEventListener("click", (e)=>{
         if (e.target === $("overlay")) closeModal();
