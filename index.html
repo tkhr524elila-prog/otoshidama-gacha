@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>お年玉ガチャ</title>
+  <style>
+    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans JP", sans-serif;
+           margin: 0; padding: 24px; background: #f7f7fb; color: #111; }
+    .card { max-width: 560px; margin: 0 auto; background: #fff; border-radius: 16px;
+            padding: 20px; box-shadow: 0 10px 24px rgba(0,0,0,.08); }
+    h1 { margin: 0 0 12px; font-size: 22px; }
+    .row { display: flex; gap: 10px; flex-wrap: wrap; }
+    button { border: 0; border-radius: 12px; padding: 14px 16px; cursor: pointer;
+             background: #ff7a00; color: #fff; font-weight: 700; font-size: 16px; }
+    button:active { transform: translateY(1px); }
+    .ghost { background: #eee; color: #222; }
+    .result { margin-top: 16px; padding: 16px; border-radius: 12px; background: #fafafa; }
+    .money { font-size: 40px; font-weight: 900; letter-spacing: .02em; }
+    .hint { font-size: 12px; color: #666; margin-top: 6px; }
+    label { display: block; font-size: 13px; color: #333; margin: 12px 0 6px; }
+    input, textarea { width: 100%; box-sizing: border-box; border: 1px solid #ddd; border-radius: 10px;
+                      padding: 10px; font-size: 14px; }
+    textarea { min-height: 84px; }
+    .small { font-size: 12px; color: #666; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>お年玉ガチャ</h1>
+    <div class="small">金額候補を入れて「ガチャ！」でランダムに決定します。</div>
+
+    <label>金額候補（カンマ区切り / 例: 500,1000,2000,3000,5000）</label>
+    <input id="candidates" value="500,1000,2000,3000,5000,10000" />
+
+    <label>当たり確率を変えたい場合（任意）</label>
+    <div class="small">下の欄に「金額:重み」を1行ずつ。重みが大きいほど出やすい（例: 500:50 / 10000:1）</div>
+    <textarea id="weights" placeholder="500:50
+1000:30
+2000:15
+3000:8
+5000:4
+10000:1"></textarea>
+
+    <div class="row" style="margin-top:14px;">
+      <button id="btn">ガチャ！</button>
+      <button id="reset" class="ghost">リセット</button>
+    </div>
+
+    <div class="result" id="result" aria-live="polite">
+      <div class="money" id="money">¥---</div>
+      <div class="hint" id="hint">ボタンを押すと結果が出ます</div>
+    </div>
+  </div>
+
+  <script>
+    const yen = (n) => "¥" + Number(n).toLocaleString("ja-JP");
+
+    function parseCandidates() {
+      const raw = document.getElementById("candidates").value.trim();
+      const arr = raw.split(",").map(s => s.trim()).filter(Boolean).map(Number).filter(n => Number.isFinite(n) && n >= 0);
+      return arr.length ? arr : [1000, 2000, 3000];
+    }
+
+    function parseWeights() {
+      const text = document.getElementById("weights").value.trim();
+      if (!text) return null;
+      const lines = text.split("\n").map(l => l.trim()).filter(Boolean);
+      const map = new Map();
+      for (const line of lines) {
+        const [a,b] = line.split(":").map(s => s.trim());
+        const amount = Number(a);
+        const w = Number(b);
+        if (Number.isFinite(amount) && Number.isFinite(w) && w > 0) map.set(amount, w);
+      }
+      return map.size ? map : null;
+    }
+
+    function weightedPick(cands, weightMap) {
+      if (!weightMap) return cands[Math.floor(Math.random() * cands.length)];
+      const items = cands.map(a => ({ a, w: weightMap.get(a) ?? 1 })).filter(x => x.w > 0);
+      const total = items.reduce((s,x) => s + x.w, 0);
+      let r = Math.random() * total;
+      for (const it of items) {
+        r -= it.w;
+        if (r <= 0) return it.a;
+      }
+      return items[items.length - 1].a;
+    }
+
+    function spin() {
+      const cands = parseCandidates();
+      const weightMap = parseWeights();
+      const moneyEl = document.getElementById("money");
+      const hintEl = document.getElementById("hint");
+      const btn = document.getElementById("btn");
+      btn.disabled = true;
+
+      let t = 0;
+      const timer = setInterval(() => {
+        const tmp = cands[Math.floor(Math.random() * cands.length)];
+        moneyEl.textContent = yen(tmp);
+        hintEl.textContent = "抽選中…";
+        t += 1;
+        if (t >= 18) {
+          clearInterval(timer);
+          const picked = weightedPick(cands, weightMap);
+          moneyEl.textContent = yen(picked);
+          hintEl.textContent = weightMap ? "（重み付き）で決定！" : "で決定！";
+          btn.disabled = false;
+        }
+      }, 50);
+    }
+
+    document.getElementById("btn").addEventListener("click", spin);
+    document.getElementById("reset").addEventListener("click", () => {
+      document.getElementById("money").textContent = "¥---";
+      document.getElementById("hint").textContent = "ボタンを押すと結果が出ます";
+      document.getElementById("weights").value = "";
+    });
+  </script>
+</body>
+</html>
