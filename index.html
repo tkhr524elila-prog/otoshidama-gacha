@@ -8,20 +8,18 @@
   <style>
     :root{
       --bg:#070b18;
-      --panel: rgba(20,24,38,.62);
-      --panel2: rgba(10,12,22,.55);
       --line: rgba(255,255,255,.12);
       --text:#eef3ff;
       --muted:#a7b1d6;
-      --gold:#ffd54a;
+      --shadow: 0 24px 70px rgba(0,0,0,.55);
+      --radius: 18px;
+
       --ssr:#ffd54a;
       --sr:#ff8a2a;
       --r:#00d9ff;
       --n:#8ea0c9;
-      --shadow: 0 24px 70px rgba(0,0,0,.55);
-      --radius: 18px;
-      --cool: 300ms;
     }
+
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
@@ -141,7 +139,7 @@
       line-height:1.5;
     }
 
-    /* ===== ボタン（文字が隠れないように修正） ===== */
+    /* ===== ボタン（文字が隠れない） ===== */
     .btnRow{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:10px; }
     .btn{
       border:0;
@@ -156,13 +154,18 @@
       display:flex; align-items:center; gap:10px;
       min-width: 220px;
       justify-content:center;
-      position:relative;           /* ← 文字レイヤー管理 */
+      position:relative;
       overflow:visible;
     }
     .btn:active{ transform: scale(.985); }
     .btn[disabled]{ opacity:.45; cursor:not-allowed; filter:saturate(.75); }
 
-    /* 下部ボタンはフレーム画像を背景に使う */
+    .btnPrimary{
+      color:#081022;
+      background: linear-gradient(180deg, #ffd54a, #ff7a00);
+      box-shadow: 0 18px 44px rgba(255,122,0,.25);
+    }
+
     .bottomBar{
       display:flex;
       gap:12px;
@@ -173,13 +176,10 @@
     .bottomBar .btn{
       min-width: min(420px, 100%);
       justify-content:space-between;
-      padding: 22px 26px;               /* ← 枠画像に負けない余白 */
+      padding: 22px 26px;
       border-radius: 22px;
     }
-    /* 文字が背景に隠れないよう前面へ */
-    .btn *{ position:relative; z-index:2; }
-
-    /* フレーム画像 */
+    .bottomBar .btn *{ position:relative; z-index:2; }
     .bottomBar .btn::before{
       content:"";
       position:absolute; inset:0;
@@ -191,7 +191,6 @@
       pointer-events:none;
       filter: drop-shadow(0 18px 40px rgba(0,0,0,.35));
     }
-    /* うっすら内側の暗幕で文字が沈まないように */
     .bottomBar .btn::after{
       content:"";
       position:absolute; inset:10px 18px;
@@ -199,12 +198,6 @@
       background: linear-gradient(180deg, rgba(0,0,0,.18), rgba(0,0,0,.34));
       z-index:1;
       pointer-events:none;
-    }
-
-    .btnPrimary{
-      color:#081022;
-      background: linear-gradient(180deg, #ffd54a, #ff7a00);
-      box-shadow: 0 18px 44px rgba(255,122,0,.25);
     }
 
     .btnMainText{
@@ -241,7 +234,6 @@
       white-space:nowrap;
     }
 
-    /* 中央ポップ */
     .menuGrid{ display:grid; grid-template-columns: 1fr; gap:14px; }
     .menuPopup{
       position:relative;
@@ -290,10 +282,7 @@
       color: rgba(255,255,255,.90);
     }
     .rateTable th{ color: var(--muted); font-weight:1000; font-size:12px; }
-    .dot{
-      width:10px;height:10px;border-radius:99px; display:inline-block; margin-right:8px;
-      box-shadow: 0 0 18px rgba(255,255,255,.08);
-    }
+    .dot{ width:10px;height:10px;border-radius:99px; display:inline-block; margin-right:8px; }
     .dot.ssr{ background: var(--ssr); box-shadow: 0 0 22px rgba(255,213,74,.18); }
     .dot.sr{ background: var(--sr); box-shadow: 0 0 22px rgba(255,138,42,.18); }
     .dot.r{ background: var(--r); box-shadow: 0 0 22px rgba(0,217,255,.18); }
@@ -410,7 +399,7 @@
       display:flex; align-items:center; gap:10px;
     }
 
-    /* ===== カード（サイズ差分＆薄さを修正） ===== */
+    /* ===== カード（演出復旧：溜め→フリップ→フラッシュ） ===== */
     .grid{
       margin-top:14px;
       display:grid;
@@ -429,17 +418,31 @@
       position:relative;
       aspect-ratio: 4/3;
       display:flex; align-items:center; justify-content:center;
-      cursor:pointer;
       user-select:none;
       -webkit-tap-highlight-color: transparent;
+      perspective: 900px; /* フリップ用 */
     }
-    .cardSlot[aria-disabled="true"]{ opacity:.55; cursor:not-allowed; }
 
-    .cardBack{
+    /* 開封順強制で pointer-events をJSで切るので、見た目はこれだけ */
+    .cardSlot[aria-disabled="true"]{ opacity:.55; }
+
+    /* フリップ本体 */
+    .flip{
+      position:absolute; inset:0;
+      transform-style: preserve-3d;
+      transition: transform 520ms cubic-bezier(.22,.85,.2,1);
+    }
+    .cardSlot.opening .flip{ transform: rotateY(180deg); }
+    .cardSlot.opened .flip{ transform: rotateY(180deg); }
+
+    .cardFace{
       position:absolute; inset:0;
       border-radius:18px;
-      display:flex; align-items:center; justify-content:center;
+      backface-visibility: hidden;
       overflow:hidden;
+      display:flex; align-items:center; justify-content:center;
+    }
+    .cardBack{
       background: none;
     }
     .cardBack img{
@@ -460,18 +463,13 @@
     }
 
     .cardFront{
-      position:absolute; inset:0;
-      border-radius:18px;
+      transform: rotateY(180deg);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.34));
       display:flex; flex-direction:column;
-      align-items:center; justify-content:center;
       gap:6px;
-      opacity:0;
-      transform: none;                 /* ← サイズ差の原因だったscaleを廃止 */
-      transition: opacity .18s ease;   /* ← opacityだけで表示 */
       text-align:center;
       padding:10px;
     }
-    .cardFront.show{ opacity:1; }
 
     .idxTxt{
       position:absolute; top:10px; left:10px;
@@ -479,32 +477,81 @@
       padding:6px 10px; border-radius:999px;
       background: rgba(0,0,0,.25);
       border:1px solid rgba(255,255,255,.10);
-      z-index:5;
+      z-index:7;
     }
 
-    /* 枠色 */
-    .frame{ position:absolute; inset:0; border-radius:18px; border:2px solid rgba(255,255,255,.10); pointer-events:none; z-index:4; }
+    .frame{ position:absolute; inset:0; border-radius:18px; border:2px solid rgba(255,255,255,.10); pointer-events:none; z-index:6; }
     .frame.n{ border-color: rgba(142,160,201,.55); box-shadow: 0 0 22px rgba(142,160,201,.10); }
     .frame.r{ border-color: rgba(0,217,255,.55); box-shadow: 0 0 24px rgba(0,217,255,.12); }
     .frame.sr{ border-color: rgba(255,138,42,.55); box-shadow: 0 0 26px rgba(255,138,42,.12); }
     .frame.ssr{ border-color: rgba(255,213,74,.65); box-shadow: 0 0 34px rgba(255,213,74,.16); }
 
-    /* 文字（薄い問題を修正） */
+    /* 表側文字（薄さ対策：完全不透明） */
     .rarTxt{
       font-weight:1300;
       letter-spacing:.14em;
       font-size:14px;
       color: rgba(255,255,255,.96);
       text-shadow: 0 10px 32px rgba(0,0,0,.65);
-      z-index:6;
+      z-index:8;
     }
     .amtTxt{
       font-weight:1500;
       font-size:32px;
       letter-spacing:.02em;
-      color: rgba(255,255,255,1);   /* ← 完全不透明に固定 */
+      color: rgba(255,255,255,1);
       text-shadow: 0 18px 60px rgba(0,0,0,.72);
-      z-index:6;
+      z-index:8;
+    }
+
+    /* “溜め光” */
+    .chargeGlow{
+      position:absolute; inset:-30%;
+      opacity:0;
+      pointer-events:none;
+      background: radial-gradient(circle at 50% 55%, rgba(255,255,255,.55), rgba(255,255,255,.16) 38%, rgba(255,255,255,0) 70%);
+      filter: blur(8px);
+      mix-blend-mode: screen;
+      z-index:5;
+    }
+    .cardSlot.charging .chargeGlow{
+      animation: charge 250ms ease-out both;
+    }
+    @keyframes charge{
+      0%{ opacity:0; transform: scale(.92); }
+      70%{ opacity:.9; transform: scale(1.02); }
+      100%{ opacity:0; transform: scale(1.05); }
+    }
+
+    /* 開封フラッシュ（rarity別に強さ変更） */
+    .flash{
+      position:absolute; inset:-20%;
+      opacity:0;
+      pointer-events:none;
+      z-index:9;
+      mix-blend-mode: screen;
+      filter: blur(2px);
+    }
+    .cardSlot.flash-n .flash{
+      background: radial-gradient(circle at 50% 55%, rgba(255,255,255,.22), rgba(255,255,255,0) 70%);
+      animation: flash 180ms ease-out both;
+    }
+    .cardSlot.flash-r .flash{
+      background: radial-gradient(circle at 50% 55%, rgba(0,217,255,.32), rgba(0,217,255,0) 70%);
+      animation: flash 200ms ease-out both;
+    }
+    .cardSlot.flash-sr .flash{
+      background: radial-gradient(circle at 50% 55%, rgba(255,138,42,.45), rgba(255,138,42,0) 70%);
+      animation: flash 240ms ease-out both;
+    }
+    .cardSlot.flash-ssr .flash{
+      background: radial-gradient(circle at 50% 55%, rgba(255,213,74,.70), rgba(255,213,74,0) 70%);
+      animation: flash 320ms ease-out both;
+    }
+    @keyframes flash{
+      0%{ opacity:0; transform: scale(.96); }
+      35%{ opacity:1; transform: scale(1.02); }
+      100%{ opacity:0; transform: scale(1.08); }
     }
 
     /* SSR確定スタンプ */
@@ -535,7 +582,7 @@
       100%{ transform: translateY(0) rotate(-6deg) scale(1); opacity:1; }
     }
 
-    /* 合計演出 */
+    /* 合計 */
     .sumBox{
       margin-top:14px;
       border-radius:18px;
@@ -579,11 +626,14 @@
       <div class="screen panel" id="screenTitle">
         <div class="titleHero">
           <div class="titleLogo">
-            <div class="logoImg" id="logoBox">
+            <div class="logoImg">
               <img id="logoImg" alt="" style="display:none;">
             </div>
             <h1 class="titleText">最大30,000円 お年玉ガチャ！</h1>
-            
+            <p class="titleSub">
+              スマホゲーム風に、ジェムを消費してガチャ！<br>
+              順番に開封 → 最後に合計をド派手表示。
+            </p>
           </div>
 
           <div class="btnRow">
@@ -615,9 +665,9 @@
               <div class="popupHead">
                 <div>
                   <p class="popupTitle">最大30,000円 お年玉ガチャ！</p>
-                  <div class="small">提供割合</div>
+                  <div class="small">提供割合（同ランク内は等確率）</div>
                 </div>
-                <div class="dragonArt" id="dragonBox">
+                <div class="dragonArt">
                   <img id="dragonImg" alt="" style="display:none;">
                 </div>
               </div>
@@ -716,13 +766,14 @@
 
             <!-- GACHA RESULT -->
             <div id="gachaArea" style="display:none;">
-              <div class="modalSub" id="openGuide">順番にタップして1枚ずつ開封</div>
+              <div class="modalSub">順番にタップして1枚ずつ開封（0.3秒クールダウン）</div>
               <div class="bigStamp" id="ssrStamp"><span>SSR確定！！</span></div>
+
               <div class="grid" id="grid"></div>
 
               <div class="sumBox" id="sumBox">
-                <div class="sumLabel" id="sumLabel">合計は・・・・・・</div>
-                <div class="sumMoney" id="sumMoney">¥0</div>
+                <div class="sumLabel">合計は・・・・・・</div>
+                <div class="sumMoney" id="sumMoney"></div>
                 <div class="small" id="sumSub"></div>
               </div>
 
@@ -741,27 +792,15 @@
   <script>
     const CFG = {
       PARENT_PIN: "2525",
-
       COST_ONE: 1000,
       COST_TEN: 10000,
       CHARGE_GEMS: 10000,
       BONUS_GEMS: 10000,
 
-      POOL: {
-        N: [10, 50, 100],
-        R: [300, 500],
-        SR: [1000, 2000],
-        SSR: [3000]
-      },
-      RATE: {
-        SSR: 0.09,
-        SR:  0.39,
-        R:   0.35,
-        N:   0.17
-      },
+      POOL: { N:[10,50,100], R:[300,500], SR:[1000,2000], SSR:[3000] },
+      RATE: { SSR:0.09, SR:0.39, R:0.35, N:0.17 },
 
       TEN_GUARANTEE_SSR_FIRST_ONLY: true,
-
       TAP_COOLDOWN_MS: 300,
 
       ASSET: {
@@ -772,15 +811,16 @@
     };
 
     const LS = {
-      loggedIn: "otg_login_v2",
-      gems: "otg_gems_v2",
-      bonusTaken: "otg_bonus_taken_v2",
-      tenGuaranteeUsed: "otg_ten_guarantee_used_v2"
+      loggedIn: "otg_login_v3",
+      gems: "otg_gems_v3",
+      bonusTaken: "otg_bonus_taken_v3",
+      tenGuaranteeUsed: "otg_ten_guarantee_used_v3"
     };
 
     const $ = (id)=>document.getElementById(id);
     const yen = (n)=> "¥" + Number(n).toLocaleString("ja-JP");
     const clamp0 = (n)=>{ n=Number(n); return Number.isFinite(n)?Math.max(0,n):0; };
+    const pick = (arr)=> arr[Math.floor(Math.random()*arr.length)];
 
     function isLoggedIn(){ return localStorage.getItem(LS.loggedIn) === "1"; }
     function setLoggedIn(){ localStorage.setItem(LS.loggedIn, "1"); }
@@ -794,8 +834,6 @@
     function tenGuaranteeUsed(){ return localStorage.getItem(LS.tenGuaranteeUsed) === "1"; }
     function setTenGuaranteeUsed(){ localStorage.setItem(LS.tenGuaranteeUsed, "1"); }
 
-    function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
-
     function pickRarity(){
       const r = Math.random();
       let acc = 0;
@@ -806,7 +844,6 @@
       }
       return "N";
     }
-
     function drawOne(forceRarity=null){
       const rar = forceRarity || pickRarity();
       const amt = pick(CFG.POOL[rar]);
@@ -841,7 +878,7 @@
     }
     function closeModal(){ $("overlay").classList.remove("show"); }
 
-    // Toast（受け取るまで消さない仕様：タイマーを使わない）
+    // Toast（受け取るまで消さない）
     function showToast(text, withBtn=true){
       $("toastText").textContent = text;
       $("toastBtn").style.display = withBtn ? "inline-block" : "none";
@@ -870,6 +907,36 @@
       $("rateNote").textContent = "※ 同ランク内の金額は等確率（例：SRは1000円/2000円が1:1）";
     }
 
+    // WebAudio（演出復旧：rarity別に音を変える）
+    let audioCtx;
+    function beep(freq=440, dur=0.08, type="sine", vol=0.10){
+      try{
+        audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+        const o = audioCtx.createOscillator();
+        const g = audioCtx.createGain();
+        o.type = type; o.frequency.value = freq;
+        g.gain.value = 0.0001;
+        o.connect(g); g.connect(audioCtx.destination);
+        const t = audioCtx.currentTime;
+        o.start(t);
+        g.gain.setValueAtTime(0.0001, t);
+        g.gain.exponentialRampToValueAtTime(vol, t + 0.01);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+        o.stop(t + dur + 0.02);
+      }catch(e){}
+    }
+    function sfxN(){ beep(320,0.05,"square",0.07); }
+    function sfxR(){ beep(392,0.06,"square",0.08); }
+    function sfxSR(){
+      beep(523,0.08,"sawtooth",0.12);
+      setTimeout(()=>beep(659,0.08,"sawtooth",0.12),90);
+    }
+    function sfxSSR(){
+      beep(523,0.10,"sawtooth",0.16);
+      setTimeout(()=>beep(784,0.14,"sawtooth",0.17),120);
+      setTimeout(()=>beep(1046,0.18,"sine",0.18),320);
+    }
+
     let lastTapAt = 0;
     function canTap(){
       const now = Date.now();
@@ -878,67 +945,94 @@
       return true;
     }
 
-    function buildCardSlot(i, total){
-      const slot = document.createElement("div");
-      slot.className = "cardSlot";
-      slot.dataset.index = String(i);
-      slot.setAttribute("role","button");
-      slot.setAttribute("aria-disabled","false");
-
-      slot.innerHTML = `
-        <div class="idxTxt">${i+1}/${total}</div>
-        <div class="cardBack">
-          <img alt="" src="${CFG.ASSET.cardBack}">
-          <span class="tapHint">TAP</span>
-        </div>
-        <div class="cardFront" aria-hidden="true">
-          <div class="rarTxt">-</div>
-          <div class="amtTxt">-</div>
-        </div>
-        <div class="frame n"></div>
-      `;
-      return slot;
-    }
-
     function setFrame(slot, rar){
       const frame = slot.querySelector(".frame");
       frame.className = "frame " + (rar==="SSR"?"ssr":rar==="SR"?"sr":rar==="R"?"r":"n");
     }
 
-    function revealSlot(slot, result){
-      if (slot.dataset.opened === "1") return;
-
-      slot.dataset.opened = "1";
+    function buildCardSlot(i, total){
+      const slot = document.createElement("div");
+      slot.className = "cardSlot";
+      slot.dataset.index = String(i);
+      slot.dataset.opened = "0";
+      slot.setAttribute("role","button");
       slot.setAttribute("aria-disabled","true");
 
+      slot.innerHTML = `
+        <div class="idxTxt">${i+1}/${total}</div>
+
+        <div class="chargeGlow"></div>
+        <div class="flash"></div>
+
+        <div class="flip">
+          <div class="cardFace cardBack">
+            <img alt="" src="${CFG.ASSET.cardBack}">
+            <span class="tapHint">TAP</span>
+          </div>
+
+          <div class="cardFace cardFront" aria-hidden="true">
+            <div class="rarTxt">-</div>
+            <div class="amtTxt">-</div>
+          </div>
+        </div>
+
+        <div class="frame n"></div>
+      `;
+      return slot;
+    }
+
+    async function revealWithFlip(slot, result){
+      if (slot.dataset.opened === "1") return;
+
+      // “溜め”
+      slot.classList.add("charging");
+      await new Promise(r=>setTimeout(r, 250));
+      slot.classList.remove("charging");
+
+      // レアリティ反映（先に入れてからフリップ）
       const front = slot.querySelector(".cardFront");
       front.querySelector(".rarTxt").textContent = result.rar;
       front.querySelector(".amtTxt").textContent = yen(result.amt);
-
       setFrame(slot, result.rar);
 
-      // TAP消す
-      const tap = slot.querySelector(".tapHint");
-      if (tap) tap.remove();
+      // フラッシュ強度（クラスで制御）
+      slot.classList.remove("flash-n","flash-r","flash-sr","flash-ssr");
+      slot.classList.add(
+        result.rar==="SSR" ? "flash-ssr" :
+        result.rar==="SR"  ? "flash-sr"  :
+        result.rar==="R"   ? "flash-r"   : "flash-n"
+      );
 
-      // 裏柄を残さない（見やすさ優先）
+      // フリップ
+      slot.classList.add("opening");
+      await new Promise(r=>setTimeout(r, 540));
+      slot.classList.remove("opening");
+      slot.classList.add("opened");
+
+      // 裏柄は残さない（見やすさ）
       const backImg = slot.querySelector(".cardBack img");
       if (backImg) backImg.style.display = "none";
 
-      front.classList.add("show");
+      const tap = slot.querySelector(".tapHint");
+      if (tap) tap.remove();
+
+      // 音
+      if (result.rar==="SSR") sfxSSR();
+      else if (result.rar==="SR") sfxSR();
+      else if (result.rar==="R") sfxR();
+      else sfxN();
+
+      slot.dataset.opened = "1";
+      slot.setAttribute("aria-disabled","true");
     }
 
     async function showSum(total, opened){
-      const box = $("sumBox");
-      const label = $("sumLabel");
       const money = $("sumMoney");
       const sub = $("sumSub");
-
-      box.classList.add("show");
-      label.textContent = "合計は・・・・・・";
-      money.textContent = "";            // ← 0円表示を避ける（指定2点）
+      $("sumBox").classList.add("show");
+      money.textContent = ""; // 0円表示はしない
+      money.classList.remove("pop");
       sub.textContent = "";
-
       await new Promise(r=>setTimeout(r, 800));
       money.textContent = yen(total);
       money.classList.add("pop");
@@ -948,35 +1042,34 @@
     function gachaOpenUI(mode, results){
       openModal("gacha");
       $("btnDone").disabled = true;
+      $("sumBox").classList.remove("show");
+      $("sumMoney").textContent = "";
+      $("sumMoney").classList.remove("pop");
 
-      const totalCount = results.length;
-      const grid = $("grid");
-      grid.innerHTML = "";
-
-      // 10連SSR確定スタンプ表示は“そのまま”
       $("ssrStamp").classList.toggle("show", mode==="ten" && !tenGuaranteeUsed());
 
-      const slots = [];
-      for(let i=0;i<totalCount;i++){
-        const slot = buildCardSlot(i, totalCount);
-        grid.appendChild(slot);
-        slots.push(slot);
-      }
+      const grid = $("grid");
+      grid.innerHTML = "";
+      const slots = results.map((_, i)=>{
+        const s = buildCardSlot(i, results.length);
+        grid.appendChild(s);
+        return s;
+      });
+
+      // 開封順強制
+      let nextIndex = 0;
+      const updateEnabled = ()=>{
+        slots.forEach((s, i)=>{
+          const enabled = (i === nextIndex) && (s.dataset.opened !== "1");
+          s.setAttribute("aria-disabled", enabled ? "false" : "true");
+          s.style.pointerEvents = enabled ? "auto" : "none";
+          s.style.opacity = enabled ? "1" : "0.55";
+        });
+      };
+      updateEnabled();
 
       let opened = 0;
       let sum = 0;
-
-      // 開封順を強制：nextIndex以外は無効
-      let nextIndex = 0;
-      function updateEnabled(){
-        slots.forEach((s, i)=>{
-          const disabled = (i !== nextIndex) || (s.dataset.opened==="1");
-          s.setAttribute("aria-disabled", disabled ? "true" : "false");
-          s.style.pointerEvents = disabled ? "none" : "auto";
-          s.style.opacity = disabled ? "0.55" : "1";
-        });
-      }
-      updateEnabled();
 
       slots.forEach((slot, idx)=>{
         slot.addEventListener("click", async ()=>{
@@ -985,14 +1078,18 @@
           if (slot.dataset.opened === "1") return;
 
           const res = results[idx];
-          revealSlot(slot, res);
+
+          // クリック中の二重実行防止
+          slot.style.pointerEvents = "none";
+
+          await revealWithFlip(slot, res);
 
           opened += 1;
           sum += res.amt;
           nextIndex += 1;
           updateEnabled();
 
-          if (opened === totalCount){
+          if (opened === results.length){
             $("btnDone").disabled = false;
             await showSum(sum, opened);
           }
@@ -1020,13 +1117,11 @@
       if (!requireGems(CFG.COST_TEN)) return;
       setGems(getGems() - CFG.COST_TEN);
 
-      const results = [];
-      for(let i=0;i<10;i++) results.push(drawOne());
+      const results = Array.from({length:10}, ()=>drawOne());
 
       // 初回のみSSR確定
       if (CFG.TEN_GUARANTEE_SSR_FIRST_ONLY && !tenGuaranteeUsed()){
-        const hasSSR = results.some(x=>x.rar==="SSR");
-        if (!hasSSR){
+        if (!results.some(x=>x.rar==="SSR")){
           const idx = Math.floor(Math.random()*10);
           results[idx] = drawOne("SSR");
         }
@@ -1038,11 +1133,8 @@
     }
 
     function maybeShowBonusToast(){
-      if (!bonusTaken()){
-        showToast("ログインボーナスが受け取れます！", true);
-      }else{
-        hideToast();
-      }
+      if (!bonusTaken()) showToast("ログインボーナスが受け取れます！", true);
+      else hideToast();
     }
 
     function takeBonus(){
@@ -1058,7 +1150,7 @@
       const ok = confirm("10000円がかかります。課金しますか？");
       if (!ok) return;
       setGems(getGems() + CFG.CHARGE_GEMS);
-      alert("ジェム +10000 を購入しました（実際に決済はされていません）");
+      alert("ジェム +10000 を購入しました（実際の課金は発生しません）");
     }
 
     function resetAll(){
@@ -1079,8 +1171,6 @@
       $("gems").textContent = getGems();
       $("btnOne").disabled = getGems() < CFG.COST_ONE;
       $("btnTen").disabled = getGems() < CFG.COST_TEN;
-
-      // 初回SSR確定のみ表示（保証済なら隠す）
       $("tenStamp").style.display = (!tenGuaranteeUsed()) ? "inline-flex" : "none";
     }
 
@@ -1105,10 +1195,7 @@
         maybeShowBonusToast();
       });
 
-      $("toastBtn").addEventListener("click", ()=>{
-        openModal("bonus");
-      });
-
+      $("toastBtn").addEventListener("click", ()=> openModal("bonus"));
       $("btnTakeBonus").addEventListener("click", takeBonus);
 
       $("btnOne").addEventListener("click", doOne);
