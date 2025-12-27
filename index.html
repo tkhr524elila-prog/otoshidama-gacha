@@ -4,18 +4,13 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta name="theme-color" content="#ff7a00">
-  <title>お年玉ガチャ 10連</title>
+  <title>お年玉ガチャ（10連）</title>
   <style>
     :root{
-      --bg1:#070b18;
-      --bg2:#140a2b;
-      --text:#eef3ff;
-      --muted:#a9b4da;
-      --accent:#ff7a00;
-      --gold:#ffd54a;
-      --cyan:#00e5ff;
-      --vio:#7c4dff;
-      --danger:#ff4d6d;
+      --bg1:#070b18; --bg2:#140a2b;
+      --text:#eef3ff; --muted:#a9b4da;
+      --accent:#ff7a00; --gold:#ffd54a;
+      --cyan:#00e5ff; --vio:#7c4dff;
       --shadow: 0 18px 60px rgba(0,0,0,.55);
       --radius: 18px;
     }
@@ -23,7 +18,7 @@
     html,body{height:100%}
     body{
       margin:0;color:var(--text);
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans JP", sans-serif;
+      font-family: system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans JP",sans-serif;
       background:
         radial-gradient(1200px 700px at 18% 10%, rgba(124,77,255,.30), transparent 60%),
         radial-gradient(900px 600px at 90% 30%, rgba(0,229,255,.22), transparent 55%),
@@ -43,21 +38,22 @@
       box-shadow: var(--shadow);
       backdrop-filter: blur(10px);
     }
-    .title{font-weight:1000;letter-spacing:.03em}
+    .title{font-weight:1100;letter-spacing:.03em}
     .sub{font-size:12px;color:var(--muted);line-height:1.25}
     .badge{
       display:inline-flex;align-items:center;gap:8px;
       padding:6px 10px;border-radius:999px;
       background:rgba(0,0,0,.20);
       border:1px solid rgba(255,255,255,.10);
-      font-size:12px;color:var(--text);font-weight:900;
+      font-size:12px;color:var(--text);font-weight:1000;
     }
+
     .gem{
       display:flex;align-items:center;gap:10px;
       padding:10px 12px;border-radius:14px;
       border:1px solid rgba(255,255,255,.12);
       background:rgba(0,0,0,.16);
-      min-width:190px;justify-content:space-between;
+      min-width:200px;justify-content:space-between;
     }
     .gemL{display:flex;align-items:center;gap:10px}
     .gemIcon{
@@ -66,7 +62,7 @@
       box-shadow: 0 0 18px rgba(0,229,255,.34);
       transform: rotate(12deg);
     }
-    .gemCount{font-weight:1000}
+    .gemCount{font-weight:1100}
     .gemSmall{font-size:11px;color:var(--muted)}
 
     .card{
@@ -78,6 +74,7 @@
       overflow:hidden;
     }
     .cardIn{padding:16px}
+
     label{display:block;font-size:12px;color:var(--muted);margin:6px 0}
     input, textarea{
       width:100%;
@@ -97,7 +94,7 @@
       border:0;cursor:pointer;
       border-radius:16px;
       padding:14px 16px;
-      font-weight:1000;
+      font-weight:1100;
       letter-spacing:.02em;
       color:#091021;
       background: linear-gradient(180deg, #ffd54a, #ff7a00);
@@ -133,7 +130,7 @@
       position:relative;
       overflow:hidden;
     }
-    .money{font-size:48px;font-weight:1100;letter-spacing:.02em;line-height:1.05}
+    .money{font-size:48px;font-weight:1200;letter-spacing:.02em;line-height:1.05}
     .rarity{
       display:inline-flex;align-items:center;gap:8px;
       margin-top:8px;
@@ -141,20 +138,18 @@
       border:1px solid rgba(255,255,255,.12);
       background: rgba(255,255,255,.05);
       color:var(--muted);
-      font-size:12px;font-weight:1000;
+      font-size:12px;font-weight:1100;
       text-transform:uppercase;
     }
     .rarDot{width:8px;height:8px;border-radius:999px;background:rgba(255,255,255,.25)}
-    .lockTag{margin-top:10px;font-size:12px;color:var(--gold);display:none}
-    .lockTag.show{display:block}
     .smallnote{font-size:11px;color:var(--muted);margin-top:10px}
 
-    /* Overlay cinematic */
+    /* Login bonus modal */
     .overlay{
       position:fixed;inset:0;
       background:rgba(0,0,0,.78);
       display:none;align-items:center;justify-content:center;
-      padding:18px;z-index:50;
+      padding:18px;z-index:60;
     }
     .overlay.show{display:flex}
     .modal{
@@ -169,45 +164,39 @@
       overflow:hidden;
       position:relative;
     }
-    /* SSR rainbow aura */
-    .rainbow{
-      position:absolute;inset:-60%;
-      background: conic-gradient(from 180deg,
-        rgba(255,0,92,.0), rgba(255,0,92,.55),
-        rgba(255,214,0,.55),
-        rgba(0,229,255,.55),
-        rgba(124,77,255,.55),
-        rgba(255,122,0,.55),
-        rgba(255,0,92,.55),
-        rgba(255,0,92,.0)
-      );
-      opacity:0;
-      filter: blur(10px) saturate(1.25);
-      animation: spin 1.2s linear infinite;
-      mix-blend-mode: screen;
-      pointer-events:none;
-      transition: opacity .18s ease;
-    }
-    .rainbow.show{opacity:.95}
-    @keyframes spin{to{transform: rotate(360deg)}}
-
-    .flash{
-      position:absolute;inset:0;
-      background: rgba(255,255,255,1);
-      opacity:0;
-      pointer-events:none;
-    }
-    .flash.on{animation: flash 0.55s ease}
-    @keyframes flash{
-      0%{opacity:0}
-      12%{opacity:.95}
-      100%{opacity:0}
-    }
-
     .modalIn{padding:18px}
-    .headerRow{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
-    .modalTitle{font-weight:1100;font-size:16px}
+    .modalTitle{font-weight:1200;font-size:16px}
     .modalSub{font-size:12px;color:var(--muted);margin-top:6px}
+    .heroRow{display:flex;gap:14px;align-items:center;margin-top:14px;flex-wrap:wrap}
+    .gift{
+      width:86px;height:86px;border-radius:22px;
+      background: conic-gradient(from 160deg, var(--cyan), var(--vio), var(--accent), var(--cyan));
+      box-shadow: 0 0 30px rgba(0,229,255,.18), 0 0 60px rgba(124,77,255,.18);
+      position:relative;
+    }
+    .gift::after{
+      content:"";
+      position:absolute;inset:10px;border-radius:18px;
+      border:1px solid rgba(255,255,255,.20);
+      background: rgba(0,0,0,.18);
+    }
+    .bonusAmt{
+      font-size:38px;font-weight:1300;letter-spacing:.02em
+    }
+    .bonusRow{display:flex;align-items:center;gap:10px}
+    .tinyGem{width:14px;height:14px;border-radius:5px;background:linear-gradient(135deg,var(--cyan),var(--vio))}
+    .footerRow{display:flex;gap:10px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap}
+    .okbtn{
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.16);
+      color:var(--text);
+      border-radius:999px;
+      padding:10px 14px;
+      font-weight:1200;
+      cursor:pointer;
+    }
+
+    /* Gacha cinematic overlay (reuse same overlay) */
     .stage{
       margin-top:12px;
       height:290px;
@@ -238,12 +227,35 @@
     @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-11px)}}
     .spinny .orb{animation: spin 0.95s linear infinite}
     .spinny .beam{opacity:.9}
+    @keyframes spin{to{transform: rotate(360deg)}}
 
-    /* characters */
-    .chars{
-      position:absolute;inset:0;
+    .rainbow{
+      position:absolute;inset:-60%;
+      background: conic-gradient(from 180deg,
+        rgba(255,0,92,.0), rgba(255,0,92,.55),
+        rgba(255,214,0,.55),
+        rgba(0,229,255,.55),
+        rgba(124,77,255,.55),
+        rgba(255,122,0,.55),
+        rgba(255,0,92,.55),
+        rgba(255,0,92,.0)
+      );
+      opacity:0;
+      filter: blur(10px) saturate(1.25);
+      animation: spin 1.2s linear infinite;
+      mix-blend-mode: screen;
       pointer-events:none;
+      transition: opacity .18s ease;
     }
+    .rainbow.show{opacity:.95}
+    .flash{
+      position:absolute;inset:0;background: rgba(255,255,255,1);
+      opacity:0;pointer-events:none;
+    }
+    .flash.on{animation: flash 0.55s ease}
+    @keyframes flash{0%{opacity:0}12%{opacity:.95}100%{opacity:0}}
+
+    .chars{position:absolute;inset:0;pointer-events:none}
     .char{
       position:absolute;bottom:18px;
       width:156px;height:190px;border-radius:22px;
@@ -255,7 +267,7 @@
       opacity:0; transform: translateY(10px);
       transition: opacity .22s ease, transform .22s ease;
     }
-    .char.show{opacity:1;transform:translateY(0)}
+    .char.show{opacity:1;transform: translateY(0)}
     .char.left{left:14px}
     .char.right{right:14px}
     .charFace{
@@ -269,12 +281,8 @@
     }
     .charFace::before{left:16px}
     .charFace::after{right:16px}
-    .charName{
-      position:absolute;left:84px;top:18px;font-weight:1100;font-size:12px;color:var(--text);
-    }
-    .charRole{
-      position:absolute;left:84px;top:38px;font-weight:900;font-size:11px;color:var(--muted);
-    }
+    .charName{position:absolute;left:84px;top:18px;font-weight:1200;font-size:12px}
+    .charRole{position:absolute;left:84px;top:38px;font-weight:1000;font-size:11px;color:var(--muted)}
     .bubble{
       position:absolute;left:12px;right:12px;top:84px;
       padding:10px 10px;border-radius:16px;
@@ -285,7 +293,6 @@
     }
     .bubble small{color:var(--muted)}
 
-    /* reveal */
     .reveal{
       position:absolute;inset:0;
       display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -294,41 +301,19 @@
       transition: opacity .22s ease, transform .22s ease;
     }
     .reveal.show{opacity:1;transform:scale(1)}
-    .revealMoney{font-size:54px;font-weight:1200}
-    .revealRarity{font-size:14px;font-weight:1100;letter-spacing:.08em}
-    .rollSummary{
-      margin-top:8px;
-      font-size:12px;color:var(--muted);
-      max-width:520px;
-    }
-    .pills{
-      display:flex;flex-wrap:wrap;gap:6px;justify-content:center;
-      margin-top:8px;
-    }
+    .revealMoney{font-size:54px;font-weight:1300}
+    .revealRarity{font-size:14px;font-weight:1200;letter-spacing:.08em}
+    .rollSummary{margin-top:8px;font-size:12px;color:var(--muted);max-width:520px}
+    .pills{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:8px}
     .pill{
-      font-size:11px;font-weight:1000;
+      font-size:11px;font-weight:1100;
       padding:6px 10px;border-radius:999px;
       border:1px solid rgba(255,255,255,.12);
       background: rgba(0,0,0,.16);
       color: var(--text);
     }
-    .pill.ssr{
-      border-color: rgba(255,213,74,.45);
-      box-shadow: 0 0 24px rgba(255,213,74,.18);
-    }
-
+    .pill.ssr{border-color: rgba(255,213,74,.45);box-shadow: 0 0 24px rgba(255,213,74,.18)}
     .confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden}
-    .footerRow{display:flex;gap:10px;justify-content:flex-end;margin-top:12px}
-    .okbtn{
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(0,0,0,.16);
-      color:var(--text);
-      border-radius:999px;
-      padding:10px 14px;
-      font-weight:1100;
-      cursor:pointer;
-    }
-    .okbtn[disabled]{opacity:.5;cursor:not-allowed}
   </style>
 </head>
 <body>
@@ -338,8 +323,8 @@
         <div class="title">お年玉ガチャ（10連）</div>
         <div class="sub">
           <span class="badge">10連：100ジェム</span>
-          <span class="badge">10回抽選→最大値採用</span>
-          <span class="badge">最大 30,000円</span>
+          <span class="badge">最大値採用</span>
+          <span class="badge">最大30,000円</span>
         </div>
       </div>
       <div class="gem">
@@ -355,11 +340,17 @@
 
     <div class="card">
       <div class="cardIn">
-        <label>候補金額（カンマ区切り）</label>
-        <input id="candidates" />
-        <div class="hint">SSRは 3,000円（虹演出）／10連で最大 30,000円 まで</div>
 
-        <label style="margin-top:10px;">確率（任意：金額:重み を1行ずつ）</label>
+        <div class="actions" style="margin-top:0">
+          <button class="btn btn2" id="loginBonusBtn">ログインボーナスを受け取る</button>
+          <button class="btn btn2" id="resetBtn">初期化（親PIN）</button>
+        </div>
+
+        <label style="margin-top:10px;">候補金額（カンマ区切り）</label>
+        <input id="candidates" />
+        <div class="hint">SSRは 3,000円（虹演出）。SSRが出ると10連最大 30,000円！</div>
+
+        <label style="margin-top:10px;">確率（任意：金額:重み）</label>
         <textarea id="weights"></textarea>
         <div class="hint">重みが大きいほど出やすい。書かなければ均等抽選。</div>
 
@@ -368,81 +359,93 @@
             10連ガチャを回す
             <span class="costBadge"><span class="miniGem"></span>-<span id="cost">100</span></span>
           </button>
-          <button class="btn btn2" id="parentResetBtn">親：やり直し（PIN）</button>
         </div>
 
         <div class="resultPanel">
           <div class="money" id="money">¥---</div>
           <div class="rarity" id="rarity"><span class="rarDot"></span><span id="rarText">READY</span></div>
-          <div class="lockTag" id="lockTag">結果は確定しました（1回だけ）。もう回せません。</div>
-          <div class="smallnote">※ 端末に保存されます（同端末・同ブラウザなら維持）</div>
+          <div class="smallnote">※ ジェムが無いと回せません（ゲームと同じ）</div>
         </div>
+
       </div>
     </div>
   </div>
 
-  <!-- Overlay -->
+  <!-- Overlay (ログインボーナス & ガチャ演出) -->
   <div class="overlay" id="overlay" role="dialog" aria-modal="true">
     <div class="modal">
       <div class="rainbow" id="rainbow"></div>
       <div class="flash" id="flash"></div>
       <div class="confetti" id="confetti"></div>
       <div class="modalIn">
-        <div class="headerRow">
-          <div>
-            <div class="modalTitle" id="modalTitle">10連召喚中…</div>
-            <div class="modalSub" id="modalSub">ジェムを消費して、10回抽選 → 最大値で確定します</div>
-          </div>
-          <div class="badge" id="ssrBadge" style="display:none;">SSR確定演出</div>
-        </div>
+        <div class="modalTitle" id="modalTitle">ログインボーナス</div>
+        <div class="modalSub" id="modalSub">受け取って10連を回そう！</div>
 
-        <div class="stage spinny" id="stage">
-          <div class="beam" aria-hidden="true"></div>
-          <div class="orb" aria-hidden="true"></div>
-
-          <div class="chars">
-            <div class="char left" id="charL">
-              <div class="charFace"></div>
-              <div class="charName">召喚士 ハヤブサ</div>
-              <div class="charRole">煽り担当</div>
-              <div class="bubble" id="lineL">いくぞ… 10連の“最大値”を掴め。</div>
-            </div>
-            <div class="char right" id="charR">
-              <div class="charFace"></div>
-              <div class="charName">精霊 ミオ</div>
-              <div class="charRole">運命担当</div>
-              <div class="bubble" id="lineR">SSRは3,000円。虹が見えたら…勝ちです。</div>
+        <div id="bonusArea">
+          <div class="heroRow">
+            <div class="gift"></div>
+            <div>
+              <div class="bonusRow">
+                <div class="tinyGem"></div>
+                <div class="bonusAmt">+3000</div>
+                <div class="badge">GEMS</div>
+              </div>
+              <div class="modalSub">初回限定：ジェム3,000個をプレゼント！</div>
             </div>
           </div>
 
-          <div class="reveal" id="reveal">
-            <div class="revealRarity" id="revealRarity">SR</div>
-            <div class="revealMoney" id="revealMoney">¥---</div>
-            <div class="rollSummary" id="rollSummary">10回の結果：—</div>
-            <div class="pills" id="pills"></div>
-            <div class="modalSub">スクショ推奨：今年の結果（最大値）</div>
+          <div class="footerRow">
+            <button class="okbtn" id="bonusGetBtn">受け取る</button>
+            <button class="okbtn" id="bonusCloseBtn">あとで</button>
           </div>
         </div>
 
-        <div class="footerRow">
-          <button class="okbtn" id="closeBtn" disabled>OK</button>
+        <div id="gachaArea" style="display:none;">
+          <div class="stage spinny" id="stage">
+            <div class="beam" aria-hidden="true"></div>
+            <div class="orb" aria-hidden="true"></div>
+
+            <div class="chars">
+              <div class="char left" id="charL">
+                <div class="charFace"></div>
+                <div class="charName">召喚士 ハヤブサ</div>
+                <div class="charRole">煽り担当</div>
+                <div class="bubble" id="lineL">いくぞ… 最大値を掴め。</div>
+              </div>
+              <div class="char right" id="charR">
+                <div class="charFace"></div>
+                <div class="charName">精霊 ミオ</div>
+                <div class="charRole">運命担当</div>
+                <div class="bubble" id="lineR">SSRは3,000円。虹が見えたら勝ち。</div>
+              </div>
+            </div>
+
+            <div class="reveal" id="reveal">
+              <div class="revealRarity" id="revealRarity">R</div>
+              <div class="revealMoney" id="revealMoney">¥---</div>
+              <div class="rollSummary" id="rollSummary">10回の結果：—</div>
+              <div class="pills" id="pills"></div>
+              <div class="modalSub">スクショ推奨：これが今回の結果</div>
+            </div>
+          </div>
+
+          <div class="footerRow">
+            <button class="okbtn" id="closeBtn" disabled>OK</button>
+          </div>
         </div>
+
       </div>
     </div>
   </div>
 
   <script>
-    /*********************
-     * カスタム（あなたの要望どおり）
-     *********************/
     const CFG = {
-      START_GEMS: 3000,          // 3000ジェム配布
-      COST_TENROLL: 100,         // 10連＝100ジェム
-      LOCK_ON_ROLL: true,        // 1回だけロック
-      MAX_TENROLL_PAYOUT: 30000, // 10連で最大3万円
-      SSR_AMOUNT: 3000,          // SSR=3000円（虹演出）
-      PARENT_PIN: "2525",        // 親PIN（好きに変えてOK）
-      CANDIDATES: "500,1000,2000,3000", // SSR=3000を含める
+      BONUS_GEMS: 3000,         // ログボで受け取る量
+      COST_TENROLL: 100,        // 10連コスト
+      MAX_TENROLL_PAYOUT: 30000,// 最大3万円
+      SSR_AMOUNT: 3000,         // SSR=3000円
+      PARENT_PIN: "2525",
+      CANDIDATES: "500,1000,2000,3000",
       WEIGHTS: `500:55
 1000:30
 2000:12
@@ -450,11 +453,8 @@
     };
 
     const LS = {
-      gems: "otg2_gems_v1",
-      locked: "otg2_locked_v1",
-      result: "otg2_result_v1",
-      rarity: "otg2_rarity_v1",
-      rolls: "otg2_rolls_v1"
+      gems: "otg3_gems_v1",
+      bonusTaken: "otg3_bonus_taken_v1"
     };
 
     const $ = (id) => document.getElementById(id);
@@ -462,17 +462,12 @@
 
     function getGems(){
       const v = localStorage.getItem(LS.gems);
-      if (!v) return CFG.START_GEMS;
+      if (!v) return 0;
       const n = Number(v);
-      return Number.isFinite(n) ? n : CFG.START_GEMS;
+      return Number.isFinite(n) ? n : 0;
     }
     function setGems(n){
       localStorage.setItem(LS.gems, String(n));
-      render();
-    }
-    function isLocked(){ return localStorage.getItem(LS.locked) === "1"; }
-    function setLocked(flag){
-      localStorage.setItem(LS.locked, flag ? "1" : "0");
       render();
     }
 
@@ -506,15 +501,24 @@
       return items[items.length - 1].a;
     }
 
-    function rarityFromMax(max){
-      // maxがSSRならSSR、それ以外は雑にSR/R/N
-      if (max >= CFG.SSR_AMOUNT) return "SSR";
-      if (max >= 2000) return "SR";
-      if (max >= 1000) return "R";
+    function setDot(r){
+      const dot = $("rarity").querySelector(".rarDot");
+      dot.style.background =
+        r==="SSR" ? "rgba(255,213,74,.95)" :
+        r==="SR" ? "rgba(255,122,0,.95)" :
+        r==="R" ? "rgba(0,229,255,.95)" :
+        r==="N" ? "rgba(168,179,214,.65)" :
+        "rgba(255,255,255,.25)";
+    }
+
+    function rarityFromPayout(p){
+      if (p >= 30000) return "SSR";
+      if (p >= 20000) return "SR";
+      if (p >= 10000) return "R";
       return "N";
     }
 
-    // WebAudio SFX (no files)
+    // WebAudio (no files)
     let audioCtx;
     function beep(seq){
       try{
@@ -537,15 +541,10 @@
     }
     function vibe(ms){ if (navigator.vibrate) navigator.vibrate(ms); }
 
-    function sfxTenStart(){
-      beep([{at:0,f:196,d:0.10,v:0.10,type:"square"},{at:0.10,f:247,d:0.10,v:0.10,type:"square"}]);
-    }
-    function sfxDrum(){
-      // 擬似ドラム（低音を短く）
-      beep([{at:0,f:110,d:0.07,v:0.08,type:"sine"},{at:0.08,f:98,d:0.08,v:0.08,type:"sine"}]);
-    }
+    function sfxBonus(){ beep([{at:0,f:523.25,d:0.12,v:0.10,type:"square"},{at:0.12,f:659.25,d:0.12,v:0.11,type:"square"}]); }
+    function sfxTenStart(){ beep([{at:0,f:196,d:0.10,v:0.10,type:"square"},{at:0.10,f:247,d:0.10,v:0.10,type:"square"}]); }
+    function sfxDrum(){ beep([{at:0,f:110,d:0.07,v:0.08,type:"sine"},{at:0.08,f:98,d:0.08,v:0.08,type:"sine"}]); }
     function sfxSSR(){
-      // それっぽいファンファーレ
       beep([
         {at:0.00,f:523.25,d:0.14,v:0.14,type:"sawtooth"},
         {at:0.14,f:659.25,d:0.14,v:0.14,type:"sawtooth"},
@@ -557,6 +556,11 @@
       if (r==="SR") beep([{at:0,f:392,d:0.14,v:0.12},{at:0.14,f:523.25,d:0.20,v:0.13}]);
       else if (r==="R") beep([{at:0,f:330,d:0.14,v:0.10},{at:0.14,f:440,d:0.18,v:0.11}]);
       else beep([{at:0,f:262,d:0.12,v:0.08}]);
+    }
+
+    function flash(){
+      const f = $("flash");
+      f.classList.remove("on"); void f.offsetWidth; f.classList.add("on");
     }
 
     function confettiBurst(kind){
@@ -594,232 +598,195 @@
       }
     }
 
-    function setDotByRarity(r){
-      const dot = $("rarity").querySelector(".rarDot");
-      dot.style.background =
-        r==="SSR" ? "rgba(255,213,74,.95)" :
-        r==="SR" ? "rgba(255,122,0,.95)" :
-        r==="R" ? "rgba(0,229,255,.95)" :
-        r==="N" ? "rgba(168,179,214,.65)" :
-        "rgba(255,255,255,.25)";
-    }
-
-    function render(){
-      $("gems").textContent = getGems();
-      const locked = isLocked();
-      $("tenRollBtn").disabled = locked || getGems() < CFG.COST_TENROLL;
-      $("lockTag").classList.toggle("show", locked);
-
-      const saved = localStorage.getItem(LS.result);
-      const rar = localStorage.getItem(LS.rarity) || "READY";
-      $("money").textContent = saved ? yen(saved) : "¥---";
-      $("rarText").textContent = rar;
-      setDotByRarity(rar);
-    }
-
-    function setOverlay(open){
-      $("overlay").classList.toggle("show", open);
-    }
-    function flash(){
-      const f = $("flash");
-      f.classList.remove("on");
-      // reflow
-      void f.offsetWidth;
-      f.classList.add("on");
-    }
-
-    function randPick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
-
     const LINES_L = {
       start: [
-        "いくぞ… 10連の“最大値”を掴め。",
-        "ここからが本番。ジェム100の価値を見せろ。",
-        "最大3万円… その可能性、君は信じられるか？"
+        "いくぞ… 最大値を掴め。",
+        "ジェム100の価値、見せてみろ。",
+        "虹が見えたら…終わりだ。勝ちだ。"
       ],
-      ssrHint: [
-        "…虹が見えたら勝ち確だ。",
-        "SSR（3,000円）…来い。",
-        "一発で流れを変えるのがSSRだ。"
+      mid: [
+        "…来い、SSR（3,000円）",
+        "最大3万円。引けるか？",
+        "その指で運命を決めろ。"
       ],
       end: [
-        "よし、結果を受け取れ。",
-        "この結果は“確定”だ。逃げるな。",
-        "スクショしろ。証拠がすべてだ。"
+        "よし、受け取れ。",
+        "スクショしろ。証拠は強い。",
+        "次は…ジェムがある時だけだ。"
       ]
     };
     const LINES_R = {
       start: [
-        "10回の運命が、いま走り出すよ。",
-        "最大値を採用…つまり“最高の未来”だけ残す。",
-        "深呼吸して。虹を呼ぼう。"
+        "10回の運命が、動き出すよ。",
+        "最大値だけが残る…強い。",
+        "SSRは3,000円。虹で祝福するね。"
       ],
-      ssrHint: [
-        "SSRは3,000円。10連で最大30,000円。",
-        "虹、見たい？ 見せてあげる。",
-        "SSRが出たら…画面が光るよ。"
+      mid: [
+        "虹、見たい？見せてあげる。",
+        "SSRが出たら…画面が光るよ。",
+        "最大30,000円。届くかな？"
       ],
       end: [
-        "これが今年の結果。おめでとう。",
-        "確定。もう一度は…親PINが必要だよ。",
-        "スクショして保存してね。"
+        "おめでとう。これが今回の結果。",
+        "ジェムが足りない時は…また今度。",
+        "保存してね。"
       ]
     };
+    function randPick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 
-    async function cinematic(rolls, max, rar){
+    function showOverlay(mode){
+      $("overlay").classList.add("show");
+      if (mode==="bonus"){
+        $("modalTitle").textContent = "ログインボーナス";
+        $("modalSub").textContent = "初回限定：ジェム3,000個をプレゼント！";
+        $("bonusArea").style.display = "block";
+        $("gachaArea").style.display = "none";
+      }else{
+        $("bonusArea").style.display = "none";
+        $("gachaArea").style.display = "block";
+      }
+    }
+    function hideOverlay(){
+      $("overlay").classList.remove("show");
+    }
+
+    async function cinematic(rolls, payout, rar){
+      showOverlay("gacha");
       $("reveal").classList.remove("show");
       $("closeBtn").disabled = true;
       $("stage").classList.add("spinny");
-      $("ssrBadge").style.display = "none";
-      $("rainbow").classList.remove("show");
       $("confetti").innerHTML = "";
-      $("modalTitle").textContent = "10連召喚中…";
-      $("modalSub").textContent = "ジェムを消費して、10回抽選 → 最大値で確定します";
+      $("rainbow").classList.remove("show");
 
-      // characters show + lines
       $("charL").classList.add("show");
       $("charR").classList.add("show");
       $("lineL").innerHTML = randPick(LINES_L.start) + "<br><small>（最大値採用）</small>";
       $("lineR").innerHTML = randPick(LINES_R.start) + "<br><small>（SSR=3,000円）</small>";
 
-      setOverlay(true);
       sfxTenStart(); vibe(25);
 
-      // drum beats (simulate 10 pulls)
-      for (let i=0;i<10;i++){
+      for(let i=0;i<10;i++){
         await new Promise(r=>setTimeout(r, 140));
         sfxDrum();
-        // small vibe
         if (i%2===0) vibe(10);
-        // hint lines around mid
         if (i===4){
-          $("lineL").textContent = randPick(LINES_L.ssrHint);
-          $("lineR").textContent = randPick(LINES_R.ssrHint);
+          $("lineL").textContent = randPick(LINES_L.mid);
+          $("lineR").textContent = randPick(LINES_R.mid);
         }
       }
 
-      await new Promise(r=>setTimeout(r, 400));
-
-      // reveal
+      await new Promise(r=>setTimeout(r, 420));
       $("stage").classList.remove("spinny");
 
-      // SSR special
       if (rar==="SSR"){
-        $("ssrBadge").style.display = "inline-flex";
         $("rainbow").classList.add("show");
-        flash();
-        sfxSSR();
-        vibe(140);
-        // extra flash
-        setTimeout(flash, 180);
-        setTimeout(flash, 360);
+        flash(); setTimeout(flash, 180); setTimeout(flash, 360);
+        sfxSSR(); vibe(140);
       }else{
         sfxNormal(rar);
         vibe(rar==="SR" ? 80 : (rar==="R" ? 45 : 25));
       }
-
       confettiBurst(rar);
 
-      // summary pills
       const pills = $("pills");
       pills.innerHTML = "";
       rolls.forEach(v=>{
         const p = document.createElement("div");
-        p.className = "pill" + (v===CFG.SSR_AMOUNT ? " ssr" : "");
+        p.className = "pill" + (v===3000 ? " ssr" : "");
         p.textContent = yen(v);
         pills.appendChild(p);
       });
 
-      $("revealMoney").textContent = yen(max);
-      $("revealRarity").textContent = rar + "（最大値）";
-      $("rollSummary").textContent =
-        "10回の結果（最大値採用）：" + rolls.map(yen).join(" / ");
+      $("revealMoney").textContent = yen(payout);
+      $("revealRarity").textContent = rar + "（結果）";
+      $("rollSummary").textContent = "10回の結果：" + rolls.map(yen).join(" / ");
 
       $("lineL").textContent = randPick(LINES_L.end);
       $("lineR").textContent = randPick(LINES_R.end);
 
       $("reveal").classList.add("show");
-      $("modalTitle").textContent = "結果確定！";
-      $("modalSub").textContent = "今年のお年玉はこの金額（1回だけ）";
-
       $("closeBtn").disabled = false;
+      renderResult(payout, rar);
+    }
+
+    function render(){
+      $("gems").textContent = getGems();
+      $("tenRollBtn").disabled = getGems() < CFG.COST_TENROLL;
+      $("candidates").value ||= CFG.CANDIDATES;
+      $("weights").value ||= CFG.WEIGHTS;
+    }
+
+    function renderResult(payout, rar){
+      $("money").textContent = yen(payout);
+      $("rarText").textContent = rar;
+      setDot(rar);
     }
 
     function doTenRoll(){
-      if (isLocked()) return;
-
       const gems = getGems();
       if (gems < CFG.COST_TENROLL){
-        alert("ジェムが足りません");
+        alert("ジェムが足りません（10連は100ジェム必要）");
         return;
       }
-      // spend
       setGems(gems - CFG.COST_TENROLL);
 
       const cands = parseCandidates();
       const weightMap = parseWeights();
-
-      // 10 draws
       const rolls = Array.from({length:10}, ()=>weightedPick(cands, weightMap));
-      let max = Math.max(...rolls);
-      // cap to max payout
-      max = Math.min(max * 10, CFG.MAX_TENROLL_PAYOUT); // “最大値×10”っぽいゲーム感
-      // ↑ 上の行が「10連で最大3万」をゲーム的に成立させる肝
-      //    SSR(3000)を引いたら max=3000*10=30000 になる
 
-      const rar = (max >= CFG.SSR_AMOUNT * 10) ? "SSR" : (max >= 20000 ? "SR" : (max >= 10000 ? "R" : "N"));
+      const max = Math.max(...rolls);
+      // “10連で最大3万円”を成立させる：最大値×10（SSR=3000なら30000）
+      const payout = Math.min(max * 10, CFG.MAX_TENROLL_PAYOUT);
 
-      // persist + lock
-      localStorage.setItem(LS.result, String(max));
-      localStorage.setItem(LS.rarity, rar);
-      localStorage.setItem(LS.rolls, JSON.stringify(rolls));
+      const rar = rarityFromPayout(payout);
 
-      if (CFG.LOCK_ON_ROLL) setLocked(true);
-
-      cinematic(rolls, max, rar).then(render);
+      cinematic(rolls, payout, rar);
       render();
     }
 
-    function closeOverlay(){
-      $("overlay").classList.remove("show");
+    function takeBonus(){
+      const taken = localStorage.getItem(LS.bonusTaken) === "1";
+      if (taken){
+        alert("ログインボーナスは受け取り済みです");
+        return;
+      }
+      const next = getGems() + CFG.BONUS_GEMS;
+      localStorage.setItem(LS.bonusTaken, "1");
+      setGems(next);
+      sfxBonus(); vibe(40);
+      confettiBurst("SSR"); // 派手に
+      setTimeout(()=>{ hideOverlay(); }, 400);
     }
 
-    function parentReset(){
+    function resetAll(){
       const pin = prompt("親PINを入力してください");
       if (pin === null) return;
       if (pin !== CFG.PARENT_PIN){
         alert("PINが違います");
         return;
       }
-      localStorage.removeItem(LS.result);
-      localStorage.removeItem(LS.rarity);
-      localStorage.removeItem(LS.rolls);
-      setLocked(false);
-      // gemsも戻す（3000に戻したいならここ）
-      localStorage.setItem(LS.gems, String(CFG.START_GEMS));
+      localStorage.removeItem(LS.gems);
+      localStorage.removeItem(LS.bonusTaken);
+      renderResult(0, "READY");
       render();
-      alert("やり直しOK（ジェムも3000に戻しました）");
+      alert("初期化しました（ボーナスも受け取り直せます）");
     }
 
     function init(){
       $("candidates").value = CFG.CANDIDATES;
       $("weights").value = CFG.WEIGHTS;
 
-      if (!localStorage.getItem(LS.gems)){
-        localStorage.setItem(LS.gems, String(CFG.START_GEMS));
-      }
-      if (!localStorage.getItem(LS.locked)){
-        localStorage.setItem(LS.locked, "0");
-      }
-
       $("tenRollBtn").addEventListener("click", doTenRoll);
-      $("parentResetBtn").addEventListener("click", parentReset);
-      $("closeBtn").addEventListener("click", closeOverlay);
+      $("loginBonusBtn").addEventListener("click", ()=>showOverlay("bonus"));
+      $("bonusGetBtn").addEventListener("click", takeBonus);
+      $("bonusCloseBtn").addEventListener("click", hideOverlay);
+      $("resetBtn").addEventListener("click", resetAll);
 
+      $("closeBtn").addEventListener("click", hideOverlay);
       $("overlay").addEventListener("click", (e)=>{
-        if (e.target === $("overlay") && !$("closeBtn").disabled) closeOverlay();
+        if (e.target === $("overlay")) hideOverlay();
       });
 
-      // if already saved, show state
       render();
     }
     init();
